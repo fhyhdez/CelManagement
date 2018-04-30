@@ -1,0 +1,159 @@
+<!DOCTYPE>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name = "viewport" content = "width=device-width, maximum-scale = 1, minimum-scale=1" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/structure.css" media="all" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/theme2.css" media="all" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/buttons.css"  />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/flexslider.css" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/fuentes.css" media="screen" />
+		<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css' />
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+		<link rel="shortcut icon" type="image/x-icon" href="http://dhtml5.comoj.com/images/favicon.ico" />
+		<script src="{{STATIC_URL}}js/wufoo.js"></script>
+ 		<script src="{{STATIC_URL}}js/jquery-1.2.1.pack.js"></script>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="{{STATIC_URL}}js/jquery.flexslider.js"></script>
+		<script src="{{STATIC_URL}}js/default.js"></script>
+		{% block miscript %}
+		{% endblock %}
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+			<script src="js/respond.min.js"></script>
+		<![endif]-->
+		<title>@CM - {% block titulo %}{% endblock %}</title>
+	</head>
+	<body>
+		<div id="pagewidth">
+			<header id="header">
+				<img src="{{STATIC_URL}}img/logoAccell2.png" id="imgLogo"/>
+				<div id="Logo"><h1><a href=".">Excess Complet Cellulaire</a></h1></div>
+			</header>
+			<nav id="minav">
+				<div class="center">
+					<ul class="navh">
+						<li><a href="/administracion/" class="tooltipbasic" data-tooltip="Ir a la Pagina de Bienvenida">Inicio</a></li>
+						{% if nivel == 0 or nivel == 1 %}
+						<li><a href="/contabilidad" class="tooltipbasic" data-tooltip="Area de contabildad">Contabilidad</a></li>
+						<li><a href="/compras" class="tooltipbasic" data-tooltip="Area de compras">Compras</a></li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Area de Ventas">Ventas</a>
+							<ul>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Nivel de Gerencia">Gerencia</a>
+									<ul>
+										<li><a href="/administracion/ventas/gerencia/reportes" class="tooltipbasic" data-tooltip="Consulta y reporte de activaciones realizadas en sucursales">Reportes</a></li>
+										<li><a href="/administracion/ventas/gerencia/eventos" class="tooltipbasic" data-tooltip="Consulta de Sucursales">Sucursales</a></li>
+										<li class="dropdownh">
+											<a href="#" class="tooltipbasic" data-tooltip="Amonestaciones">Amonestaciones</a>
+											<ul>
+												<li><a href="/administracion/ventas/gerencia/amonestacion/agregar" class="tooltipbasic" data-tooltip="Agregar amonestacion">Agregar</a></li>
+												<li><a href="/administracion/ventas/gerencia/amonestacion/consultar" class="tooltipbasic" data-tooltip="Consulta y reporte de Amonestaciones">Consultar</a></li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Apartados">Apartados</a>
+									<ul>
+										<li><a href="/administracion/ventas/apartados/clientes" class="tooltipbasic" data-tooltip="Catalogo de clientes">Clientes</a></li>
+										<li><a href="/administracion/ventas/apartados/historial" class="tooltipbasic" data-tooltip="Consulta y reporte de historial de clientes">Historial</a></li>
+									</ul>
+								</li>
+								<li><a href="/administracion/ventas/caja_sucursales" class="tooltipbasic" data-tooltip="Reporte de Ventas al momento">Caja/Sucursales</a></li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Metas por sucursal">Metas</a>
+									<ul>
+										<li><a href="/administracion/ventas/metas/asignar" class="tooltipbasic" data-tooltip="Asignacion de metas a vendedores">Asignar</a></li>
+										<li><a href="/administracion/ventas/metas/consultar" class="tooltipbasic" data-tooltip="Consulta y reporte de metas">Consultar</a></li>
+									</ul>
+								</li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Sanciones $Economicas">Sanciones</a>
+									<ul>
+										<li><a href="/administracion/gerencia/sancion/agregar" class="tooltipbasic" data-tooltip="Agregar Sanciones">Agregar</a></li>
+										<li><a href="/administracion/gerencia/sancion/consultar" class="tooltipbasic" data-tooltip="Consulta y reporte de Sanciones">Consultar</a></li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Activaciones Prepago">Activaciones</a>
+							<ul>
+								<li><a href="/administracion/activaciones/reporte" class="tooltipbasic" data-tooltip="Consulta y reportes de equipos y express">Reporte</a></li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Area de planes tarifarios">Planes Tarifarios</a>
+							<ul>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Planes ingresados por sucursales">Solicitudes</a>
+									<ul>
+										<li><a href="/administracion/planes/solicitudes/todos" class="tooltipbasic" data-tooltip="Planes ingresados">Todos</a></li>
+									</ul>
+								</li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Actualizacion de planes">Servicios</a>
+									<ul>
+										<li><a href="/administracion/planes/servicios/reportes" class="tooltipbasic" data-tooltip="Planes Modificados">Reporte</a></li>
+									</ul>
+								</li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Planes ingresados por sucursales">Portabilidades</a>
+									<ul>
+										<li><a href="/administracion/planes/portabilidades/consultar" class="tooltipbasic" data-tooltip="Consulta y actualizacion de solicitud">Consultar</a></li>
+									</ul>
+								</li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Planes Existentes">Catalogo Planes</a>
+									<ul>
+										<li><a href="/administracion/planes/planes/nuevo" class="tooltipbasic" data-tooltip="Nuevo plan">Nuevo</a></li>
+										<li><a href="/administracion/planes/planes/actualizar" class="tooltipbasic" data-tooltip="Consulta y actualizacion de Plan">Actualizar</a></li>
+									</ul>
+								</li>
+								<li><a href="/administracion/sucursales/papeletas" class="tooltipbasic" data-tooltip="Consulta y reporte de Papeletas ingresadas">Papeletas</a></li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Servicios tecnicos">Servicios</a>
+							<ul>
+								<li><a href="/administracion/servicios/catalogo/reporte" class="tooltipbasic" data-tooltip="Catalogo de reparaciones">Catalogo/Rep.</a></li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Clientes de reparaciones">Clientes Rep.</a>
+									<ul>
+										<li><a href="/administracion/servicios/clientes/historial" class="tooltipbasic" data-tooltip="Consulta y reporte de historial de clientes de reparacion">Historial</a></li>
+									</ul>
+								</li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Seguimiento de servicios">Seguimiento</a>
+									<ul>
+										<li><a href="/administracion/servicios/seguimiento/flexeo_porta" class="tooltipbasic" data-tooltip="Seguimiento de flexeos por portabilidad">Flexeo Porta</a></li>
+										<li><a href="/administracion/servicios/seguimiento/flexeos" class="tooltipbasic" data-tooltip="Seguimiento de flexeos con costo">Flexeos</a></li>
+										<li><a href="/administracion/servicios/seguimiento/reparaciones" class="tooltipbasic" data-tooltip="Seguimiento de reparaciones fisicas">Reparacion fisica</a></li>
+									</ul>
+								</li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="inventario de servicios">Inventario</a>
+									<ul>
+										<li><a href="/administracion/servicios/inventario/accesorios" class="tooltipbasic" data-tooltip="Accesorios existentes">Accesorios</a></li>
+										<li><a href="/administracion/servicios/inventario/refacciones" class="tooltipbasic" data-tooltip="Refacciones existentes">Refacciones</a></li>
+										<li><a href="/administracion/servicios/inventario/eqobsoletos" class="tooltipbasic" data-tooltip="Equipos obsoletos">Eq.Obsoletos</a></li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						{%endif %}
+						<li><a href="/cerrar">Salir</a></li>
+					</ul>
+			</div>
+			</nav>
+			{% block contenido %}{% endblock %}
+			<footer id="footer">
+				<div class="center">
+				<a href="#">Soporte T&eacute;cnico</a>
+			</div></footer>
+		</div>
+	</body>
+</html>

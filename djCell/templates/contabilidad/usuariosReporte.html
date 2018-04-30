@@ -1,0 +1,130 @@
+{% extends 'contabilidad/conta-base2.html' %}
+
+{% block titulo %}--Contabilidad{% endblock %}
+
+{% block contenido %}
+<div id="content2">
+	<section id="row">
+	<div class="info">
+		<h2>Lista de Usuarios</h2>
+		<div>{{descr}}</div>
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<td id="gridhead">Filtro</td>
+					<td id="gridhead">Buscar</td>
+				</tr>
+				<tr>
+					<form action='.'  method='GET' enctype="multipart/form-data">{% csrf_token %}
+						<td><input type='texto' name='q' value='{{ q|escape }}'></td>
+						<td><input class="submit success" type="submit" value='buscar'></td>
+					</form>
+				</tr>
+			</table>
+		</div>
+			{% if usuarios %}
+				<br>
+				<br>
+				<h2>Descripcion de los Usuarios, Total de {{nUsuarios}}</h2>
+				<div id="form2">
+				<table id="form2">
+					<tr>
+						<td id="gridhead">Usuario</td>
+						<td id="gridhead">Empleado</td>
+						<td id="gridhead">Privilegios</td>
+						<td id="gridhead">Detalles</td>
+					</tr>
+					{% for item in usuarios %}
+					<tr>
+						<td>{{ item.user|escape}}</td>
+						<td>{{ item.empleado|upper}}</td>
+						<td>{{ item.permiso|upper}}</td>
+						<td> <a href="?q={{item.id}}">Seleccionar</a></td>
+					</tr>
+					{%endfor %}
+				</table>
+				</div>
+				<div class="pagination">
+				    <span class="step-links">
+				        {% if usuarios.has_previous %}
+				            <a href="?pagina={{ usuarios.previous_page_number }}&amp;q={{q|escape}}">anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ usuarios.number }} de {{ usuarios.paginator.num_pages }}.
+				        </span>
+
+				        {% if usuarios.has_next %}
+				            <a href="?pagina={{ usuarios.next_page_number }}&amp;q={{q|escape}}">Siguiente</a>
+				        {% endif %}
+				    </span>
+				</div>
+			{%elif q %}
+				{{mensaje}}
+			{% endif %}
+
+			{%if usuario %}
+				<br>
+				<br>
+				<div class="info">
+					<h2>Datos de La Cuenta:</h2>
+				</div>
+				<div id="twoCol">
+					<table id="twoCol">
+						<tr>
+							<td>Nombre del Usuario</td>
+							<td>{{usuario.user.username}}</td>
+						</tr>
+						<tr>
+							<td>Privilegios</td>
+							<td>{{usuario.permiso.descripcion}}</td>
+						</tr>
+						<tr>
+							<td colspan="2" style="text-align:center;">Empleado</td>
+						</tr>
+						<tr>
+							<td>Nombre</td>
+							<td>{{usuario.empleado.nombre}} {{usuario.empleado.aPaterno}} {{usuario.empleado.aMaterno}}</td>
+						</tr>
+						<tr>
+							<td>Direccion</td>
+							<td>{{ usuario.empleado.direccion|escape}}, {{ usuario.empleado.colonia|escape}}, {{ usuario.empleado.ciudad|escape}}, {{ usuario.empleado.estado|escape}}</td>
+						</tr>
+						<tr>
+							<td>Telefono</td>
+							<td>{{usuario.empleado.telefono}}</td>
+						</tr>
+						<tr>
+							<td>Fecha de Nacimiento</td>
+							<td>{{usuario.empleado.fxNacimiento|date}}</td>
+						</tr>
+						<tr>
+							<td>Fecha de Ingreso</td>
+							<td>{{usuario.empleado.fxIngreso|date:"Y-m-d h:i a"}}</td>
+						</tr>
+						<tr>
+							<td>Puesto</td>
+							<td>{{usuario.empleado.puesto}}</td>
+						</tr>
+						<tr>
+							<td>Area</td>
+							<td>{{usuario.empleado.area}}</td>
+						</tr>
+						<tr>
+							<td>Estado Activo del empleado</td>
+							<td>{%if usuario.empleado.estadoEmpleado %}<img src="{{STATIC_URL}}img/icons/tick.png" />{%else %}<img src="{{STATIC_URL}}img/icons/exclamation.png" />{%endif %}</td>
+						</tr>
+						<tr>
+							<td>Editar Empleado</td>
+							<td><a href="/contabilidad/nomina/empleados/nuevo/?ide={{usuario.empleado.id}}">Editar</a></td>
+						</tr>
+					</table>
+				</div>
+			{%endif %}
+
+			<br><br><br><br>
+	</div>	
+	</section>
+	
+</div>
+{% endblock %}

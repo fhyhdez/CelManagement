@@ -1,0 +1,271 @@
+/*** General button styling ***/
+#buttons {
+				
+				width: 100%;
+				text-align: left;
+				padding: 0px 0px 30px 0px;
+}
+input.submit, input.reset, .button {
+	/*** Layout Styling ***/
+	
+	cursor: pointer;
+	display: inline-block;
+	position: relative;
+	padding: 6px 10px;
+	border-radius: 5px;
+	margin-bottom: 3px;
+	background: #f0f0f0; /* Background for Internet Explorer 6-9 and other older browsers */
+	background: -webkit-linear-gradient(top, rgba(255, 255, 255, .2), rgba(255, 255, 255, .2)), url('../img/white_texture.png'); /* Background for Webkit browsers (Google Chrome and Apple Safari) */
+	background: -ms-linear-gradient(top, rgba(255, 255, 255, .2), rgba(255, 255, 255, .2)), url('../img/white_texture.png'); /* Background for Internet Explorer 10+ */
+	background: -moz-linear-gradient(top, rgba(255, 255, 255, .2), rgba(255, 255, 255, .2)), url('../img/white_texture.png'); /* Background for Mozilla Firefox */
+	background: -o-linear-gradient(top, rgba(255, 255, 255, .2), rgba(255, 255, 255, .2)), url('../img/white_texture.png'); /* Background for Opera */
+	box-shadow: inset 0px 1px 0px #ffffff,
+				0px 1px 0px #d1d1d1,
+				0px 2px 2px rgba(0, 0, 0, .5);
+	
+	/*** Text styling ***/
+	
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	font-weight: bold;
+	text-decoration: none;
+	color: #797977;
+	text-shadow: 0px 1px 0px rgba(255, 255, 255, .3);
+}
+
+	
+	
+	input.submit:hover, input.reset:hover, .button:hover {
+		background: #fafafa;
+		background: -webkit-linear-gradient(top, rgba(255, 255, 255, .4), rgba(255, 255, 255, .4)), url('../img/white_texture.png'); /* Background for Internet Explorer 6-9 and other older browsers */
+		background: -o-linear-gradient(top, rgba(255, 255, 255, .4), rgba(255, 255, 255, .4)), url('../img/white_texture.png');  /* Background for Webkit browsers (Google Chrome and Apple Safari) */
+		background: -ms-linear-gradient(top, rgba(255, 255, 255, .4), rgba(255, 255, 255, .4)), url('../img/white_texture.png');  /* Background for Internet Explorer 10+ */
+		background: -moz-linear-gradient(top, rgba(255, 255, 255, .4), rgba(255, 255, 255, .4)), url('../img/white_texture.png'); /* Background for Opera */
+		color: #6AB5C8;
+	}
+		
+	input.submit:active, input.reset:active,  .button:active {
+		/*** The push effect ***/
+		
+		-webkit-transform: translateY(1px);
+		-ms-transform: translateY(1px);
+		-moz-transform: translateY(1px);
+		-o-transform: translateY(1px);
+		
+		box-shadow: inset 0px 1px 0px #ffffff,
+					0px 0px 0px #d1d1d1,
+					0px 1px 1px rgba(0, 0, 0, .4);
+	}
+
+/*** Error/deny button styling ***/	
+	
+input.reset, .error {
+	color: #eb2643;
+	padding: 6px 23px 6px 10px;
+}
+
+/*** The hover state of the error/deny button ***/
+
+input.reset:hover, .error:hover {
+	color: #ff425e;
+
+}
+
+	/*** The 'x' sign of the error button ***/
+	
+	input.reset:after, .error:after {
+		height: 10px;
+		width: 3px;
+		background: #eb2643;
+		position: absolute;
+		top: 10px;
+		right: 11px;
+		-webkit-transform: rotate(45deg);
+		-ms-transform: rotate(45deg);
+		-moz-transform: rotate(45deg);
+		-o-transform: rotate(45deg);
+		border-radius: 3px;
+	}
+	
+	input.reset:before ,.error:before {
+		clear: both;
+		content: " ";
+		height: 10px;
+		width: 3px;
+		background: #eb2643;
+		position: absolute;
+		top: 10px;
+		right: 11px;
+		-webkit-transform: rotate(-45deg);
+		-ms-transform: rotate(-45deg);
+		-moz-transform: rotate(-45deg);
+		-o-transform: rotate(-45deg);
+		border-radius: 3px;
+	}
+
+/*** Success/accept button styling ***/
+	
+input.submit, .success {
+	color: #52b827;
+	padding: 6px 27px 6px 10px;
+}
+
+	/*** The hover state of the success/accept button ***/
+	
+	input.submit:hover, .success:hover {
+		color: #5ecf2d;
+	}
+
+	/*** The 'v' sign of the success/accept button ***/
+	
+	input.submit:after, .success:after {
+		content: " ";
+		height: 12px;
+		width: 3px;
+		background: #52b827;
+		position: absolute;
+		top: 8px;
+		right: 11px;
+		-webkit-transform: rotate(45deg);
+		-ms-transform: rotate(45deg);
+		-moz-transform: rotate(45deg);
+		-o-transform: rotate(45deg);
+		border-radius: 3px;
+	}
+	
+	input.submit:before, .success:before {
+		content: " ";
+		height: 6px;
+		width: 3px;
+		background: #52b827;
+		position: absolute;
+		top: 13px;
+		right: 16px;
+		-webkit-transform: rotate(-45deg);
+		-ms-transform: rotate(-45deg);
+		-moz-transform: rotate(-45deg);
+		-o-transform: rotate(-45deg);
+		border-radius: 3px;
+	}	
+	
+/*** Warning button styling ***/	
+	
+.warning {
+	color: #E9B61C;
+	padding: 6px 27px 6px 10px;
+}
+
+	/*** The hover state of the warning button ***/
+
+	.warning:hover {
+		color: #ffce3b;
+	}
+	
+	/*** The warning sign ***/
+	
+	.warning:after {
+		content: "x";
+		padding: 0px 4px 2px 4px;
+		border-radius: 10px;
+		font-size: 10px;
+		background: #ffce3b;
+		position: absolute;
+		top: 8px;
+		right: 8px;
+		color: black;
+	}
+/*** Tooltip general styling ***/	
+
+.tooltip {
+	position: absolute;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	top: -27px;
+	right: -133px;
+	border-radius: 4px;
+	padding: 5px;
+	font-weight: bold;
+	text-transform: none;
+	visibility: hidden;
+	display: inline-block;
+	text-align: center;
+	z-index: 3;
+	}
+	
+	.error:hover .tooltip, .success:hover .tooltip, .warning:hover .tooltip {
+		visibility: visible; /*** It makes the tooltip visible on hover ***/
+	}
+	
+	/*** The triangle of the tooltip ***/
+	
+	.tooltip:after {
+		content: " ";
+		position: absolute;
+		height: 10px;
+		width: 10px;
+		bottom: -3px;
+		left: 10px;
+		z-index: 2;
+		-webkit-transform: rotate(45deg);
+		-ms-transform: rotate(45deg);
+		-moz-transform: rotate(45deg);
+		-o-transform: rotate(45deg);
+	}
+	
+	/*** Styling the error tooltip (the background and text color) ***/
+	
+	.error .tooltip {
+		width: 150px; /*** CHANGE THIS IF YOU WANT A LARGER ERROR TOOLTIP **/
+		background: #f7a3a3;
+		background: -webkit-linear-gradient(top, rgba(235, 136, 136, .4), rgba(235, 136, 136, .5)), url('../img/white_texture.png');
+		background: -ms-linear-gradient(top, rgba(235, 136, 136, .4), rgba(235, 136, 136, .5)), url('../img/white_texture.png');
+		background: -moz-linear-gradient(top, rgba(235, 136, 136, .4), rgba(235, 136, 136, .5)), url('../img/white_texture.png');
+		background: -o-linear-gradient(top, rgba(235, 136, 136, .4), rgba(235, 136, 136, .5)), url('../img/white_texture.png');
+		color: #c42121;
+	}
+
+	.error .tooltip:after {
+		background: #f7a3a3;
+		background: -webkit-linear-gradient(top, rgba(235, 136, 136, .5), rgba(235, 136, 136, .5)), url('../img/white_texture.png');	
+		background: -ms-linear-gradient(top, rgba(235, 136, 136, .5), rgba(235, 136, 136, .5)), url('../img/white_texture.png');	
+		background: -moz-linear-gradient(top, rgba(235, 136, 136, .5), rgba(235, 136, 136, .5)), url('../img/white_texture.png');	
+		background: -o-linear-gradient(top, rgba(235, 136, 136, .5), rgba(235, 136, 136, .5)), url('../img/white_texture.png');	
+	}
+	
+	/*** Styling for the success tooltip (the background and text color) ***/
+	
+	.success .tooltip {
+		width: 150px; /*** CHANGE THIS IF YOU WANT A LARGER SUCCESS TOOLTIP **/ 
+		background: #b6fa99;
+		background: -webkit-linear-gradient(top, rgba(76, 214, 17, .4), rgba(76, 214, 17, .5)), url('../img/white_texture.png');
+		background: -ms-linear-gradient(top, rgba(76, 214, 17, .4), rgba(76, 214, 17, .5)), url('../img/white_texture.png');
+		background: -moz-linear-gradient(top, rgba(76, 214, 17, .4), rgba(76, 214, 17, .5)), url('../img/white_texture.png');
+		background: -o-linear-gradient(top, rgba(76, 214, 17, .4), rgba(76, 214, 17, .5)), url('../img/white_texture.png');
+		color: #067313;
+	}
+	
+	.success .tooltip:after {
+		background: #b6fa99;
+		background: -webkit-linear-gradient(top, rgba(76, 214, 17, .4), rgba(76, 214, 17, .5)), url('../img/white_texture.png');
+		background: -ms-linear-gradient(top, rgba(76, 214, 17, .4), rgba(76, 214, 17, .5)), url('../img/white_texture.png');
+		background: -moz-linear-gradient(top, rgba(76, 214, 17, .4), rgba(76, 214, 17, .5)), url('../img/white_texture.png');
+		background: -o-linear-gradient(top, rgba(76, 214, 17, .4), rgba(76, 214, 17, .5)), url('../img/white_texture.png');
+	}
+	
+	.warning .tooltip {
+		width: 150px; /*** CHANGE THIS IF YOU WANT A LARGER WARNING TOOLTIP ***/
+		background: #f5eb80;
+		background: -webkit-linear-gradient(top, rgba(255, 234, 0, .4), rgba(255, 234, 0, .5)), url('../img/white_texture.png');
+		background: -ms-linear-gradient(top, rgba(255, 234, 0, .4), rgba(255, 234, 0, .5)), url('../img/white_texture.png');
+		background: -moz-linear-gradient(top, rgba(255, 234, 0, .4), rgba(255, 234, 0, .5)), url('../img/white_texture.png');
+		background: -o-linear-gradient(top, rgba(255, 234, 0, .4), rgba(255, 234, 0, .5)), url('../img/white_texture.png');
+		color: #c2940b;
+	}
+	
+	.warning .tooltip:after {
+		background: #f5eb80;
+		background: -webkit-linear-gradient(top, rgba(255, 234, 0, .4), rgba(255, 234, 0, .5)), url('../img/white_texture.png');
+		background: -ms-linear-gradient(top, rgba(255, 234, 0, .4), rgba(255, 234, 0, .5)), url('../img/white_texture.png');
+		background: -moz-linear-gradient(top, rgba(255, 234, 0, .4), rgba(255, 234, 0, .5)), url('../img/white_texture.png');
+		background: -o-linear-gradient(top, rgba(255, 234, 0, .4), rgba(255, 234, 0, .5)), url('../img/white_texture.png');
+	}

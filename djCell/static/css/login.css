@@ -1,0 +1,167 @@
+#imgLogo{
+  		height: 120px;
+  		width: 200px;
+  		border: none;
+  		position: relative;
+  		margin-left: 2%;
+ }
+ body{
+font-family:"Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
+font-size:12px;
+background: url('../img/fondo2.jpg');
+overflow-x:hidden;
+background-position: center;
+}
+
+p, h1, form, button{border:0; margin:0; padding:0;}
+.spacer{clear:both; height:1px;}
+/* ----------- My Form ----------- */
+.myform{
+margin:0 auto 0 auto;
+width:400px;
+padding:14px;
+top: 20%;
+position: relative;
+text-align: center;
+border-radius: 15px;
+}
+
+
+/* ----------- stylized ----------- */
+#stylized{
+border:solid 2px #b7ddf2;
+background:#ebf4fb;
+opacity: 0.9;
+}
+#stylized h1 {
+font-size:18px;
+font-weight:bold;
+margin-bottom:8px;
+font-family: 'ArmWrestlerBold', sans-serif,Helvetica;
+}
+#stylized p{
+font-size:11px;
+color:#666666;
+margin-bottom:20px;
+border-bottom:solid 1px #b7ddf2;
+padding-bottom:10px;
+}
+#stylized label{
+/*display:block;*/
+font-weight:bold;
+text-align:right;
+width:140px;
+float:left;
+margin-top: 1%;
+}
+#stylized .small{
+color:#666666;
+display:block;
+font-size:11px;
+font-weight:normal;
+text-align:right;
+width:140px;
+}
+#stylized input{
+float:left;
+font-size:12px;
+padding:4px 2px;
+border:solid 1px #aacfe4;
+width:200px;
+margin:2px 0 20px 10px;
+}
+#stylized button{
+clear:both;
+margin-left:150px;
+width:125px;
+height:31px;
+background:#666666 url('../img/button.png') no-repeat;
+text-align:center;
+line-height:31px;
+color:#FFFFFF;
+font-size:11px;
+font-weight:bold;
+}
+/*----- estilos visuales de los elementos --------*/
+
+#stylized input{ 
+	border:1px solid #aaa;
+	box-shadow: 0px 0px 3px #ccc, 0 10px 15px #eee inset;
+	border-radius:15px;
+	color: #888;
+	font-size: 12px;
+	padding-right:30px;
+	-moz-transition: padding .25s; 
+	-webkit-transition: padding .25s; 
+	-o-transition: padding .25s;
+  -ms-transition: padding .25s;
+	transition: padding .25s;
+}
+#stylized input:focus{
+	background: #fff; 
+	border:1px solid #555; 
+	box-shadow: 0 0 3px #aaa; 
+	padding-right:80px;
+}
+
+/* === Estilos de Validacion === */	
+
+#stylized input:required:valid{
+	box-shadow: 0 0 5px #5cd053;
+	border-color: #28921f;
+}
+#stylized input:focus:invalid{
+	box-shadow: 0 0 5px #d45252;
+	border-color: #b03535
+}
+
+/* === Estilos del boton de Envio === */
+#stylized button.submit {
+    padding: 9px 17px;
+   font-family: Helvetica, Arial, sans-serif;
+   font-weight: bold;
+   line-height: 1;
+   color: #444;
+   border: none;
+   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.85);
+   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fff), to(#bbb));
+   background-image: -moz-linear-gradient(0% 100% 90deg, #BBBBBB, #FFFFFF);
+   background-image: -o-linear-gradient(0% 100% 90deg, #BBBBBB, #FFFFFF);
+   background-image: -ms-linear-gradient(0% 100% 90deg, #BBBBBB, #FFFFFF);
+   background-color: #00A8C6;
+   border: 1px solid #AEE239;
+   border-radius: 10px;
+   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+   
+}
+#stylized button.submit:hover {
+	opacity:.70;
+	cursor: pointer; 
+	color: orange;
+}
+#stylized button.submit:active {
+	border: 1px solid #222;
+	box-shadow: 0 0 10px 5px #444 inset; 
+}
+#ex4 {
+    /*width: 800px;
+    margin: 0 auto;*/
+    top: -5%;
+    left: 58%;
+    position: relative;
+}
+ 
+#ex4 img {
+    position:absolute;
+    -webkit-transition: all 0.5s ease-out;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+}
+ 
+#ex4 img:hover {
+    -webkit-transform: rotate(-7deg);
+    -moz-transform: rotate(-7deg);
+    -o-transform: rotate(-7deg);
+    -ms-transform: rotate(-7deg);
+}

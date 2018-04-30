@@ -1,0 +1,246 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}@Bienvenido a @Compras{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+			<div class="info">
+					<h2>Facturas Agregadas en Almacen/Compras</h2>
+			</div>
+
+		<form action='.' method='GET' enctype="multipart/form-data">{% csrf_token %}
+			<div id="grid">
+			<table id="grid">
+				<tr>
+					<td>
+						<label for='q'>Buscar folio de Factura:</label>
+					</td>
+					<td>
+						<input type='texto' name='q' value='{{ b_folio|escape }}'>
+					</td>
+					<td>
+						<input class="submit success" type='submit' value='buscar'>
+					</td>
+				</tr>
+			</table>
+			</div>		
+		</form>
+		{% if b_facturas %}
+			<div class="info">
+					<h2>Resultados de la busqueda de Facturas</h2>
+			</div>
+<hr>
+			<br>
+				<br>
+				<h2>Facturas</h2>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Folio</td>
+							<td id="gridhead">Documento</td>
+							<td id="gridhead">Proveedor</td>
+							<td id="gridhead">Fecha de Factura</td>
+							<td id="gridhead">Forma de Pago</td>
+							<td id="gridhead">Examinar Detalles</td>
+						</tr>
+						{% for item in b_facturas %}
+						<tr>
+							<td>{{ item.folio|escape}}</td>
+							<td>{{ item.documento|upper}}</td>
+							<td>{{ item.proveedor|title}}</td>
+							<td>{{ item.fxFactura|date}}</td>
+							<td>{{ item.formaPago|upper}}</td>
+							<td><a href="?q={{ item.folio|escape }}">Detalles</a></td>
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+		{%else %}
+		<strong>No hay resultados disponibles por el momento.s</strong>
+		{% endif %}
+
+
+		{% if b_factura %}
+			<div class="info">
+				<h2>Detalles de la Factura</h2>
+			</div>
+			<div id='twoCol'>
+				<table>
+					<tr>
+						<td>Folio:</td><td>{{b_factura.folio}}</td>
+					</tr>
+					<tr>
+						<td>Documento:</td><td>{{b_factura.documento}}</td>
+					</tr>
+					<tr>
+						<td>Proveedor:</td><td>{{b_factura.proveedor}}</td>
+					</tr>
+					<tr>
+						<td>Fecha de Factura:</td><td>{{b_factura.fxFactura|date}}</td>
+					</tr>
+					<tr>
+						<td>Forma de Pago:</td><td>{{b_factura.formaPago}}</td>
+					</tr>
+				</table>
+			</div>
+		{% endif %}
+
+
+			{% if b_equipos %}
+
+				<br>
+				<br>
+				<div class="info">
+				<h2>Equipos en Factura</h2>
+				</div>
+				<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Factura</td>
+						<td id="gridhead">Marca/Modelo</td>
+						<td id="gridhead">IMEI</td>
+						<td id="gridhead">ICC</td>
+						<td id="gridhead">No. Cel.</td>
+						<td id="gridhead">Accesorios</td>
+						<td id="gridhead">Estatus</td>
+						<td id="gridhead">Importe en Factura</td>
+						<td id="gridhead">Sucursal Actual</td>
+					</tr>
+					{% for item in b_equipos %}
+					<tr>
+						<td>{{ item.factura|escape}}</td>
+						<td>{{ item.detallesEquipo|escape}}</td>
+						<td>{{ item.imei|escape}}</td>
+						<td>{{ item.icc|default:'Sin Asignar'}}</td>
+						<td>{{ item.noCell|default:''}}</td>
+						<td>{{ item.accesorioEqu|default:''}}</td>
+						<td>{{ item.estatus|escape}}</td>
+						<td>{{ item.importeFactura|escape}}</td>
+						<td>{{ item.sucursal|escape}}</td>
+					</tr>
+					{%endfor %}
+				</table>
+			</div>
+			{% endif %}
+
+
+			{% if b_express %}
+				<br>
+				<br>
+				<div class="info">
+				<h2>Express en Factura</h2>
+				</div>
+				<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Factura</td>
+						<td id="gridhead">ICC</td>
+						<td id="gridhead">No Cel</td>
+						<td id="gridhead">Detalles</td>
+						<td id="gridhead">Estatus</td>
+						<td id="gridhead">Importe de Factura</td>
+						<td id="gridhead">Sucursal Actual</td>
+					</tr>
+					{% for item in b_express %}
+					<tr>
+						<td>{{ item.factura|escape}}</td>
+						<td>{{ item.icc|escape}}</td>
+						<td>{{ item.noCell|default:''}}</td>
+						<td>{{ item.detallesExpres|escape}}</td>
+						<td>{{ item.estatus|escape}}</td>
+						<td>{{ item.importeFactura|escape}}</td>
+						<td>{{ item.sucursal|escape}}</td>
+					</tr>
+					{%endfor %}
+				</table>
+			</div>
+			{% endif %}
+
+
+			{% if b_accesorios %}
+				<br>
+				<br>
+				<div class="info">
+				<h2>Accesorios en Factura</h2>
+				</div>
+				<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Factura</td>
+						<td id="gridhead">Codigo de Barras</td>
+						<td id="gridhead">Marca Descripcion</td>
+						<td id="gridhead">Estatus</td>
+						<td id="gridhead">Importe en Factura</td>
+						<td id="gridhead">Sucursal Actual</td>
+					</tr>
+					{% for item in b_accesorios %}
+					<tr>
+						<td>{{ item.factura|escape}}</td>
+						<td>{{ item.codigoBarras|escape}}</td>
+						<td>{{ item.detallesAccesorio|escape}}</td>
+						<td>{{ item.estatusAccesorio|escape}}</td>
+						<td>{{ item.precioFact|escape}}</td>
+						<td>{{ item.sucursal|escape}}</td>
+					</tr>
+					{%endfor %}
+				</table>
+			</div>
+			{% endif %}
+
+			{%if fichas %}
+				<br>
+				<div class="info">
+				<h2>Desglose de Series de Fichas en Factura</h2>
+				</div>
+				<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">No de Fichas</td>
+						<td id="gridhead">Desde</td>
+						<td id="gridhead">Hasta</td>
+						<td id="gridhead">Nominacion</td>
+					</tr>
+					{% for item in fichas %}
+					<tr>
+						{% for x in item %}
+						<td>{{ x|escape}}</td>
+						{%endfor %}
+					</tr>
+					{%endfor %}
+				</table>
+				</div>
+			{%endif %}
+
+
+			{% if b_recargas %}
+				<br>
+				<br>
+				<div class="info">
+				<h2>Saldo en Factura</h2>
+				</div>
+				<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Factura</td>
+						<td id="gridhead">Saldo</td>
+						<td id="gridhead">Precio Factura</td>
+					</tr>
+					{% for item in b_recargas %}
+					<tr>
+						<td>{{ item.factura|escape}}</td>
+						<td>{{ item.saldo|escape}}</td>
+						<td>{{ item.precioFac|escape}}</td>
+					</tr>
+					{%endfor %}
+				</table>
+			</div>
+			{% endif %}
+			
+			<strong>{{ informacion }}</strong>
+	</section>
+	<br>
+	<br>
+	<br>
+	<br>
+</div>
+{% endblock %}

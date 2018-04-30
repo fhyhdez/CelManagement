@@ -1,0 +1,153 @@
+{% extends 'ventas/ventas-base2.html' %}
+{% block miscript %} 
+<script type="text/javascript">
+ function SINO(cual) {
+   var elElemento=document.getElementById(cual);
+   if(elElemento.style.display == 'block') {
+      elElemento.style.display = 'none';
+   } else {
+      elElemento.style.display = 'block';
+   }
+}  
+ </script>
+{% endblock %}
+
+{% block titulo %}@Seguimiento de Portabilidades - @Ventas{% endblock %}
+
+{% block contenido %}
+<div id="content2">
+	<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Seguimiento de Clientes - Portabilidades</h2>
+				<div>Clientes registrados en sucursales</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar Cliente</h3>
+				</li>
+				<li>
+					<label class="desc">Filtrar por : (Nombre / direccion / folio) <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ queryPorta|escape}}" name="qPorta" title="Ingrese parcial o totalmente el nombre, direccion o sucursal del cliente"; placeholder="Ej. carlos" required />
+					</div>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Consultar"/>
+				</li>
+				<li><strong>{{ info }}</strong></li>
+			</ul>
+		</form>
+	</section>
+	
+		{% if queryPorta %}
+		<section id="row">
+			<h3>Resultados para "{{ query|escape }}":</h3>
+			{% if results %}
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Sucursal</td>
+						<td id="gridhead">Nombre</td>
+						<td id="gridhead">Direccion</td>
+						<td id="gridhead">Ingreso</td>
+						<td id="gridhead">No.A Portar</td>
+						<td id="gridhead">Flexeo</td>
+						<td id="gridhead" title='Estado de portabildad'>Estado</td>
+						<td id="gridhead" title='Operacion a realizar'>Revisar</td>
+					</tr>
+					{% for porta in results %}
+					<tr>
+						
+						<td>{{ porta.sucursal.nombre }} </td>
+						<td>{{ porta.cliente.nombre }} </td>
+						<td>{{ porta.cliente.direccion }}. {{ porta.cliente.colonia.colonia }}, {{ porta.cliente.ciudad.ciudad }}, {{ porta.cliente.ciudad.estado }}.  </td>
+						<td>{{ porta.fxIngreso|date:"Y-m-d h:i a" }}</td>
+						<td>{{ porta.noaPortar }}</td>
+						<td>
+						{% if porta.flexearEquipo %}
+							{% for ccosto in eqReparacion %}
+								{% for hist in historial %}
+									{% if ccosto.cliente == porta.cliente and ccosto.id == hist.equipoReparacion.id %}
+										Equipo : {{ ccosto.marcaModelo }} / {{ ccosto.imei}}<br>
+										Estado/Equipo : {{ ccosto.estado.estado }}<br>
+										Antipo : {{ ccosto.anticipo }}<br>
+										<input type="radio" name="abonarEqr" value="{{ ccosto.id|escape }}"/><br>
+										<input name="ActivarEquipo" class="submit success" type="submit" value="Abonar"/>
+										-.-.-.-.-.-<br>
+									{% endif %}
+								{% endfor %}
+							{% endfor %}
+							-.-.-.-.-.-<br>
+							{% for scosto in eqFlexeo %}
+								{%if scosto.portabilidad.id == porta.id %}
+								Equipo : {{ scosto.marcaModelo }}
+								Fecha de Ingreso a Sucursal: {{ scosto.fxSucursal|date:"Y-m-d h:i a" }}
+								Ingreso con el Tecnico: {{ scosto.fxTecnico|date:"Y-m-d h:i a" }}
+								Estado / Equipo: {{ scosto.observaciones }}
+								-.-.-.-.-.-<br>
+								{%endif %}
+							{% endfor %}
+						{% else %}
+						<strong>No se incluyo equipo para flexeo</strong>
+						{% endif %}
+						</td>
+						<td title='Estado del numero a portar'>{{ porta.estado.estado }}</td>
+						<td>
+							<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="updPorta" type="image" src="/static/img/icons/report_edit.png" title="Actualizar Datos" value="{{ porta.id|escape }}" />
+							</form>
+						</td>
+					</tr>
+					{%endfor %}
+				</table>
+			</div>
+			{% else %}
+				<p>El Cliente no se encuentra registrado, verifique sus datos o agregue uno nuevo<br>
+				<a class="success button" href="/ventas/portabilidades/agregar/" title="Agregar Nuevo">Nueva Cliente de portabilidad</a> </p>
+			{% endif %}
+		</form>
+		</section>
+		{% endif %}
+	<section id="row">
+	{%if mostrarPorta %}
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div class="info">
+					<h2>Actualizacion del Estado de Portabilidad</h2>
+				</div>
+				<ul>
+					<li class="section first">
+						<h3>Datos Generales</h3>
+					</li>
+
+					{% for field in form %}
+							<li>
+								{%if field.label == 'Key' %}
+									{{ field.as_hidden }}
+								{% else %}
+								<label class="desc">{{field.label}}</label> 
+								<div>
+									{{field}}
+								</div>
+								<label> {{field.help_text}} <span class="req"> {{field.errors}} </span></label>
+								{% endif %}
+							</li>
+						{% endfor %}
+					<li id="buttons">
+						{%if form %}
+						<input name="edoPorta" class="submit success" type="submit" value="Actualizar Seguimiento"/> |  
+						{%endif %}
+						<a class="success button" href="." title="Buscar Solicitudes sin revisar">Buscar Solicitudes</a> <br>
+						<BR /><span class="req">*.Campos Obligatorios. No dejar vacios.</span>
+					</li>
+				</ul>
+			</form>
+	{%endif %}
+	</section>
+	<br><br>
+</div>
+{% endblock %}

@@ -1,0 +1,213 @@
+{% extends 'contabilidad/conta-base2.html' %}
+
+{% block titulo %}--Contabilidad{% endblock %}
+
+{% block contenido %}
+<div id="content2">
+	<section id="row">
+	<div class="info">
+		<h2>Lista de Empleados</h2>
+		<div>{{descr}}</div>
+		{{buscador|safe}}
+		{{mensaje}}
+			{% if empleados %}
+				{{empleados|safe}}
+			{%endif %}
+
+
+			{%if empleado %}
+				<br>
+				<br>
+				<div class="info">
+					<h3><strong>Datos del Empleado</strong></h3>
+				</div>
+				<div id="twoCol">
+					<table id="twoCol">
+						<tr>
+							<td>CURP</td>
+							<td>{{empleado.curp|upper}}</td>
+						</tr>
+						<tr>
+							<td>Nombre</td>
+							<td>{{empleado.nombre|upper}} {{empleado.aPaterno|upper}} {{empleado.aMaterno|upper}}</td>
+						</tr>
+						<tr>
+							<td>Direccion</td>
+							<td>{{ empleado.direccion|title}}, {{ empleado.colonia|title}}, {{ empleado.ciudad|title}}, {{ empleado.estado|title}}</td>
+						</tr>
+						<tr>
+							<td>Telefono</td>
+							<td>{{empleado.telefono|default:'Sin Asignar'}}</td>
+						</tr>
+						<tr>
+							<td>Fecha de Nacimiento</td>
+							<td>{{empleado.fxNacimiento|date}}</td>
+						</tr>
+						<tr>
+							<td>Fecha de Ingreso</td>
+							<td>{{empleado.fxIngreso|date:"Y-m-d h:i a"}}</td>
+						</tr>
+						<tr>
+							<td>Puesto</td>
+							<td>{{empleado.puesto}}</td>
+						</tr>
+						<tr>
+							<td>Area</td>
+							<td>{{empleado.area}}</td>
+						</tr>
+						<tr>
+							<td>Estado Activo del empleado</td>
+							<td>{%if empleado.estadoEmpleado %}<img src="{{STATIC_URL}}img/icons/tick.png" />{%else %}<img src="{{STATIC_URL}}img/icons/exclamation.png" />{%endif %}</td>
+						</tr>
+						<tr>
+							<td>Editar</td>
+							<td><a href="/contabilidad/nomina/empleados/nuevo/?ide={{empleado.id}}">Editar <img src="{{STATIC_URL}}img/icons/user_edit.png" /></a></td>
+						</tr>
+					</table>
+				</div>
+			{%endif %}
+
+			{%if amones %}
+				<br>
+				<br>
+				<div class="info">
+					<h2>Ultimas amonestaciones</h2>
+					</div>
+					<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Tipo de Amonestacion</td>
+							<td id="gridhead">Comentario</td>
+							<td id="gridhead">Fecha de Amonestacion</td>
+						</tr>
+						{%for item in amones %}
+						<tr>
+							<td>{{item.tipoAmonestacion}}</td>
+							<td>{{item.comentario|default:'Ninguna'}}</td>
+							<td>{{item.fxAmonestacion|date:"Y-m-d h:i a"}}</td>
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+			{%endif %}
+
+			{%if comisiones %}
+				<br>
+				<br>
+				<div class="info">
+					<h2>Las ultimas comisiones Ganadas</h2>
+					</div>
+					<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Kit</td>
+							<td id="gridhead">Tip</td>
+							<td id="gridhead">Planes</td>
+							<td id="gridhead">Servicios</td>
+							<td id="gridhead">Mes</td>
+							<td id="gridhead">Pagado</td>
+
+						</tr>
+						{%for item in comisiones %}
+						<tr>
+							<td>{{item.comEquipoKit|default:'0'}}</td>
+							<td>{{item.comEquipoTip|default:'0'}}</td>
+							<td>{{item.comPlanes|default:'0'}}</td>
+							<td>{{item.comServicios|default:'0'}}</td>
+							<td>{{item.mes}}</td>
+							<td>{%if item.pagado %}{{item.fxPago|date:"Y-m-d h:i a"}}{%else %}<img src="{{STATIC_URL}}img/icons/exclamation.png" />{%endif %}</td>
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+			{%endif %}
+
+
+
+			{%if cuentas %}
+				{%for cuen in cuentas %}
+					<br>
+					<br>
+					<br>
+					<div class="info">
+						<h2>Estado de Cuenta {{cuen.0}}</h2>
+					</div>
+					<div id="grid">
+						<table id="grid">
+							<tr>
+								<td id="gridhead">Tipo de Cuenta</td>
+								<td>{{cuen.0.tipoCuenta|upper}}</td>
+							</tr>
+							<tr>
+								<td id="gridhead">Monto Original</td>
+								<td>{{cuen.0.monto|default:'0'}}</td>
+							</tr>
+							<tr>
+								<td id="gridhead">Fecha de Creacion</td>
+								<td>{{cuen.0.fxCreacion|date:"Y-m-d h:i a"}}</td>
+							</tr>
+							<tr>
+								<td id="gridhead">Observaciones</td>
+								<td>{{ cuen.0.observacion|default:'Ninguna'}}</td>
+							</tr>
+						</table>
+
+						{%if cuen.1 %}
+							<h3>Historial de la Cuenta</h3>
+							<table id="grid">
+								<tr>
+									<td id="gridhead">Descuento</td>
+									<td id="gridhead">Fecha de Pago</td>
+									<td id="gridhead">Observacion</td>
+								</tr>
+								{%for item in cuen.1 %}
+								<tr>
+									<td>{{item.descuento}}</td>
+									<td>{{item.fxPago|date:"Y-m-d h:i a"}}</td>
+									<td>{{item.observacion|default:'Ninguna'}}</td>
+								</tr>
+								{%endfor %}
+							</table>
+						{%else %}
+							<h3>Sin Abonos Realizados</h3>
+						{%endif %}
+					</div>
+				{%endfor %}
+			{%endif %}
+
+			{%if nomina %}
+				<br>
+				<br>
+				<div class="info">
+					<h2>Historial de Nomina</h2>
+					</div>
+					<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Dias Trabajados</td>
+							<td id="gridhead">Bono de Puntualidad</td>
+							<td id="gridhead">Bono de Vales</td>
+							<td id="gridhead">Bono de Productividad</td>
+							<td id="gridhead">Descuento por pago de Cuentas</td>
+							<td id="gridhead">Fecha de Pago</td>
+							<td id="gridhead">Observacion</td>
+						</tr>
+						{%for item in nomina %}
+						<tr>
+							<td id="gridhead">{{item.diasTrab|default:'0'}}</td>
+							<td id="gridhead">{{item.bonoPuntualidad|default:'0'}}</td>
+							<td id="gridhead">{{item.bonoVales|default:'0'}}</td>
+							<td id="gridhead">{{item.bonoProductividad|default:'0'}}</td>
+							<td id="gridhead">{{item.descuento|default:'0'}}</td>
+							<td id="gridhead">{{item.fxPago|date:"Y-m-d h:i a"}}</td>
+							<td id="gridhead">{{item.observacion|default:'Ninguna'}}</td>
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+			{%endif %}
+			<br><br><br><br>
+	</div>
+	</section>
+</div>
+{% endblock %}

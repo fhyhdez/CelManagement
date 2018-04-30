@@ -1,0 +1,66 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}@Contabilidad @Reporte de Arqueos{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+				<div class="info">
+					<h3>Reportes de Arqueos realizados</h3>
+				</div>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Fecha / Sucursal / Usuario </td>
+							<td id="gridhead">Buscar</td>
+						</tr>
+						<tr>
+							<form action='.'  method='GET'>{% csrf_token %}
+								<td><input type='text' name='q' value='{{ query|escape }}' required></td>
+								<td><input class="submit success" type="submit" value='buscar'>
+									<a class="success button" href="." title="Nueva busqueda">Limpiar Busqueda</a>
+								</td>
+							</form>
+						</tr>
+					</table>
+				</div>
+
+
+				{% if r_items %}
+				<h3>Equipos</h3>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">SUCURSAL</td>
+							<td id="gridhead">FECHA</td>
+							<td id="gridhead">REALIZADO POR<br>Auditó</td>
+							<td id="gridhead">VENDEDOR<br>En turno </td>
+							<td id="gridhead">DIFERENCIA</td>
+							<td id="gridhead">OBSERVACIONES</td>
+							<td id="gridhead">IR A</td>
+						</tr>
+						{% for x in vendedor %}
+						<tr>
+							<td>{{ x.0.sucursal.nombre|upper }} </td>
+							<td>{{ x.0.fxArqueo|date:"Y-m-d h:i a" }} </td>
+							<td>{{ x.0.auditor|escape }} </td>
+							<td>{{ x.0.vendedor|escape }} </td>
+							<td>$ {{ x.0.difArqueo|default:'0'|escape }} </td>
+							<td>{{ x.0.observaciones|default:'Ninguna'|title }} </td>
+							{% if x.0.addCtaEmpleado %}
+							<td>
+							<a href="/contabilidad/nomina/empleados/estado_cta/historial/?q={{x.1.empleado.curp}}"><img src=""> Ver Cuentas </a>
+							</td>
+							{% else %}
+							<td>Sin Cuenta agregada</td>
+							{% endif %}
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+			{%elif query %}
+	<strong>No hay resultados</strong>
+				{% endif %}
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

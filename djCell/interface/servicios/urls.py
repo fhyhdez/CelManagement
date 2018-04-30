@@ -1,0 +1,35 @@
+from django.conf.urls import patterns, url, include
+'''from django.conf.urls.defaults import patterns,url'''
+
+urlpatterns=patterns('djCell.interface.servicios.views',
+	url(r'^$','index_view', name='vista_principal'),
+
+	url(r'^ventas/resultado/operacion/$','resultado_operacion_view', name='vista_resultado_operacion'),
+	url(r'^catalogo_reparaciones/agregar/$','servicios_catalogo_reparaciones_agregar_view', name='vista_servicios_catalogo_reparaciones_agregar'),
+	url(r'^catalogo_reparaciones/todos/$','servicios_catalogo_reparaciones_todos_view', name='vista_servicios_catalogo_reparaciones_todos'),
+	url(r'^solicitudes/flexeo_porta/$','servicios_solicitudes_flexeo_porta_view', name='vista_servicios_solicitudes_flexeo_porta'),
+	url(r'^solicitudes/flexeos/$','servicios_solicitudes_flexeos_view', name='vista_servicios_solicitudes_flexeos'),
+	url(r'^solicitudes/reparacion_fisica/$','servicios_solicitudes_reparacion_fisica_view', name='vista_servicios_solicitudes_reparacion_fisica'),
+	url(r'^clientes_rep/nuevo/$','servicios_clientes_rep_nuevo_view', name='vista_servicios_clientes_rep_nuevo'),
+	url(r'^clientes_rep/abonos/$','servicios_clientes_rep_abonos_view', name='vista_servicios_clientes_rep_abonos'),
+	url(r'^clientes_rep/historial/$','servicios_clientes_rep_historial_view', name='vista_servicios_clientes_rep_historial'),
+	url(r'^seguimiento/flexeo_porta/$','servicios_seguimiento_flexeo_porta_view', name='vista_servicios_seguimiento_flexeo_porta'),
+	url(r'^seguimiento/flexeos/$','servicios_seguimiento_flexeos_view', name='vista_servicios_seguimiento_flexeos'),
+	url(r'^seguimiento/reparacion_fisica/$','servicios_seguimiento_reparacion_fisica_view', name='vista_servicios_seguimiento_reparacion_fisica'),
+	url(r'^ventas/flexeo_porta/$','servicios_ventas_flexeo_porta_view', name='vista_servicios_ventas_flexeo_porta'),
+	url(r'^ventas/flexeos/$','servicios_ventas_flexeos_view', name='vista_servicios_ventas_flexeos'),
+	url(r'^ventas/reparacion_fisica/$','servicios_ventas_reparacion_fisica_view', name='vista_servicios_ventas_reparacion_fisica'),
+	url(r'^ventas/carga_software/$','servicios_ventas_carga_software_view', name='vista_servicios_ventas_carga_software'),
+	url(r'^ventas/accesorios/$','servicios_ventas_accesorios_view', name='vista_servicios_ventas_accesorios'),
+	url(r'^corte_vta/caja/$','servicios_corte_vta_caja_view', name='vista_servicios_corte_vta_caja'),
+	url(r'^corte_vta/gastos/$','servicios_corte_vta_gastos_view', name='vista_servicios_corte_vta_gastos'),
+	url(r'^corte_vta/cerrar_corte/$','servicios_corte_vta_cerrar_corte_view', name='vista_servicios_corte_vta_cerrar_corte'),
+	url(r'^inventario/accesorios/$','servicios_inventario_accesorios_view', name='vista_servicios_inventario_accesorios'),
+	url(r'^inventario/refacciones/$','servicios_inventario_refacciones_view', name='vista_servicios_inventario_refacciones'),
+	url(r'^inventario/eq_obsoletos/$','servicios_inventario_eq_obsoletos_view', name='vista_servicios_inventario_eq_obsoletos'),
+	url(r'^transferencias/$','servicios_transferencia_view', name='vista_servicios_inventario_eq_obsoletos'),
+	url(r'^reportes/caja/$','servicios_reportes_caja_view', name='vista_servicios_reportes_caja'),
+	url(r'^autorizaciones/cancelaciones$','servicios_autorizacion_cancelaciones_view', name='vista_servicios_cancelaciones'),
+	url(r'^listas/accesorios$','servicios_lista_accesorios_view', name='vista_servicios_lista_accesorios'),
+
+)

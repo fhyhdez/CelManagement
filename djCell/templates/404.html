@@ -1,0 +1,18 @@
+{% extends 'home/base.html' %}
+
+{% block titulo %}404{% endblock %}
+
+{% block contenido %}
+	<div id="stylized" class="myform">
+		<form id="formulario" method='post' name="form" method="post" action="">{% csrf_token %}
+			<img src="{{STATIC_URL}}img/logoAccell2.png" id="imgLogo"/>
+			
+			<h1>Lo Sentimos!, :(</h1>
+			<p>Lo que est&aacute; buscando no se encuentra o no existe.</p>
+			<p>Consulte a su Administrador. </p>
+
+			<div class="spacer"></div>
+			<a href="javascript:history.back()">Regresar</a>
+		</form>
+	</div>
+{% endblock %}

@@ -1,0 +1,90 @@
+
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}--Contabilidad{% endblock %}
+
+{% block contenido %}
+
+<div id="content">
+	<section id="row">
+	<div class="info">
+		<h2>Cuentas de Empleados</h2>
+		<div>{{descr}}</div>
+		{% if buscador %}
+				{{buscador|safe}}
+		{%endif %}
+
+		{% if cuentas %}
+				{{cuentas|safe}}
+		{% endif %}
+
+			{%if cuenta %}
+					<br>
+					<br>
+					<br>
+					<div class="info">
+						<h2>Estado de Cuenta {{cuenta.folio}}</h2>
+					</div>
+					<div id="twoCol">
+						<table id="twoCol">
+							<tr>
+								<td>Empleado</td>
+								<td>{{cuenta.empleado}}</td>
+							</tr>
+							<tr>
+								<td>Tipo de Cuenta</td>
+								<td>{{cuenta.tipoCuenta}}</td>
+							</tr>
+							<tr>
+								<td>Monto Original</td>
+								<td>{{cuenta.monto}}</td>
+							</tr>
+							<tr>
+								<td>Adeudo</td>
+								<td>{{cuenta.adeudo}}</td>
+							</tr>
+							<tr>
+								<td>Fecha de Creacion</td>
+								<td>{{cuenta.fxCreacion|date:"Y-m-d h:i a"}}</td>
+							</tr>
+							<tr>
+								<td>Observaciones</td>
+								<td>{{ cuenta.observacion|escape}}</td>
+							</tr>
+						{% if cuenta.adeudo %}
+						<form class="wufoo" name=formAbono action="." method="POST" enctype="multipart/form-data">
+							{% csrf_token %}
+							<input type="hidden" name="cuenta" value="{{cuenta.id}}">
+							<tr>
+								<td colspan="2">Abonar Manualmente </td>
+							</tr>
+							<tr>
+								<td>$</td>
+								<td>Observaciones</td>
+							</tr>
+							<tr>
+								<td><input type="number" name="abono" required > </td>
+								<td>
+									<textarea cols="40" id="id_direccion" name="desc" rows="2"></textarea>
+								</td>
+							</tr>
+							<tr>
+								<td> </td>
+								<td><input class="submit success" type="submit" value="Registrar el Ingreso"/> 
+								</td>
+							</tr>
+						</form>
+						{% endif %}
+						</table>
+
+					</div>
+			{%endif %}
+			{{mensaje|escape}}
+						{%if historial %}
+							{{historial | safe}}
+						{%endif %}
+			<br><br><br><br>
+	</div>
+	</section>
+</div>
+{% endblock %}

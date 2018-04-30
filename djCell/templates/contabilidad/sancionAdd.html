@@ -1,0 +1,39 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}@Nueva Sancion {% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div class="info">
+					<h2>Sanciones</h2>
+					<div>Registro de Sanciones a Empleados</div>
+				</div>
+				<ul>
+					<li class="section first">
+						<h3>Datos Generales</h3>
+					</li>
+					{% for field in form %}
+						<li>
+							<label class="desc">{{field.label}}</label> 
+							<div>
+								{{field}}
+							</div>
+							<label> {{field.help_text}} <span class="req"> {{field.errors}} </span></label>
+						</li>
+					{% endfor %}
+					<li><strong>{{ info }}</strong></li>
+					<li id="buttons">
+						<input class="submit success" type="submit" value="Guardar"/> |  
+						<a class="success button" href="." title="Agregar Nuevo">Agregar Otro</a>
+						<BR /><span class="req">*.Campos Obligatorios. No dejar vacios.</span>
+					</li>
+				</ul>
+			</form>
+			
+
+	</section>
+</div>
+{% endblock %} 

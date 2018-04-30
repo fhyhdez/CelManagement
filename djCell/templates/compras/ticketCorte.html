@@ -1,0 +1,364 @@
+{% extends 'admingral/base-ticket.html' %}
+{% block miscript %}
+<style type="text/css">
+a{
+	text-decoration: none;
+}
+.button{
+	/* estilos tipograficos */
+	
+	color: #fff;
+	font-family: sans-serif;
+	font-size: 1em;
+	font-weight: bold;
+	text-transform: uppercase;
+	
+	/* padding, margin y borde */
+	
+    padding: 1em 2em;
+	margin-right: 1.5em;
+	cursor: pointer;
+	border: 0;
+    border-radius: 2em;
+
+	/* propiedades para la animacion  */
+	
+	transition: all 0.20s linear;
+	-webkit-transition: all 0.20s linear;
+	-moz-transition: all 0.20s linear;
+	position: relative;
+	bottom: 0;
+}
+.azul{
+	background: #04a8bf;
+	box-shadow: 0px 5px 0 #0491a5;
+}
+.button:active{
+	bottom: -5px;
+}
+.azul:active{
+	box-shadow:0 0 0 #0491a5, inset 0 0 5px rgba(0, 0, 0, 0.4);			
+}
+.rojo{
+	background: #bf1b04;
+	box-shadow: 0px 5px 0 #8F1502;			
+}
+.rojo:active{
+	box-shadow:0 0 0 #9a1604, inset 0 0 5px rgba(0, 0, 0, 0.4);			
+}
+table.simple {
+	font-family: Arial,sans-serif,Tahoma;
+	font-size: 0.580em;
+	border-width: 0px;
+	border-spacing: 1px;
+	border-style: hidden;
+	border-collapse: collapse;
+	background-color: white;
+	width: 250px;
+}
+table.simple th {
+	border-width: thin;
+	padding: 3px 12px;
+	border-style: ;
+	border-color: gray;
+	background-color: white;
+}
+table.simple td {
+	border-width: thin;
+	padding: 3px 12px;
+	border-style: ;
+	border-color: gray;
+	background-color: white;
+}
+table.simple2 {
+	font-family: Arial,sans-serif,Tahoma;
+	font-size: 0.580em;
+	border-width: 0px;
+	border-spacing: 1px;
+	border-style: hidden;
+	border-collapse: collapse;
+	background-color: white;
+	width:250px;
+}
+table.simple2 th {
+	border-width: thin;
+	padding: 3px 12px;
+	border-style: ;
+	background-color: white;
+}
+table.simple2 td {
+	border-width: thin;
+	padding: 3px 12px;
+	border-style: ;
+	background-color: white;
+	width: 90%;
+}
+table.simple2 td:first-child{
+	text-align: center;
+	width:4%;
+	border-style: ;
+	border-width: thin;
+}
+table.simple2 td:last-child {
+	text-align: center;
+	width: 4%;
+	border-style: ;
+	border-width: thin;
+}
+hr.comon{
+	border-style: hidden;
+	border: 1px;
+	width: 200px;
+	vertical-align: left;
+}
+</style>
+<style type="text/css" media="print">
+@media print {
+	.button {display:none;}
+	.azul {display:none;}
+	.rojo {display:none;}
+}
+</style>
+{% endblock %}
+{% block titulo %}@Ticket{% endblock %}
+
+{% block contenido %}
+{%if info %}
+<strong>{{ info }} </strong>
+{%else %}
+<div id="ticket"> 
+	{%for x in aio %}
+	<table class="simple">
+		<tr>
+			<th colspan="2"><h1>GRUPO ACCELL</h1></th>
+		</tr>
+		<tr>
+			<th colspan="2">{{x.0.sucursal.nombre|upper}}</th>
+		</tr>
+		<tr>
+			<th colspan="2">{{x.0.sucursal.direccion|upper}}</th>
+		</tr>
+		
+		<tr>
+			<th>FOLIO:</th><td>{{ x.0.folioCorteVta|upper }}</td>
+		</tr>
+		<tr>
+			<th>FECHA:</th><td>{{ x.0.fxCorte|date|upper }}</td>
+		</tr>
+		<tr>
+			<th>USUARIO:</th><td>{{ x.0.cierraCorte.username|upper }}</td>
+		</tr>
+	</table>
+	<hr class="comon">
+	<table class="simple2">
+		{%if x.1 or x.2 or x.3 or x.6 or x.7 or x.8 %}
+		<tr>
+			<th>CANT.</th>
+			<th>DESCRIPCION</th>
+			<th>IMPORTE</th>
+		</tr>
+		{%for equipoV in x.1 %}
+		<tr>
+			<td>1</td>
+			<td>{{equipoV.equipo.detallesEquipo.marca.marca|upper}} {{equipoV.equipo.detallesEquipo.modelo|upper}} IMEI: {{equipoV.equipo.imei|default:''}} ICC: {{equipoV.equipo.icc|default:''}} NOTA:{{ equipoV.venta.folioVenta|upper}} </td>										
+			<td>{%if equipoV.venta.credito and equipoV.venta.estado.estado != 'Pagada' %} N/A - {%endif %} {{equipoV.precVenta|default:'N/A'}} </td>
+		</tr>
+		{%endfor %}
+		{%for expV in x.2 %} 
+		<tr>
+			<td>1 </td>
+			<td>{{expV.expres.detallesExpres.tipoIcc.tipoIcc|upper}} - {{expV.expres.icc|default:''}} NOTA:{{ expV.venta.folioVenta|upper}}</td>
+			<td>{%if expV.venta.credito and expV.venta.estado.estado != 'Pagada' %} N/A - {%endif %} {{expV.precVenta|default:'N/A'}} </td>
+		</tr>
+		{%endfor %}
+		{%for acV in x.3 %}
+		<tr>
+			<td>1 </td>
+			<td>{{acV.accesorio.detallesAccesorio.seccion.seccion|upper}} | {{acV.accesorio.codigoBarras}} - {{acV.accesorio.detallesAccesorio.marca|upper}} {{acV.accesorio.detallesAccesorio.descripcion|upper}} NOTA:{{ acV.venta.folioVenta|upper}}</td>
+			<td>{%if acV.venta.credito and acV.venta.estado.estado != 'Pagada' %} N/A - {%endif %} {{acV.precVenta|default:'N/A'}} </td>
+		</tr>
+		{%endfor %}
+		{%for planV in x.6 %}
+		<tr>
+			<td>1 </td>
+			<td>{{planV.plan.plan|upper}} - {{planV.observacion|default:'NINGUNA'|upper}} NOTA:{{ planV.venta.folioVenta|upper}}</td>
+			<td>{%if planV.venta.credito and planV.venta.estado.estado != 'Pagada' %} N/A - {%endif %} {{planV.precVenta|default:'N/A'}} </td>
+		</tr>
+		{%endfor %}
+		{%for rV in x.7 %}
+		<tr>
+			<td>1</td>
+			<td>RENTA, CUENTA: {{rV.numeroReferencia|upper|default:''}} <br> OBSERVACIONES:<br>{{ rV.observacion|default:'NINGUNA'|upper}} NOTA:{{ rV.venta.folioVenta|upper}}</td>
+			<td>{%if rV.venta.credito and rV.venta.estado.estado != 'Pagada' %} N/A - {%endif %} {{rV.abono|default:'N/A'}} </td>
+		</tr>
+		{%endfor %}
+		{%for an in x.8 %}
+		<tr>
+			<td>1</td>
+			<td>{{ an.tipoAnticipo|upper|default:'' }} NOTA:{{ an.folioVenta.folioVenta|upper}}</td>
+			<td>{{an.monto|default:''}}</td>
+		</tr>
+		{%endfor %}
+		{%else %}
+		<tr>
+			<td colspan="3"></td>
+		</tr>
+		{%endif %}
+	</table>
+	{%endfor %}
+	<hr class="comon">
+	{%for x in aio %}
+	<table class="simple2">
+		<tr>
+			<td colspan="3"><h2>FICHAS VENDIDAS</h2></td>
+		</tr>
+		{%if x.4 %}
+		<tr>
+			<td colspan="3">DESGLOSE: FICHAS CON DESCUENTO</td>
+		</tr>
+		{%for ficV in x.4 %}
+		<tr>
+			<td>1 </td>
+			<td>{{ficV.ficha.nominacion.nominacion|upper}} - {{ficV.ficha.folio|upper}}  NOTA:{{ ficV.venta.folioVenta|upper}}</td>
+			<td>{%if ficV.venta.credito and ficV.venta.estado.estado != 'Pagada' %} N/A - {%endif %} {{ficV.precVenta|default:'N/A'}} </td>
+		</tr>
+		{%endfor %}
+		{%endif %}
+		{%if x.9 %}
+		<tr>
+			<td colspan="2">NOMINACION</td><td>CANTIDAD</td>
+		</tr>
+		<tr>
+			<td colspan="2">100</td><td>{{x.9.0}}</td>
+		</tr>
+		<tr>
+			<td colspan="2">200</td><td>{{x.9.1}}</td>
+		</tr>
+		<tr>
+			<td colspan="2">300</td><td>{{x.9.2}}</td>
+		</tr>
+		<tr>
+			<td colspan="2">400</td><td>{{x.9.3}}</td>
+		</tr>
+		<tr>
+			<td colspan="2"><strong>TOTAL FICHAS: $</strong></td><td>{{x.9.4}} </td>
+		</tr>
+		{%endif %}
+		<tr>
+			<td colspan="3"><h2>RECARGAS VENDIDAS</h2></td>
+		</tr>
+		{%if x.5 %}
+		<tr>
+			<td colspan="3">DESGLOSE: RECARGAS CON DESCUENTO</td>
+		</tr>
+		{%for recV in x.5 %}
+		<tr>
+			<td>1 </td>
+			<td>{{recV.recarga.montos.monto|upper|default:''}} - {{recV.recarga.folio|default:''|upper}} <br> OBSERVACIONES:<br>{{ recV.observaciones|default:'NINGUNA'|upper}}  NOTA:{{ recV.venta.folioVenta|upper}}</td>
+			<td>{%if recV.venta.credito and recV.venta.estado.estado != 'Pagada' %} N/A - {%endif %} {{recV.precVenta|default:'N/A'}} </td>
+		</tr>
+		{%endfor %}
+		{%endif %}
+		<hr class="comon">
+		{%if x.10 %}
+		<tr>
+			<td colspan="2">REC.CON DESC.:</td><td>{{x.10.0}}</td>
+		</tr>
+		<tr>
+			<td colspan="2">REC.SIN DESC.:</td><td>{{x.10.1}}</td>
+		</tr>
+		<tr>
+			<td colspan="2">NUM.REC. REALIZADAS:</td><td>{{x.10.2}}</td>
+		</tr>
+		<tr>
+			<td colspan="2">SALDO TOTAL VENDIDO:</td><td>{{x.10.4}}</td>
+		</tr>
+		<tr>
+			<td colspan="2"><strong>TOTAL RECARGAS: $</strong></td><td>{{x.10.3}}</td>
+		</tr>
+		{%endif %}
+	</table>
+	<hr class="comon">
+	<table class="simple2">
+		<tr>
+			<td colspan="3"><h2>DESGLOSE DE GASTOS</h2></td>
+		</tr>
+		{%if x.11 %}
+		<tr>
+			<th>TIPO</th>
+			<th>DESCRIPCION</th>
+			<th>MONTO</th>
+		</tr>
+		{%for g in x.11 %}
+		<tr>
+			<td>{{g.tipoGasto.tipo|upper}}</td>
+			<td>{{g.observacion|upper|default:'NINGUNA'}} <strong>USUARIO:</strong> {{ g.usuario|upper}}</td>
+			<td>{{g.gasto|default:'0'}}</td>
+		</tr>
+		{% empty %}
+		<tr>
+			<td colspan="3">NINGUNO</td>
+		</tr>
+		{%endfor %}
+		{%else %}
+		<tr>
+			<td colspan="3">NINGUNO</td>
+		</tr>
+		{%endif %}
+	</table>
+	{%endfor %}
+	{%for x in aio %}
+	<hr class="comon">
+	<table class="simple">
+		<tr>
+			<th>TOTAL VENTAS:</th><td>${{ x.0.totalVta|default:'0' }}</td>
+		</tr>
+		<tr>
+			<th>TOTAL GASTOS:</th><td>${{ x.0.totalGastos|default:'0' }}</td>
+		</tr>
+		<tr>
+			<th>TOTAL CORTE:</th><td>${{ x.0.total|default:'0' }}</td>
+		</tr>
+		<tr>
+			<th>OBSERVACIONES:</th><td>{{ x.0.observacion|default:'NINGUNA'|upper }}</td>
+		</tr>
+	</table>
+	{%endfor %}
+	<hr class="comon">
+	<table class="simple">
+		<tr>
+			<td  style="padding:3em;border-style:dashed;"></td>
+		</tr>
+		<tr>
+			<th>ENTREGA:<br>ENCARGADO EN TURNO</th>
+		</tr>
+		<tr>
+			<td  style="padding:3em;border-style:dashed;"></td>
+		</tr>
+		<tr>
+			<th>RECIBE:</th>
+		</tr>
+		<tr>
+			<td  style="padding:3em;border-style:dashed;"></td>
+		</tr>
+		<tr>
+			<th>REVISA:</th>
+		</tr>
+		<tr>
+			<td  style="padding:3em;border-style:dashed;"></td>
+		</tr>
+		<tr>
+			<th>ENTREGÓ:</th>
+		</tr>
+		{%for x in aio %}
+		<tr>
+			<th>TOTAL CORTE: $ {{ x.0.total|default:'0' }}</th>
+		</tr>
+		{%endfor %}
+	</table>
+</div>
+<div style="clear:both;height:4em;"></div>
+<a href="javascript:window.print()" class="button azul">Imprimir</a>   
+{%endif %}
+<a href="javascript:close();" class="button rojo">Cerrar ventana</a>
+{% endblock %}

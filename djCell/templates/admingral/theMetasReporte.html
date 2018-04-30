@@ -1,0 +1,103 @@
+{% extends 'admingral/admin-base2.html' %}
+
+{% block titulo %}@Metas @Administracion{% endblock %}
+
+{% block contenido %}
+<div id="content2">
+		<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Empleados Activos</h2>
+				<div>Encargados y Vendedores de Sucursales</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar Empleado</h3>
+				</li>
+				<li>
+					<label class="desc">Filtrar por : (Nombre / Apellidos / Curp) <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query|escape}}" name="q" title="Ingrese parcial o totalmente el nombre, apellidos, curp del empleado"; placeholder="Ej. carlos" required />
+					</div>
+				</li>
+				<li>
+					<label class="desc">Mes:</label>
+					<div>
+						<input type="month" name="mes">
+					</div>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Consultar"/>  |  
+					<a class="success button" href="." title="Nueva busqueda">Nueva Busqueda</a>
+				</li>
+				<li><strong>{{ info }}</strong></li>
+			</ul>
+		</form>
+		
+	</section>
+	<section id="row">
+			<h3>{{ query|escape }}</h3>
+			{% if empleados %}
+			<div id="twoCol">
+				<table id="twoCol">
+					<tr>
+						<td>Mes:</td>
+						<td>{{ mes }} </td>
+					</tr>
+				</table>
+			</div>
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead" rowspan="2">Curp</td>
+						<td id="gridhead" rowspan="2">Empleado</td>
+						<td id="gridhead" colspan="6">Metas</td>
+					</tr>
+					<tr>
+						<td id="gridhead">Equipos</td>
+						<td id="gridhead">Vendidos</td>
+						<td id="gridhead">Planes</td>
+						<td id="gridhead">Activados</td>
+						<td id="gridhead">Servicios</td>
+						<td id="gridhead">Entregados</td>
+					</tr>
+					{% for x in empleados %}
+				
+					<tr>
+						<td>{{ x.0.empleado.curp|upper }} </td>
+						<td>{{ x.0.empleado.nombre|title }} {{ x.0.empleado.aPaterno|title }} {{ x.0.empleado.aMaterno|title }}</td>
+						<td>{{ x.0.metaEquipo }} </td>
+						<td>{{ x.1 }} </td>
+						<td>{{ x.0.metaPlanes }} </td>
+						<td>{{ x.2 }} </td>
+						<td>{{ x.0.metaServicios }} </td>
+						<td>{{ x.3 }} </td>
+					</tr>
+					{%endfor %}
+				</table>
+			</div>
+		
+			<div class="pagination">
+				    <span class="step-links">
+				        {% if empleados.has_previous %}
+				            <a class="success button" href="?pagina={{ empleados.previous_page_number }}&amp;q={{ query }}">...Anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ empleados.number }} de {{ empleados.paginator.num_pages }}.
+				        </span>
+
+				        {% if empleados.has_next %}
+				            <a class="success button" href="?pagina={{ empleados.next_page_number }}&amp;q={{query}}">Siguiente...</a>
+				        {% endif %}
+				    </span>
+				</div>
+
+			{% else %}
+				<p>No hay resultados por el momento</p>
+			{% endif %}
+		</section>
+	<br><br>
+</div>
+{% endblock %}

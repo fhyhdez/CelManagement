@@ -1,0 +1,97 @@
+{% extends 'servicios/servicios-base.html' %}
+
+{% block titulo %}@Ventas al dia @Servicios Tecnicos{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info">
+			<h3>Caja</h3>
+			<div>Total de Ventas del dia y/o Cortes Activos :<strong>{{caja}}</strong> </div>
+		</div>
+	</section>
+	<section id="row">
+		<h3>Ventas {{ cosa }} del dia de Hoy</h3>
+		<div id="grid2">
+			<table id="grid2">
+				<tr>
+					<td id="gridhead2">Vendedor</td>
+					<td id="gridhead2">Folio</td>
+					<td id="gridhead2">Producto</td>
+					<td id="gridhead2">Descripcion</td>
+					<td id="gridhead2" title="Tipo de Pago">Estado</td>
+					<td id="gridhead2" title="Tipo de Venta">Venta</td>
+					<td id="gridhead2">Monto</td>
+				</tr>
+		{%if vtaRealizadas %}
+			{%for vc in vtaRealizadas %}
+				{%if accVendido or anticipo %}
+					{%for acV in accVendido %}
+					<tr>
+						{%if vc.folioVenta == acV.venta.folioVenta %}
+							{%if vc.aceptada %}
+							<td>{{ vc.usuario.username }} </td>
+							<td>{{ vc.folioVenta }} </td>
+							<td>Acc. {{acV.accesorio.detallesAccesorio.seccion.seccion}} | | {{acV.accesorio.codigoBarras}}</td>
+							<td>{{acV.accesorio.detallesAccesorio.marca}} {{acV.accesorio.detallesAccesorio.descripcion}}</td>
+							<td style="border-color:#00733C;background-color: #61D89F;">{{vc.estado.estado}} </td>
+							<td>Contado</td>
+							<td>
+								{{acV.precVenta}}
+							</td>
+							{%else %}
+							<td style="border-color:#FFAE00;background-color:#FFD373;">{{ vc.usuario.username }} </td>
+							<td style="border-color:#FFAE00;background-color:#FFD373;">{{ vc.folioVenta }} </td>
+							<td style="border-color:#FFAE00;background-color:#FFD373;">Acc. {{acV.accesorio.detallesAccesorio.seccion.seccion}}</td>
+							<td style="border-color:#FFAE00;background-color:#FFD373;">{{acV.accesorio.detallesAccesorio.marca}} {{acV.accesorio.detallesAccesorio.descripcion}}</td>
+							<td style="border-color:#FFAE00;background-color:#FFD373;">Cancelada</td>
+							<td style="border-color:#FFAE00;background-color:#FFD373;">Contado</td>
+							<td style="border-color:#FFAE00;background-color:#FFD373;">
+								{{acV.precVenta}}
+							</td>
+							{%endif %}
+							
+						{%endif %}
+					</tr>
+					{%endfor %}
+							
+					{%for an in anticipo %}
+					<tr>
+						{%if vc.folioVenta == an.folioVenta.folioVenta %}
+							{%if vc.aceptada %}
+							<td>{{ vc.usuario.username }} </td>
+							<td>{{ vc.folioVenta }} </td>
+							<td>Anticipo</td>
+							<td>{{ an.tipoAnticipo }}<br>{{an.folioVenta.folioVenta}}</td>
+							<td style="border-color:#00733C;background-color: #61D89F;">{{vc.estado.estado}} </td>
+							<td>Anticipo</td>
+							<td>{{an.monto}}</td>
+							{%else %}
+							<td style="border-color:#FFAE00;background-color:#FFD373;">{{ vc.usuario.username }} </td>
+							<td style="border-color:#FFAE00;background-color:#FFD373;">{{ vc.folioVenta }} </td>
+							<td style="border-color:#FFAE00;background-color:#FFD373;">Anticipo</td>
+							<td style="border-color:#FFAE00;background-color:#FFD373;">{{ an.tipoAnticipo }}<br>{{an.folioVenta.folioVenta}}</td>
+							<td style="border-color:#FFAE00;background-color:#FFD373;">{{vc.estado.estado}} </td>
+							<td style="border-color:#FFAE00;background-color:#FFD373;">Cancelado</td>
+							<td style="border-color:#FFAE00;background-color:#FFD373;">{{an.monto}}</td>
+							{%endif %}
+						{%endif %}
+					</tr>
+					{%endfor %}
+				{%else %}
+					<tr>
+						<td colspan="3">NO HAY PRODUCTOS/SERVICIOS AGREGADOS</td>
+					</tr>
+				{%endif %}
+			{%endfor %}
+		{%else %}
+					<tr>	
+						<td colspan="3">NO HAY PRODUCTOS/SERVICIOS AGREGADOS</td>
+					</tr>
+		{%endif %}
+			</table>
+		</div>
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

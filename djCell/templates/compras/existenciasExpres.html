@@ -1,0 +1,74 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Bienvenido a @Compras{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+				<div class="info">
+					<h2>Express Existentes</h2>
+				</div>
+
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Express</td>
+							<td id="gridhead">Buscar</td>
+						</tr>
+						<tr>
+							<form action='.'  method='GET' enctype="multipart/form-data">{% csrf_token %}
+								<td><input type='text' name='item' value='{{ b_item|escape }}'></td>
+								<td><input class="submit success" type="submit" value='buscar'></td>
+							</form>
+						</tr>
+					</table>
+				</div>
+
+
+			{% if items %}
+				<br>
+				<br>
+				<h2>Descripcion de los Express {{nItems}}</h2>
+				<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Factura</td>
+						<td id="gridhead">ICC</td>
+						<td id="gridhead">No de Cel</td>
+						<td id="gridhead">Tipo/Detalle</td>
+						<td id="gridhead">Sucursal Actual</td>
+					</tr>
+					{% for item in items %}
+					<tr>
+						<td>{{ item.expres.factura|escape}}</td>
+						<td>{{ item.expres.icc|escape}}</td>
+						<td>{{ item.expres.noCell|escape}}</td>
+						<td>{{ item.expres.detallesExpres|escape}}</td>
+						<td>{{ item.expres.sucursal|escape}}</td>
+					</tr>
+					{%endfor %}
+				</table>
+				</div>
+				<div class="pagination">
+				    <span class="step-links">
+				        {% if items.has_previous %}
+				            <a class="success button" href="?pagina={{ items.previous_page_number }}&amp;item={{b_item}}">anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ items.number }} de {{ items.paginator.num_pages }}.
+				        </span>
+
+				        {% if items.has_next %}
+				            <a class="success button" href="?pagina={{ items.next_page_number }}&amp;item={{b_item}}">Siguiente</a>
+				        {% endif %}
+				    </span>
+				</div>
+			{%elif b_item %}
+	No hay resultados
+			{% endif %}
+			
+			<strong>{{ informacion }}</strong>
+	</section>
+	<div style="height:70px;"></div>
+</div>
+{% endblock %}

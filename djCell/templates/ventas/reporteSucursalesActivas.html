@@ -1,0 +1,150 @@
+{% extends 'ventas/ventas-base.html' %}
+
+{% block titulo %}@Reporte de Sucursales Activas - @Ventas{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Sucursales o Eventos</h2>
+				<div>Acumulado de Ventas realizadas</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar Sucursal:</h3>
+				</li>
+				<li>
+					<label class="desc">Buscar: <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query|escape}}" name="q" title="Buscar Sucursal o evento"; placeholder="Ej. 1 Oriente" required />
+					</div>
+					<p class="instruct">Ingrese Nombre de la sucursal | Nombre del Empleado. gracias.</p>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Buscar"/>  |  
+					<a class="success button" href="/ventas/sucursales/reporte/" title="Nueva busqueda">Nueva Busqueda</a>
+				</li>
+			</ul>
+		</form>
+		{{ info }}
+	</section>
+	<br>	
+		<section id="row">
+			<h3>Sucursales o Eventos</h3>
+			{% if Sucursal %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Nombre</td>
+						<td id="gridhead">Zona</td>
+						<td id="gridhead">Tipo</td>
+						<td id="gridhead">Direccion</td>
+						<td id="gridhead">Encargado </td>
+						<td id="gridhead">Estado</td>
+						<td id="gridhead">Revisar</td>
+					</tr>
+					{% for x in Sucursal %}
+						<tr>
+							<td>{{ x.nombre|title }} </td>
+							<td>{{ x.zona.zona|title }} </td>
+							<td>{{ x.tipoSucursal.tipo|title }} </td>
+							<td>{{ x.direccion|title }}.{{ x.colonia.colonia|title }}, {{ x.ciudad.ciudad|title }}, {{ x.estado.estado|title }}. </td>
+							<td>{{ x.encargado.nombre|title }} {{ x.encargado.aPaterno|title }} {{ x.encargado.aMaterno|title }}</td>
+							<td>{{ x.estado.estado|title }}</td>
+							<td title="Ver acumulado de ventas">
+								<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+									<input name="acumulado" type="image" src="/static/img/icons/chart_pie.png" value="{{ x.id|escape}}" />
+								</form>
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+				<div class="paxination">
+				    <span class="step-links">
+				        {% if Sucursal.has_previous %}
+				            <a class="success button" href="?pag1={{ Sucursal.previous_page_number }}&amp;q={{ query }}">...Anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ Sucursal.number }} de {{ Sucursal.paginator.num_pages }}.
+				        </span>
+
+				        {% if Sucursal.has_next %}
+				            <a class="success button" href="?pag1={{ Sucursal.next_page_number }}&amp;q={{query}}">Siguiente...</a>
+				        {% endif %}
+				    </span>
+				</div>
+		
+			{% elif query %}
+				<p>Lo sentimos, no encontramos lo que busca. Intente de nuevo con otros datos.</p>
+			{% endif %}
+		</section>
+	<br>
+	{%if mostrar %}
+	<section id="row">
+		<p>La informacion puede variar, debido a las cancelaciones de ventas que no han sido autorizadas para liberar el equipo en la respectiva sucursal/evento.</p>
+		<div id="grid">
+			Año <strong>{{ anyoAnt }} </strong>
+			<table id="grid">
+				<tr>
+					<td id="gridhead">{{ nomSucursal }}</td>
+					<td id="gridhead">Enero</td>
+					<td id="gridhead">Febrero</td>
+					<td id="gridhead">Marzo</td>
+					<td id="gridhead">Abril</td>
+					<td id="gridhead">Mayo</td>
+					<td id="gridhead">Junio</td>
+					<td id="gridhead">Julio</td>
+					<td id="gridhead">Agosto</td>
+					<td id="gridhead">Septiembre</td>
+					<td id="gridhead">Octubre</td>
+					<td id="gridhead">Noviembre</td>
+					<td id="gridhead">Diciembre</td>
+					<td id="gridhead">Total</td>
+				</tr>
+				{% for item in vtasAnt %}
+				<tr>
+					{% for x in item %}
+					<td>{{ x|default:'0' }}</td>
+					{%endfor %}
+				</tr>
+				{%endfor %}
+			</table>
+		</div>
+		<hr>
+		<div id="grid">
+			Año <strong>{{ anyoAct }} </strong>
+			<table id="grid">
+				<tr>
+					<td id="gridhead">{{ nomSucursal }}</td>
+					<td id="gridhead">Enero</td>
+					<td id="gridhead">Febrero</td>
+					<td id="gridhead">Marzo</td>
+					<td id="gridhead">Abril</td>
+					<td id="gridhead">Mayo</td>
+					<td id="gridhead">Junio</td>
+					<td id="gridhead">Julio</td>
+					<td id="gridhead">Agosto</td>
+					<td id="gridhead">Septiembre</td>
+					<td id="gridhead">Octubre</td>
+					<td id="gridhead">Noviembre</td>
+					<td id="gridhead">Diciembre</td>
+					<td id="gridhead">Total</td>
+				</tr>
+				{% for item in vtasAct %}
+				<tr>
+					{% for x in item %}
+					<td>{{ x|default:'0' }}</td>
+					{%endfor %}
+				</tr>
+				{%endfor %}
+			</table>
+		</div>
+	</section>
+	{%endif %}
+	<br><br>
+</div>
+{% endblock %}

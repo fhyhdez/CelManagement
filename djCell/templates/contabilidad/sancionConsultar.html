@@ -1,0 +1,84 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}@Consultar Sanciones - @Gerencia{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Sanciones</h2>
+				<div>Registradas</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar sanciones:</h3>
+				</li>
+				<li>
+					<label class="desc">Buscar: <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query|escape}}" name="q" title="Buscar sanciones"; placeholder="Ej.Equipo sin precio" required />
+					</div>
+					<p class="instruct">Ingrese Nombre de Empleado,Descripcion. gracias.</p>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Buscar"/>  |  
+					<a class="success button" href="." title="Nueva busqueda">Nueva Busqueda</a>
+				</li>
+			</ul>
+		</form>
+		{{ info }}
+	</section>
+	<br>	
+		<section id="row">
+			<h3>Sanciones Realizadas</h3>
+			<div>Elimine las sanciones que ya no desea. Esto no afecta a la Cuenta de Empleado (El descuento se realizará vía nomina o abonos por parte del empleado)</div>
+			{% if sanciones %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Empleado</td>
+						<td id="gridhead">Descripcion</td>
+						<td id="gridhead">Monto</td>
+						<td id="gridhead">Fecha</td>
+						<td id="gridhead">Revisar</td>						
+					</tr>
+					{% for x in sanciones %}
+						<tr>
+							<td>{{ x.empleado.nombre|title }} {{ x.empleado.aPaterno|title }} {{ x.empleado.aMaterno|title }}</td>
+							<td>{{ x.descripcion|title }} </td>
+							<td>{{ x.monto|title }} </td>
+							<td>{{ x.fxSancion|date:"Y-m-d h:i a" }} </td>
+							<td title="Eliminar Sancion?">
+								<form class="wufoo" action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+									<input name="delete" type="image"  src="/static/img/icons/cross.png" value="{{ x.id|escape}}" onclick="confirm('¿La Sancion seleccionada, se eliminará de la base de datos. Esto no afecta la cuenta del empleado. Esta seguro de continuar?')" title="Eliminar Sancion?" />
+								</form>
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+				<div class="paxination">
+				    <span class="step-links">
+				        {% if sanciones.has_previous %}
+				            <a class="success button" href="?pag1={{ sanciones.previous_page_number }}&amp;q={{ query }}">...Anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ sanciones.number }} de {{ sanciones.paginator.num_pages }}.
+				        </span>
+
+				        {% if sanciones.has_next %}
+				            <a class="success button" href="?pag1={{ sanciones.next_page_number }}&amp;q={{query}}">Siguiente...</a>
+				        {% endif %}
+				    </span>
+				</div>
+		
+			{% elif query %}
+				<p>Lo sentimos, no encontramos lo que busca. Intente de nuevo con otros datos.</p>
+			{% endif %}
+		</section>
+	<br><br>
+</div>
+{% endblock %}

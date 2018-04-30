@@ -1,0 +1,33 @@
+{% extends 'ventas/ventas-base.html' %}
+
+{% block titulo %}@Papeletas sin LLenar{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info"><h3>Papeletas sin Llenar</h3></div>
+		{%if spapeleta %}
+		<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Fecha de Venta</td>
+						<td id="gridhead">Producto</td>
+						<td id="gridhead">Papeleta</td>
+					</tr>
+					{% for item in spapeleta %}
+					<tr>
+						<td>{{ item.0|escape }}</td>
+						<td>{{ item.1|escape }}</td>
+						<td>
+							<a class="success button" href="/ventas/papeleta/nueva/?producto={{item.2}}" onClick="window.open(this.href, this.target, 'width=900,height=700,toolbar=0,menubar=1,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0'); return false;"><br>Llenar Papeleta</a>
+						</td>
+					</tr>
+					{%endfor %}
+				</table>
+		</div>
+		{%else %}
+		<strong>No hay papeletas sin llenar por el momento.</strong>
+		{%endif %}
+	</section>
+</div>
+{% endblock %}

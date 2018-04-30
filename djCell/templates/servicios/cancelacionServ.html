@@ -1,0 +1,68 @@
+{% extends 'servicios/servicios-base.html' %}
+{% block titulo %}@Ventas CANCELADAS del Dia - @Servicios{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<h3><strong>VENTAS CANCELADAS POR AUTORIZAR </strong></h3>
+		<DIV class="info">Las ventas canceladas que no han sido autorizadas, deben ser reportadas para que los productos se liberen y regresen a su respectivo estado de Existencia en sucursal.</DIV>
+		<div id="grid2">
+			<table id="grid2">
+				<tr>
+					<td id="gridhead2">Vendedor</td>
+					<td id="gridhead2">Folio</td>
+					<td id="gridhead2">Producto</td>
+					<td id="gridhead2">Descripcion</td>
+					<td id="gridhead2" title="Tipo de Pago">Estado</td>
+					<td id="gridhead2" title="Tipo de Venta">Venta</td>
+					<td id="gridhead2">Monto</td>
+				</tr>
+		{%if vtaCanceladas %}
+			{%for vc in vtaCanceladas %}
+				{%if accVendido or anticipo %}
+					{%for acV in accVendido %}
+					<tr>
+						{%if vc.folioVenta == acV.venta.folioVenta %}
+							<td>{{ vc.usuario.username }} </td>
+							<td>{{ vc.folioVenta }} </td>
+							<td>Acc. {{acV.accesorio.detallesAccesorio.seccion.seccion}} || {{acV.accesorio.codigoBarras}}</td>
+							<td>{{acV.accesorio.detallesAccesorio.marca}} {{acV.accesorio.detallesAccesorio.descripcion}}</td>
+							<td style="border-color:#FFAE00;background-color:#FFD373;">{{vc.estado.estado}}</td>
+							<td>Contado</td>
+							<td>
+								{{acV.precVenta}}
+							</td>
+						{%endif %}
+					</tr>
+					{%endfor %}
+							
+					{%for an in anticipo %}
+					<tr>
+						{%if vc.folioVenta == an.folioVenta.folioVenta %}
+							<td>{{ vc.usuario.username }} </td>
+							<td>{{ vc.folioVenta }} </td>
+							<td>Anticipo</td>
+							<td>{{ an.tipoAnticipo }}<br>{{an.folioVenta.folioVenta}}</td>
+							<td>Contado</td>
+							<td style="border-color:#FFAE00;background-color:#FFD373;">N/A</td>
+							<td>{{an.monto}}</td>
+						{%endif %}
+					</tr>
+					{%endfor %}
+				{%else %}
+					<tr>
+						<td colspan="3">NO HAY PRODUCTOS/SERVICIOS AGREGADOS</td>
+					</tr>
+				{%endif %}
+			{%endfor %}
+		{%else %}
+					<tr>	
+						<td colspan="3">NO HAY PRODUCTOS/SERVICIOS AGREGADOS</td>
+					</tr>
+		{%endif %}
+			</table>
+		</div>
+	</section>	
+	<br><br>
+</div>
+{% endblock %}

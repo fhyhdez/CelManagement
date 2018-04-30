@@ -1,0 +1,254 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}--Contabilidad{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info">
+			<h2>{{titulo}}</h2>
+		</div>
+		<strong>{{ mensaje }}</strong>
+
+		{%if inventarios and not inventario%}
+			{{buscador|safe}}
+			{{inventarios|safe}}
+		{%endif %}
+
+		{%if inventario %}
+			<div class="info">
+				<h2>Auditoria  {{inventario}} </h2>
+			</div>
+			<div id="twoCol">
+				<table id="twoCol">
+					<tr>
+						<td>Folio</td>
+						<td>{{inventario.folio|upper}}</td>
+					</tr>
+					<tr>
+						<td>Inicio</td>
+						<td>{{inventario.fxInicio|date:"Y-m-d h:i a"}}</td>
+					</tr>
+					<tr>
+						<td>Sucursal</td>
+						<td>{{inventario.sucursal|escape}}</td>
+					</tr>
+					<tr>
+						<td>Observaciones</td>
+						<td>{{inventario.observaciones|default:'Ninguna'}}</td>
+					</tr>
+
+					<tr>
+						<td>Estado</td>
+						<td>
+							{%if not inventario.terminada %}Activa
+							{%elif inventario.cerrado %}Cerrada
+							{%else %}Terminada
+							{%endif%}
+						</td>
+					</tr>
+					{%if not inventario.terminada %}
+					
+					<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+					<input type="hidden" name="idInv" value="{{inventario.id}}">
+					{% csrf_token %}
+					<tr>
+						<td><input class="submit success" type="submit" name='cancelar' value="Cancelarla"/> </td>
+						<td><input type="checkbox" name="confir">Confirme que desea Cancelar la Auditoria<br><p>Si cancela la auditoria se cerrara con diferenciales en 0</p></td>
+					</tr>
+					</form>
+					<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+					<input type="hidden" name="idInv" value="{{inventario.id}}">
+					{% csrf_token %}
+					<tr>
+						<td><input class="submit success" type="submit" name='terminar' value="Terminarla"/> </td>
+						<td><input type="checkbox" name="confir">Confirme que desea Terminar la Auditoria</td>
+					</tr>
+					</form>
+					{%elif inventario.cerrado %}
+					{%else %}
+
+					<tr>
+						<td>Diferencia de Equipos</td>
+						<td>{{inventario.difEquipo|default:'0'}}</td>
+					</tr>
+					<tr>
+						<td>Diferencia de Accesorios</td>
+						<td>{{inventario.difAccesorio|default:'0'}}</td>
+					</tr>
+					<tr>
+						<td> Diferencia de Expres</td>
+						<td> {{inventario.difExpres|default:'0'}}</td>
+					</tr>
+					<tr>
+						<td>Diferencia de Fichas</td>
+						<td>{{inventario.difFicha|default:'0'}}</td>
+					</tr>
+					{%endif%}
+				</table>
+			</div>
+
+
+				{%if not inventario.terminada %}
+					<br>
+					<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+						{% csrf_token %}
+						<div id='form2'>
+							<h2>Agregar Auditor</h2>
+							<table id='form2'>
+								<input type="hidden" name="inventario" value="{{inventario.id}}">
+								<tr><th><label for="id_auditor">Auditor:{{formAsig.errors}}</label></th><td>{{formAsig.auditor}}</td></tr>
+							</table>
+						</div>
+						<div style="text-align:center;padding-top:0.5em;">
+								<input class="submit success" type="submit" name='asignar' value="Asignar el empleado"/> 
+						</div>
+					</form>
+				{%elif inventario.cerrado %}
+					<h2>Esta auditoria se encuentra Cerrada</h2>
+				{%else%}
+				<br>
+					<h2>Formulario para cierre de auditoria</h2>
+					<div id='form2'>
+					<table id='form2'>
+					<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+					<input type="hidden" name="idInv" value="{{inventario.id}}">
+					{% csrf_token %}
+					<tr>
+						<td>Observaciones</td>
+						<td><textarea cols="40" id="id_observaciones" name="observaciones" rows="6">
+</textarea></td>
+					<tr>
+						<td>Sanciones Extras</td>
+						<td><input type="number" value="0" name="sansion"></td>
+					<tr>
+						<td>Descripcion de la sansion extra</td>
+						<td><textarea cols="40" id="id_observaciones" name="sancionDes" rows="6">
+</textarea></td>
+					{%if empleados%}
+					</tr>
+						<td>Empleados:</td>
+						<td></td>
+					</tr>
+					{% for empleado in empleados %}
+					</tr>
+						<td><input type="checkbox" name="em-{{empleado.empleado.id}}"></td>
+						<td>{{empleado.empleado}}</td>
+					</tr>
+					{% endfor %}
+					
+					<tr>
+						<td>Confirme que desea Cerrar la Auditoria<input type="checkbox" name="confir"></td>
+						<td><input class="submit success" type="submit" name='cerrar' value="Cerrarla"/> </td>
+					</tr>
+					{%endif%}
+					
+					</form>
+					</table>
+					</div>
+
+				{%if desplEq %}
+					<div id="grid">
+						<p>Desglose de Equipos</p>
+						<table id="grid">
+							<tr>
+								<td id="gridhead">Equipo</td>
+								<td id="gridhead">Existente</td>
+								<td id="gridhead">Estado</td>
+								<td id="gridhead">observacion</td>
+								<td id="gridhead">fxRevision</td>
+							</tr>
+							{%for item in desplEq %}
+								<tr>
+									<td>{{item.equipo}}</td>
+									<td>{%if item.existe %}<img src="{{STATIC_URL}}img/icons/tick.png" />{%else %}<img src="{{STATIC_URL}}img/icons/exclamation.png" />{%endif %}</td>
+									<td>{{item.equipo.estatus}}</td>
+									<td>{{item.observacion|default:'Ninguna'}}</td>
+									<td>{%if item.revisado %}{{item.fxRevision|date:"Y-m-d h:i a"}}{%endif %}</td>
+								</tr>
+							{%endfor %}
+						</table>
+					</div>
+				{%endif %}
+				{%if desplAc %}
+					<div id="grid">
+						<p>Desglose de Accesorios</p>
+						<table id="grid">
+							<tr>
+								<td id="gridhead">Accesorio</td>
+								<td id="gridhead">Existente</td>
+								<td id="gridhead">Estado</td>
+								<td id="gridhead">observacion</td>
+								<td id="gridhead">Revision</td>
+							</tr>
+							{%for item in desplAc %}
+								<tr>
+									<td>{{item.accesorio}}</td>
+									<td>{%if item.existe %}<img src="{{STATIC_URL}}img/icons/tick.png" />{%else %}<img src="{{STATIC_URL}}img/icons/exclamation.png" />{%endif %}</td>
+									<td>{{item.accesorio.estatusAccesorio}}</td>
+									<td>{{item.observacion|default:'Ninguna'}}</td>
+									<td>{%if item.revisado %}{{item.fxRevision|date:"Y-m-d h:i a"}}{%endif %}</td>
+								</tr>
+							{%endfor %}
+						</table>
+					</div>
+				{%endif %}
+				{%if desplEx %}
+					<div id="grid">
+						<p>Desglose de Expres</p>
+						<table id="grid">
+							<tr>
+								<td id="gridhead">Expres</td>
+								<td id="gridhead">Existente</td>
+								<td id="gridhead">Estado</td>
+								<td id="gridhead">observacion</td>
+								<td id="gridhead">Revision</td>
+							</tr>
+							{%for item in desplEx %}
+								<tr>
+									<td>{{item.expres}}</td>
+									<td>{%if item.existe %}<img src="{{STATIC_URL}}img/icons/tick.png" />{%else %}<img src="{{STATIC_URL}}img/icons/exclamation.png" />{%endif %}</td>
+									<td>{{item.expres.estatus}}</td>
+									<td>{{item.observacion|default:'Ninguna'}}</td>
+									<td>{%if item.revisado %}{{item.fxRevision|date:"Y-m-d h:i a"}}{%endif %}</td>
+								</tr>
+							{%endfor %}
+						</table>
+					</div>
+				{%endif %}
+				{%if desplFi %}
+					<div id="grid">
+						<p>Desglose de Fichas</p>
+						<table id="grid">
+							<tr>
+								<td id="gridhead">Ficha</td>
+								<td id="gridhead">Existente</td>
+								<td id="gridhead">Estado</td>
+								<td id="gridhead">observacion</td>
+								<td id="gridhead">Revision</td>
+							</tr>
+							{%for item in desplFi %}
+								<tr>
+									<td>{{item.ficha}}</td>
+									<td>{%if item.existe %}<img src="{{STATIC_URL}}img/icons/tick.png" />{%else %}<img src="{{STATIC_URL}}img/icons/exclamation.png" />{%endif %}</td>
+									<td>{{item.ficha.estatusFicha}}</td>
+									<td>{{item.observacion|default:'Ninguna'}}</td>
+									<td>{%if item.revisado %}{{item.fxRevision|date:"Y-m-d h:i a"}}{%endif %}</td>
+								</tr>
+							{%endfor %}
+						</table>
+					</div>
+				{%endif %}
+
+				{%endif%}
+				{%if asignados and not inventario.terminada%}
+					{{asignados|safe}}
+					</table>
+					</div>
+				{%endif%}
+
+		{%endif %}
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}--Contabilidad{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info">
+			<h2>Linea de Credito</h2>
+		</div>
+		<hr>
+			{{ mensaje }}				
+			<hr>
+			<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<input  type="hidden" name='idP' value="{{provee.id}}"/> 
+				<div id='form2'>
+					<h2>Registrar Linea</h2>
+					<table id='form2'>
+						{{fLinea}}
+					</table>
+				</div>
+				<div style="text-align:center;padding-top:0.5em;">
+						<input class="submit success" type="submit" name='guardar' value="Registrar"/> 
+				</div>
+			</form>
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

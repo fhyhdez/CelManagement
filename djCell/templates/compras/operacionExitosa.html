@@ -1,0 +1,15 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Bienvenido a @Compras{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info"><h3>Operaciones en Compras</h3></div>
+			<center>
+                <p>El dato ha sido agregado correctamente.</p>
+                <p><a href="javascript:history.back(-1);"><img alt="go_back" title="Regresar" src="{{STATIC_URL}}img/operaciones.png"/><br>Regresar</a></p>
+            </center>
+		<div style="height:100%;"></div>
+	</section>
+</div>
+{% endblock %}

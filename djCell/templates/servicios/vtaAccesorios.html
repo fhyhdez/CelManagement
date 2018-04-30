@@ -1,0 +1,120 @@
+{% extends 'servicios/servicios-base.html' %}
+{% block miscript %} 
+<link rel="stylesheet" href="{{STATIC_URL}}css/tabstyle.css" type="text/css">
+{% endblock %}
+{% block titulo %}@Venta de Accesorios @Servicios Tecnicos{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info">
+			<h3><strong>Registro de Ventas</strong>
+			</h3>
+		</div>
+		<div id="tabContainer">
+		    <div id="tabs">
+			    <ul>
+					<li id="tabHeader_1">Accesorios</li>
+				</ul>
+			</div>
+			<div id="tabscontent">
+				<div class="tabpage" id="tabpage_1">
+					<form class="wufoo" name="addAcc" action="." method="GET" enctype="multipart/form-data">
+						{% csrf_token %}
+					    <div class="info"><h2>Venta de Accesorios</h2></div>
+							<ul>
+								<li class="section first">
+									<h3>Agregar Folio de Accesorio</h3>
+								</li>
+							
+								<li>
+									<label class="desc">FOLIO: <span class="req">*</span></label>
+									<input class="field text medium" type="text" value="{{ queryAcc|escape}}" name="qAcc" title="Ingrese parte del codigo de barras"; placeholder="Ej. FMV03-10293" required />
+								</li>
+								<li>
+								<li id="buttons">
+									<input type="hidden" name="vtaGral" value="{{vtaGenerada}}"/>
+									<input name="addAcc" class="submit success" type="image" src="/static/img/1362824176_shoppingbasket--add.png" value="producto"/>
+								</li>
+							</ul>
+					</form>
+				</div> 
+			</div>
+		</div>	
+		<script src="{{STATIC_URL}}js/tabs_old.js"></script>
+	<script type="text/javascript">
+	  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-1332079-8']);
+		  _gaq.push(['_trackPageview']);
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+	</script>
+		<div id="grid">
+			{%if resultAdd %}
+				<p><strong> {{resultAdd}} </strong></p>
+			{%elif queryAcc %}
+			<p>El Producto Ingresado no Pertenece o no Existe en Sucursal.</p>
+			{%endif %}
+		</div>
+	</section>
+	<section id="row">
+		<h3><strong>Folio de Venta:</strong>{{ vtaGenerada }} </h3>
+			<div id="grid" style="float:left;width:70%;">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Producto</td>
+						<td id="gridhead">Descripcion</td>
+						<td id="gridhead">Importe</td>
+					</tr>
+					{%if accVendido %}
+						{%for acV in accVendido %}
+						<tr>
+							{%if vtaGenerada == acV.venta.folioVenta %}
+								<td>Acc. {{acV.accesorio.detallesAccesorio.seccion.seccion}} | {{acV.accesorio.codigoBarras}}</td>
+								<td>{{acV.accesorio.detallesAccesorio.marca}} {{acV.accesorio.detallesAccesorio.descripcion}}</td>
+								<td>{{acV.precVenta}} </td>
+							{%endif %}
+						</tr>
+						{%endfor %}
+					{%else %}
+						<tr>
+							<td colspan="3">NO HAY PRODUCTOS AGREGADOS</td>
+						</tr>
+					{%endif %}
+				</table>
+			</div>
+			<img src="/static/img/1362823556_shopping-basket-full.png" style="float:right;padding:3%">
+			<div style="clear:both;"></div>
+	</section>
+	<section id="row">
+		<h3>Caja: Cobrar Venta</h3>
+			<form class="wufoo" action="." name="caja" method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+				<ul>
+					{% for field in vtaForm %}
+						<li>
+							<label class="desc">{{field.label}}</label> 
+							<div>
+								{{field}}
+							</div>
+							<label> {{field.help_text}} <span class="req"> {{field.errors}} </span></label>
+						</li>
+					{% endfor %}
+					<br>
+					<li><br><strong>{{info}}</strong><br></li>
+					{%if folioVenta %}
+					<li><a href="./?print={{ folioVenta }}" class="success button" target="_blank" ><img src="{{STATIC_URL}}img/icons/1366452634_print.png">  Imprimir Ticket</a></li>
+					{%endif %}
+					<li id="buttons">
+						<input name="cobrar" title="Cobrar venta" class="submit success" type="image" src="/static/img/1362824182_shoppingbasket-accept.png" value="cobrar"/> |  
+						<input name="cancelar" title="Cancelar venta" class="submit success" type="image" src="/static/img/1362824162_shoppingbasket-delete.png" value="cancelar"/>						
+					</li>
+				</ul>
+			</form>
+	</section>
+	<br><br>
+</div>
+{% endblock %}

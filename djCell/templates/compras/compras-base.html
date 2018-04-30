@@ -1,0 +1,357 @@
+<!DOCTYPE>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name = "viewport" content = "width=device-width, maximum-scale = 1, minimum-scale=1" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/structure.css" media="all" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/theme2.css" media="all" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/buttons.css"  />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/flexslider.css" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/fuentes.css" media="screen" />
+		<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css' />
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+		<link rel="shortcut icon" type="image/x-icon" href="http://dhtml5.comoj.com/images/favicon.ico" />
+		<script src="{{STATIC_URL}}js/wufoo.js"></script>
+ 		<script src="{{STATIC_URL}}js/jquery-1.2.1.pack.js"></script>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="{{STATIC_URL}}js/jquery.flexslider.js"></script>
+		<script src="{{STATIC_URL}}js/default.js"></script>
+		{% block miscript %} 
+		{%endblock %}
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+			<script src="js/respond.min.js"></script>
+		<![endif]-->
+		<title>@CM - 
+		{% if nivel == 0 %}
+		Django-Admin
+		{% elif nivel == 1 %}
+		Administrador
+		{% elif nivel == 5 %}
+		Gerente
+		{% elif nivel == 6 %}
+		Jefe de Distribucion
+		{% elif nivel == 7 %}
+		Almacenista
+		{% endif %}
+		{% block titulo %}
+		{% endblock %}</title>
+	</head>
+	<body>
+		<div id="pagewidth">
+			<header id="header">
+				<img src="{{STATIC_URL}}img/logoAccell2.png" id="imgLogo"/>
+				<div id="Logo"><h1><a href=".">Excess Complet Cellulaire</a></h1></div>
+			</header>
+			<nav id="minav">
+				<div class="center">
+					<ul class="navh">
+						<li>{%if nivel == 1 %}
+							<a href="/administracion" class="tooltipbasic" data-tooltip="Ir a la pagina de Bienvenida">Admin</a>
+							{%else %}
+							<a href="/compras" class="tooltipbasic" data-tooltip="Ir a la pagina de Bienvenida">Inicio</a>
+							{%endif %}
+						</li>
+
+						{% if nivel != 7 %}
+						<li class="dropdownh">
+							<a href="/compras" class="tooltipbasic" data-tooltip="Seccion de Compras">Compras</a>
+							<ul>
+
+								{% if nivel != 6 %}
+								<li><a href="/compras/compras/generar" class="tooltipbasic" data-tooltip="Generar compras en base a ventas">Generar</a></li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Listas de precios">Listas Precios</a>
+									<ul>
+										<li><a href="/compras/compras/lista_precios/equipos" class="tooltipbasic" data-tooltip="Consulta y Actualizacion de lista de precios de equipos">Equipos</a></li>
+										<li><a href="/compras/compras/lista_precios/accesorios" class="tooltipbasic" data-tooltip="Consulta y Actualizacion de lista de precios de accesorios">Accesorios</a></li>
+										<li><a href="/compras/compras/lista_precios/express" class="tooltipbasic" data-tooltip="Consulta y Actualizacion de lista de precios de Express">Express</a></li>
+									</ul>
+								</li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Stocks">Stocks</a>
+									<ul>
+										<li class="dropdownh">
+											<a href="#" class="tooltipbasic" data-tooltip="Asignacion de stocks por sucursal">Asignar</a>
+											<ul>
+												<li><a href="/compras/compras/stocks/asignar/equipos" class="tooltipbasic" data-tooltip="Stocks equipos">Equipos</a></li>
+												<li><a href="/compras/compras/stocks/asignar/accesorios" class="tooltipbasic" data-tooltip="Stocks accesorios">Accesorios</a></li>
+												<li><a href="/compras/compras/stocks/asignar/express" class="tooltipbasic" data-tooltip="Stocks express">Express</a></li>
+												<li><a href="/compras/compras/stocks/asignar/fichas" class="tooltipbasic" data-tooltip="Stocks fichas">Fichas</a></li>
+												<li><a href="/compras/compras/stocks/asignar/recargas" class="tooltipbasic" data-tooltip="Stocks recargas">Recargas</a></li>
+											</ul>
+										</li>
+										<li class="dropdownh">
+											<a href="#" class="tooltipbasic" data-tooltip="Actualizacion de stocks">Actualizar</a>
+											<ul>
+												<li><a href="/compras/compras/stocks/actualizar/equipos" class="tooltipbasic" data-tooltip="Stocks equipos">Equipos</a></li>
+												<li><a href="/compras/compras/stocks/actualizar/accesorios" class="tooltipbasic" data-tooltip="Stocks accesorios">Accesorios</a></li>
+												<li><a href="/compras/compras/stocks/actualizar/express" class="tooltipbasic" data-tooltip="Stocks express">Express</a></li>
+												<li><a href="/compras/compras/stocks/actualizar/fichas" class="tooltipbasic" data-tooltip="Stocks fichas">Fichas</a></li>
+												<li><a href="/compras/compras/stocks/actualizar/recargas" class="tooltipbasic" data-tooltip="Stocks recargas">Recargas</a></li>
+											</ul>
+										</li>
+										<li><a href="/compras/compras/stocks/todos" class="tooltipbasic" data-tooltip="Consulta y reporte de stocks">Todos</a></li>
+									</ul>
+								</li>
+								{% endif %}
+								<li><a href="/compras/compras/pedidos" class="tooltipbasic" data-tooltip="Pedidos o Mensajes en sucursales / sistema">Mensajes</a></li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Clientes">Clientes</a>
+									<ul>
+										<li><a href="/compras/compras/clientes/subdistribuidor" class="tooltipbasic" data-tooltip="Agregar clientes subdistribuidores">Subdistribuidor</a></li>
+										<li><a href="/compras/compras/clientes/mayorista" class="tooltipbasic" data-tooltip="Agregar clientes mayoristas">Mayorista</a></li>
+										<li><a href="/compras/compras/clientes/catalogos" class="tooltipbasic" data-tooltip="Consulta y reporte de clientes">Catalogos</a></li>
+									</ul>
+								</li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Proveedores">Proveedores</a>
+									<ul>
+										<li><a href="/compras/compras/proveedor/nuevo" class="tooltipbasic" data-tooltip="Agregar nuevo proveedor">Nuevo</a></li>
+										<li><a href="/compras/compras/proveedor/catalogo" class="tooltipbasic" data-tooltip="Catalogo de proveedores">Catalogo</a></li>
+									</ul>
+								</li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Credito y Cobranza">Credito y Cobranza</a>
+									<ul>
+										<li><a href="/compras/compras/credito/abonar" class="tooltipbasic" data-tooltip="Abonar a subdistriduidores">Abonar</a></li>
+										<li><a href="/compras/compras/credito/vencidos" class="tooltipbasic" data-tooltip="Cartera Vencida, plazos de credito vencidos">Vencidos</a></li>
+										<li><a href="/compras/compras/credito/historial" class="tooltipbasic" data-tooltip="Consulta y reporte de historial de creditos">Historial</a></li>
+									</ul>
+								</li>
+
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Almacen">Almacen</a>
+							<ul>
+								<li><a href="/compras/almacen/registrar_fact" class="tooltipbasic" data-tooltip="Nueva factura o nota de compra">Alta Factura</a></li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Registro de equipos y nueva marca, modelo, color">Alta Equipo</a>
+									<ul>
+										<li><a href="/compras/almacen/nuevo/dequipos" class="tooltipbasic" data-tooltip="Nuevo detalle de Equipo: marca, modelo, color">Nueva Marca</a></li>
+										<li><a href="/compras/almacen/equipos" class="tooltipbasic" data-tooltip="Agregar equipos">Equipos</a></li>
+									</ul>
+								</li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Registro de Accesorios y nueva seccion, marca">Alta Accesorio</a>
+									<ul>
+										<li><a href="/compras/almacen/nuevo/daccesorios" class="tooltipbasic" data-tooltip="Nueva Marca, seccion de accesorios">Nueva Marca</a></li>
+										<li><a href="/compras/almacen/accesorios" class="tooltipbasic" data-tooltip="Agregar / Registrar accesorios">Accesorios</a></li>
+									</ul>
+									
+								</li>
+								<li><a href="/compras/almacen/express" class="tooltipbasic" data-tooltip="Agregar express">Alta Express</a></li>
+								<li><a href="/compras/almacen/fichas" class="tooltipbasic" data-tooltip="Agregar fichas">Alta Fichas</a>
+								</li>
+								<li>
+									<a href="/compras/almacen/recargas" class="tooltipbasic" data-tooltip="Agregar Recargas">Alta Recargas</a>
+								</li>
+								<li><a href="/compras/almacen/reporte" class="tooltipbasic" data-tooltip="Consulta y reporte de productos entrantes">Reporte</a></li>
+							</ul>
+						</li>
+						{% endif %}
+
+
+
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Movimientos">Movimientos</a>
+							<ul>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Transferencias">Transferencias</a>
+									<ul>
+										<li><a href="/compras/movimientos/transferencias/equipos" class="tooltipbasic" data-tooltip="Agregar equipos">Equipos</a></li>
+										<li><a href="/compras/movimientos/transferencias/accesorios" class="tooltipbasic" data-tooltip="Agregar accesorios">Accesorios</a></li>
+										<li><a href="/compras/movimientos/transferencias/express" class="tooltipbasic" data-tooltip="Agregar express">Express</a></li>
+										<li><a href="/compras/movimientos/transferencias/fichas" class="tooltipbasic" data-tooltip="Agregar fichas">Fichas</a></li>
+										<li><a href="/compras/movimientos/transferencias/recargas" class="tooltipbasic" data-tooltip="Agregar Recargas">Recargas</a></li>
+										<li><a href="/compras/movimientos/transferencias/consultar" class="tooltipbasic" data-tooltip="Consulta y reporte de transferencias">Consultar</a></li>
+									</ul>
+								</li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Devoluciones">Devoluciones</a>
+									<ul>
+										<li><a href="/compras/movimientos/devoluciones/equipos" class="tooltipbasic" data-tooltip="Devolver equipos">Equipos</a></li>
+										<li><a href="/compras/movimientos/devoluciones/accesorios" class="tooltipbasic" data-tooltip="Devolver accesorios">Accesorios</a></li>
+										<li><a href="/compras/movimientos/devoluciones/express" class="tooltipbasic" data-tooltip="Devolver express">Express</a></li>
+										<li><a href="/compras/movimientos/devoluciones/fichas" class="tooltipbasic" data-tooltip="Devolver fichas">Fichas</a></li>
+										<li><a href="/compras/movimientos/devoluciones/recargas/" class="tooltipbasic" data-tooltip="Devolver Saldo de Sucursales">Recargas</a></li>
+										<li><a href="/compras/movimientos/devoluciones/consultar" class="tooltipbasic" data-tooltip="Consulta y reporte de devoluciones">Consultar</a></li>
+									</ul>
+								</li>
+								<li>
+									<a href="/compras/movimientos/asignacion" class="tooltipbasic" data-tooltip="Asignacion de Expess a Equipos">Asignacion</a>
+								</li>
+								<li>
+									<a href="/compras/movimientos/confirmacion" class="tooltipbasic" data-tooltip="Transferencias no Aceptadas, Seguimiento">Transferencias sin Confirmar</a>
+								</li>
+								
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Servicio de Garantia">Garantias</a>
+							<ul>
+								<li><a href="/compras/garantias/solicitudes" class="tooltipbasic" data-tooltip="Garantias de Sucursales">Solicitudes</a></li>
+								<li><a href="/compras/garantias/consultar" class="tooltipbasic" data-tooltip="Seguimiento de la solicitud, actualizar datos">Consultar</a></li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Existencias">Existencias</a>
+							<ul>
+								<li><a href="/compras/existencias/equipos" class="tooltipbasic" data-tooltip="Existencias equipos">Equipos</a></li>
+								<li><a href="/compras/existencias/accesorios" class="tooltipbasic" data-tooltip="Existencias accesorios">Accesorios</a></li>
+								<li><a href="/compras/existencias/express" class="tooltipbasic" data-tooltip="Existencias express">Express</a></li>
+								<li><a href="/compras/existencias/fichas" class="tooltipbasic" data-tooltip="Existencias fichas">Fichas</a></li>
+								<li><a href="/compras/existencias/recargas" class="tooltipbasic" data-tooltip="Existencias de Recargas">Recargas</a></li>
+								<li><a href="/compras/existencias/almacen" class="tooltipbasic" data-tooltip="Consulta y reporte de Existencias por sucursal">Reporte</a></li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Faltantes">Faltantes</a>
+							<ul>
+								<li><a href="/compras/faltantes/equipos" class="tooltipbasic" data-tooltip="Faltantes equipos">Equipos</a></li>
+								<li><a href="/compras/faltantes/accesorios" class="tooltipbasic" data-tooltip="Faltantes accesorios">Accesorios</a></li>
+								<li><a href="/compras/faltantes/express" class="tooltipbasic" data-tooltip="Faltantes express">Express</a></li>
+								<li><a href="/compras/faltantes/fichas" class="tooltipbasic" data-tooltip="Faltantes fichas">Fichas</a></li>
+								<li><a href="/compras/faltantes/recargas" class="tooltipbasic" data-tooltip="Reporte de Recargas al dia">Recargas</a></li>
+								<li><a href="/compras/faltantes/consultar" class="tooltipbasic" data-tooltip="Consulta y reporte de faltantes">Consultar</a></li>
+							</ul>
+						</li>
+						{%if nivel == 1 %}
+						{%else %}
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Ventas de almacen">Ventas</a>
+							<ul>
+								<li><a href="/compras/ventas/mayoreo" class="tooltipbasic" data-tooltip="Tipo Mayoreo">Venta Mayoreo</a></li>
+								<li><a href="/compras/ventas/credito" class="tooltipbasic" data-tooltip="Tipo Credito">Credito</a></li>
+								<li><a href="/compras/ventas/contado" class="tooltipbasic" data-tooltip="Tipo Contado">Contado</a></li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Corte de venta">Caja</a>
+									<ul>
+										<li><a href="/compras/ventas/caja/vtas_dia" class="tooltipbasic" data-tooltip="Acumulado de ventas del cia">Vtas del Dia</a></li>
+										<li><a href="/compras/ventas/caja/cerrar_corte" class="tooltipbasic" data-tooltip="Cerrar corte">Cerrar Corte</a></li>
+									</ul>
+								</li>
+								<li><a href="/compras/ventas/gastos" class="tooltipbasic" data-tooltip="Agregar gastos realizados en el dia">Gastos</a></li>
+							</ul>
+						</li>
+						{%endif %}
+						<li><a href="/cerrar">Salir</a></li>
+					</ul>
+			</div>
+			</nav>
+			<aside id="sidebar">
+				<ul class="nav">
+
+					<li class="dropdown">
+						<a href="#">Reportes</a>
+						<ul>
+							<li><a href="/compras/movimientos/transferencias/consultar/"  class="tooltipbasic2" data-tooltip="Transferencias del dia">Transferencias</a></li>
+							<li><a href="/compras/movimientos/devoluciones/consultar/"  class="tooltipbasic2" data-tooltip="Devoluciones del dia">Devoluciones</a></li>
+							<li><a href="/compras/existencias/almacen/"  class="tooltipbasic2" data-tooltip="Existencias del dia">Exist. Almacen</a></li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#">Listas</a>
+						<ul>
+							<li><a href="/compras/listas/equipos/"  class="tooltipbasic2" data-tooltip="Precios de equipos">Equipos</a></li>
+							<li><a href="/compras/listas/accesorios/"  class="tooltipbasic2" data-tooltip="Precios de Accesorios">Accesorios</a></li>
+						</ul>
+					</li>
+
+				</ul>
+				<p align="center"><SCRIPT language="javascript">
+					function greeting(){   
+					        var today = new Date();   
+					        var hrs = today.getHours();   
+					        document.writeln("<CENTER>");   
+					        document.write("<div id='Calendario'>Buen@s ");   
+					        if (hrs < 6)      document.write("(y tempranos) días");   
+					        else if (hrs < 12)      document.write("días");   
+					        else if (hrs <= 19)      document.write("tardes");   
+					        else      document.write("Noches");   document.writeln("!</div>");   
+					        document.writeln("</CENTER>");  
+					}
+					function getmon(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11)
+					{
+					   this[0] = m0;
+					   this[1] = m1;
+					   this[2] = m2;
+					   this[3] = m3;
+					   this[4] = m4;
+					   this[5] = m5;
+					   this[6] = m6;
+					   this[7] = m7;
+					   this[8] = m8;
+					   this[9] = m9;
+					   this[10] = m10;
+					   this[11] = m11;
+					}
+					function calendar()
+					{
+					   var monthNames = "EneFebMarAbrMayJunJulAgoSepOctNovDic";
+					   var today = new Date();
+					   var thisDay;
+					   var monthDays = new getmon(31, 28, 31, 30, 31, 30, 31, 31, 30,
+					      31, 30, 31);
+					      year = today.getFullYear();
+					   thisDay = today.getDate();
+					      if (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0))
+					      monthDays[1] = 29;
+					   nDays = monthDays[today.getMonth()];
+					   firstDay = today;
+					   firstDay.setDate(1);
+					   startDay = firstDay.getDay();
+					   document.writeln("<center><small>");
+					   document.write("<table border=3 cellpadding=1>");
+					   document.write("<tr><th colspan=7><font size=2>");
+					   document.write(monthNames.substring(today.getMonth() * 3,
+					      (today.getMonth() + 1) * 3));
+					   document.write(". ");
+					   document.write(year);
+					   document.write("<tr><th>");
+					  document.write("D<th>L<th>M<th>Mi<th>J<th>V<th>S");
+					   document.write("<tr>");
+					   column = 0;
+					   for (i=0; i<startDay; i++)
+					   {
+					   document.write("<td align=center>");
+					      column++;
+					      document.write("");
+					   }
+					   for (i=1; i<=nDays; i++)
+					   {
+					   document.write("<td align=center>");
+					      if (i == thisDay)
+					         document.write("<font color=\"red\"  size=2><b>")
+					      document.write(i);
+					      if (i == thisDay)
+					        document.write("</font></b>")
+					      column++;
+					      if (column == 7)
+					      {
+					     document.write("<tr>");
+					         column = 0;
+					      }
+					   }
+					   document.write("</table></small>");
+					}
+					greeting();
+					calendar();
+					document.write();
+					function shutdown(){
+						window.close()
+					}
+					</SCRIPT>
+				</p>
+			</aside>
+			{% block contenido %}{% endblock %}
+			<br><br><br><br><br><br>
+			<!--<footer id="footer">
+				<div class="center">
+				<a href="#">Soporte T&eacute;cnico</a>
+			</div></footer>-->
+		</div>
+	</body>
+</html>

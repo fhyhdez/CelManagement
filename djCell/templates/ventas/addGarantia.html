@@ -1,0 +1,145 @@
+{% extends 'ventas/ventas-base.html' %}
+
+{% block titulo %}@Recepcion de Garantias @Servicios - Ventas{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	{%if buscar %}
+	<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Papeletas para Validar la Garantia</h2>
+				<div>Las Garantias son validadas con la fecha actual y la fecha de papeleta.</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Papeletas Registradas en Sucursal</h3>
+				</li>
+				<li>
+					<label class="desc">Buscar:( Cliente/Folio papeleta/ Calle /Colonia/Imei ) <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query|escape}}" name="q" title="Ingrese uno de los argumentos mencionados para realizar el filtro"; placeholder="Ej. Jhon Perez" required />
+					</div>
+					<p class="instruct">Ingrese Nombre del cliente | folio papeleta | Imei | Calle | Colonia, para realizar el filtrado.Solo se mostraran los clientes que pertenezcan a la sucursal. Gracias.</p>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Buscar"/>  |  
+					<a class="success button" href="." title="Nueva busqueda">Nueva Busqueda</a>
+				</li>
+				<li><strong>{{ info }}</strong></li>
+			</ul>
+		</form>
+	</section>
+	{%endif %}
+	
+	{%if show %}
+	<section id="row">
+			<h3>Papeletas Actuales en Sucursal</h3>
+			{% if papeletas %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Folio</td>
+						<td id="gridhead">Cliente <br> Direccion </td>
+						<td id="gridhead">Tel. Asignado</td>
+						<td id="gridhead">Equipo<br>Imei </td>
+						<td id="gridhead">Ingres&oacute;</td>
+						<td id="gridhead">Tiempo<br>de Garantia</td>
+						<td id="gridhead" title='Accion a Realizar'>Garantia</td>
+					</tr>
+
+					{% for x in papeletas %}
+						<tr>
+							<td>{{ x.folioPapeleta }} </td>
+							<td>{{ x.nombre|title}}<br>{{ x.calle|title }}. {{x.colonia.colonia|title}}. C.P.{{x.codP.cp}}. {{x.ciudad.ciudad|title}}. {{x.estado.estado|title}}. </td>
+							<td>{{ x.telAsig}}</td>
+							<td>{{ x.esnImei }}</td>
+							<td>{{ x.fxActivacion|date:"Y-m-d h:i a"}} </td>
+							<td>{{ x.tgarantia}} Meses</td>
+							{%for g in sigarantias %}
+								{%if g == x.folioPapeleta %}
+							<td title="Agregar Garantia">
+								<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+									<input name="nvoG" type="image" src="/static/img/icons/report_edit.png" title="Agregar Garantia" value="{{ x.id|escape }}" />
+								</form>
+							</td>
+								{%endif %}
+							{%endfor %}
+							{%for g in singarantias %}
+							    {%if g != x.folioPapeleta %}
+							    <td style="background-color:#FFD373;" title="Garantia Expirada">
+								La Garantia Ya Expir&oacute;
+							</td>
+							    {%endif %}
+							{%endfor %}						
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+				<div class="pagination">
+				    <span class="step-links">
+				        {% if papeletas.has_previous %}
+				            <a class="success button" class="success button" href="?pagina={{ papeletas.previous_page_number }}&amp;q={{ query }}">...Anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ papeletas.number }} de {{ papeletas.paginator.num_pages }}.
+				        </span>
+
+				        {% if papeletas.has_next %}
+				            <a class="success button" class="success button" href="?pagina={{ papeletas.next_page_number }}&amp;q={{query}}">Siguiente...</a>
+				        {% endif %}
+				    </span>
+				</div>
+		
+			{% else %}
+				<p>El cliente no se encuentra o no pertenece a esta seccion. <br> verifique sus datos</p>
+			{% endif %}
+	</section>
+	{%endif %}
+
+	
+	{%if garantiaCli %}
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div class="info">
+					<h2>Agregar Cliente a Garantia</h2>
+					<div>Registro de la Garantia</div>
+				</div>
+				<ul>
+					
+					<li class="section first">
+						<h3>Datos Generales</h3>
+					</li>
+						{% for field in formC %}
+							<li>
+								{%if field.label == 'Key' or field.label == 'Key2' %}
+									{{ field.as_hidden }}
+								{% else %}
+								<label class="desc">{{field.label}}</label> 
+								<div>
+									{{field}}
+								</div>
+								<label> {{field.help_text}} <span class="req"> {{field.errors}} </span></label>
+								{%endif %}
+							</li>
+						{% endfor %}								
+					
+					<li><strong>{{ info }}</strong></li>
+					<li id="buttons">
+						{%if formC %}
+							<input class="submit success" type="submit" value="Almacenar Garantia" title="Se guardaran los datos"/> |  
+						{%endif %}
+						<a class="success button" href="." title="Buscar otra Papeleta">Buscar</a> <br>
+						<BR /><span class="req">*.Campos Obligatorios. No dejar vacios.</span>
+					</li>
+
+				</ul>
+		</form>			
+	</section>
+	{%endif %}
+	<br><br><br>
+</div>
+{% endblock %}

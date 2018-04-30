@@ -1,0 +1,86 @@
+{% extends 'planes/planes-base2.html' %}
+
+{% block titulo %}@Entradas de Solicitudes -Todas- @Planes Tarifarios{% endblock %}
+
+{% block contenido %}
+<div id="content2">
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Clientes de Solicitudes de Planes</h2>
+				<div>Reporte por fecha de Ingreso</div>
+			</div>
+			<ul>
+				{% for field in form %}
+						<li>
+							<label class="desc">{{ field.label }}</label>
+							<div>
+								{{ field }}
+							</div>
+							<label> {{field.help_text}} <small><span class="req"> {{field.errors}} </span></small></label>
+						</li>
+				{% endfor %}
+				<div style="clear:both;"></div>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Consultar"/>  |  
+					<a class="success button" href="." title="Nueva Consulta">Nueva Consulta</a>
+				</li>
+				<li><strong>{{ info }}</strong></li>
+			</ul>
+		</form>
+		
+	</section>
+	<section id="row">
+			<h3>Solicitudes Ingresadas:</h3>
+			{% if solicitudes %}
+			<div id="grid">
+				<table id="twoCol2">
+					<tr>
+						<th>FOLIO</th>
+						<th>FECHA</th>
+						<th>SUCURSAL</th>
+						<th>VENDEDOR</th>
+						<th>CLIENTE</th>
+						<th>PLAN</th>
+						<th>EQUIPO SOLICITADO</th>
+						<th>ESTADO</th>
+						<th>MOSTRAR</th>
+					</tr>
+					{% for x in solicitudes %}
+						<tr>
+							<td>{{ x.folio|escape }}</td>
+							<td>{{ x.fxSolicitud|date:"Y-m-d h:i a"}}</td>
+							<td>{{ x.sucursal.nombre|title }}</td>
+							<td>{{ x.vendedor.curp|upper }}</td>
+							<td>{{ x.nombre|title }} {{ x.aPat|title }} {{ x.aMat|title}}</td>
+							<td>{{ x.plan.plan|title }} ${{x.plan.costo|default:'0'}}</td>
+							<td>{{ x.equipoSolicitado|title}} </td>
+							<td>{{ x.estado.estado|title }}<br>{{x.fxModificacion|date:"Y-m-d h:i a"}}</td>
+							<td title="Ver Solicitud Completa"><a href="/planes/solicitudes/todos/?pop={{ x.id }}" class="success button" onClick="window.open(this.href, this.target, 'width=900,height=700,toolbar=0,menubar=1,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0'); return false;" >Solicitud</a> </td>	
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			<div class="pagination">
+				<span class="step-links">
+				        {% if solicitudes.has_previous %}
+				            <a class="success button" class="success button" href="?pagina={{ solicitudes.previous_page_number }}&amp;q={{ query }}">...Anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ solicitudes.number }} de {{ solicitudes.paginator.num_pages }}.
+				        </span>
+
+				        {% if solicitudes.has_next %}
+				            <a class="success button" class="success button" href="?pagina={{ solicitudes.next_page_number }}&amp;q={{query}}">Siguiente...</a>
+				        {% endif %}
+				    </span>
+			</div>
+			{% else %}
+				<p>El cliente no se encuentra o no pertenece a esta seccion. <br> verifique sus datos</p>
+			{% endif %}
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends 'planes/planes-base.html' %}
+
+{% block titulo %}@Portabilidades @Planes Tarifarios{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Clientes de Portabilidades</h2>
+				<div>Reporte por fecha de Ingreso</div>
+			</div>
+			<ul>
+				{% for field in form %}
+						<li>
+							<label class="desc">{{ field.label }}</label>
+							<div>
+								{{ field }}
+							</div>
+							<label> {{field.help_text}} <small><span class="req"> {{field.errors}} </span></small></label>
+						</li>
+				{% endfor %}
+				<div style="clear:both;"></div>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Consultar"/>  |  
+					<a class="success button" href="." title="Nueva Consulta">Nueva Consulta</a>
+				</li>
+				<li><strong>{{ info }}</strong></li>
+			</ul>
+		</form>
+	</section>
+	<section id="row">
+			<h3>Resultados para "{{ query|escape }}":</h3>
+			{% if results %}
+
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Sucursal</td>
+						<td id="gridhead">Ingres&oacute;</td>
+						<td id="gridhead">Folio</td>
+						<td id="gridhead">Cliente</td>
+						<td id="gridhead">Direccion</td>
+						<td id="gridhead">No. Portar</td>
+						<td id="gridhead">Flexeo</td>
+						<td id="gridhead" title="Ultima Fecha de Revision">Fecha</td>
+						<td id="gridhead">Estado</td>
+						<td id="gridhead" title="Seleccione una accion a realizar">Revisar</td>
+					</tr>
+					{% for x in results %}
+					<tr>
+						<td>{{ x.sucursal.nombre|title }} </td>
+						<td>{{ x.fxIngreso|date}}</td>
+						<td>{{ x.cliente.folio|escape}} </td>
+						<td>{{ x.cliente.nombre|title}} </td>
+						<td>{{ x.cliente.direccion|title }}.{{ x.cliente.colonia.colonia|title }}, {{ x.cliente.ciudad.ciudad|title }}, {{ x.cliente.ciudad.estado|title }}.</td>
+						<td>{{ x.noaPortar|escape }}</td>
+						<td>
+							{%if x.flexearEquipo %}
+							<strong>Si</strong>
+							{%else %}
+							<strong>No</strong>
+							{%endif %}
+						</td>
+						<td  title="Ultima Fecha de Revision">{{ x.fxRevision|date }} </td>
+						<td>{{ x.estado.estado|title }} </td>
+						<td>
+							<form class="wufoo" action="/planes/portabilidades/consultar/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="updPorta" type="image" src="/static/img/icons/report_edit.png" title="Actualizar Datos" value="{{ x.id|escape }}" />
+							</form>
+						</td>
+					</tr>
+					{%endfor %}
+				</table>
+			</div>
+			<div class="pagination">
+				    <span class="step-links">
+				        {% if results.has_previous %}
+				            <a class="success button" href="?pagina={{ results.previous_page_number }}">...Anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ results.number }} de {{ results.paginator.num_pages }}.
+				        </span>
+
+				        {% if results.has_next %}
+				            <a class="success button" href="?pagina={{ results.next_page_number }}">Siguiente...</a>
+				        {% endif %}
+				    </span>
+				</div>
+			{% else %}
+				<strong>No se encontraron resultados en este momento. Verifique o intente otra fecha. </strong>
+			{% endif %}
+	</section>
+	<div style="height:70px;"></div>
+</div>
+{% endblock %}

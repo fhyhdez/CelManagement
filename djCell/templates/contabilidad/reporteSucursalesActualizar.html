@@ -1,0 +1,122 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}@Reporte de Sucursales @Contabilidad{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	{%if buscar %}
+	<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Sucursales o Eventos</h2>
+				<div>Sucursales o Eventos registrados</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar Evento o Sucursal:</h3>
+				</li>
+				<li>
+					<label class="desc">Buscar: <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query|escape}}" name="q" title="Buscar Sucursal o evento"; placeholder="Ej. 1 Oriente" required />
+					</div>
+					<p class="instruct">Ingrese Nombre de la sucursal | Nombre del Empleado. gracias.</p>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Buscar"/>  |  
+					<a class="success button" href="." title="Nueva busqueda">Nueva Busqueda</a>
+				</li>
+				<li><strong>{{ info }}</strong></li>
+			</ul>
+		</form>
+		
+	</section>
+	<br>	
+		<section id="row">
+			<h3>Sucursales o Eventos</h3>
+			{% if Sucursal %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Nombre</td>
+						<td id="gridhead">Zona</td>
+						<td id="gridhead">Tipo</td>
+						<td id="gridhead">Direccion</td>
+						<td id="gridhead">Encargado </td>
+						<td id="gridhead">Estado</td>
+						<td id="gridhead" title="Actualizar Datos">Actualizar</td>
+					</tr>
+					{% for x in Sucursal %}
+						<tr>
+							<td>{{ x.nombre|title }} </td>
+							<td>{{ x.zona.zona|title }} </td>
+							<td>{{ x.tipoSucursal.tipo|title }} </td>
+							<td>{{ x.direccion|title }}.{{ x.colonia.colonia|title }}, {{ x.ciudad.ciudad|title }}, {{ x.estado.estado|title }}. </td>
+							<td>{{ x.encargado.nombre|title }} {{ x.encargado.aPaterno|title }} {{ x.encargado.aMaterno|title }}</td>
+							<td>{{ x.estado.estado|title }}</td>
+							<td title="Sucursal o Evento, actualizar datos">
+							<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="upd" type="image" src="/static/img/icons/table_edit.png" value="{{ x.id|escape }}" />
+							</form>
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+				<div class="paxination">
+				    <span class="step-links">
+				        {% if Sucursal.has_previous %}
+				            <a class="success button" href="?pag1={{ Sucursal.previous_page_number }}&amp;q={{ query }}">...Anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ Sucursal.number }} de {{ Sucursal.paginator.num_pages }}.
+				        </span>
+
+				        {% if Sucursal.has_next %}
+				            <a class="success button" href="?pag1={{ Sucursal.next_page_number }}&amp;q={{query}}">Siguiente...</a>
+				        {% endif %}
+				    </span>
+				</div>
+		
+			{% elif query %}
+				<p>Lo sentimos, no encontramos lo que busca. Intente de nuevo con otros datos.</p>
+			{% endif %}
+		</section>
+	
+	{%else %}
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Sucursales</h2>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Actualizacion de datos en sucursales</h3>
+				</li>
+				<li><strong>Sucursal</strong></li>
+				{% for field in form %}
+				<li>
+					<label class="desc">{{field.label}}</label> 
+					<div>
+						{{field}}
+					</div>
+					<label> {{field.help_text}} <small><span class="req"> {{field.errors}} </span></small></label>
+				</li>
+				{% endfor %}
+				<li><strong>{{ info}}</strong></li>
+				<li id="buttons">
+					<input type="hidden" name="miki" value="{{ key }}"/>
+					<input class="submit success" type="submit" value="Guardar Cambios"/> |  
+					<a class="success button" href="." title="Limpiar Campos, la informacion anterior se perdera">Nuevo</a>
+				</li>
+			</ul>
+		</form>
+
+	</section>
+	{%endif %}
+	<br><br>
+</div>
+{% endblock %}

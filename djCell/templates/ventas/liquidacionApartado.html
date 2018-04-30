@@ -1,0 +1,185 @@
+{% extends 'ventas/ventas-base.html' %}
+
+{% block titulo %}@Liquidación de Apartados - Clientes - @Ventas{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	{%if buscar %}
+	<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Clientes de Apartados - Liquidaciones</h2>
+				<div>Registros de Clientes en la Sucursal</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar Cliente</h3>
+				</li>
+				<li>
+					<label class="desc">Nombre del Cliente: <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query|escape}}" name="q" title="Ingrese parcial o totalmente el nombre del cliente"; placeholder="Ej. Juan Perez" required />
+					</div>
+					<p class="instruct">Ingrese datos del Cliente como Folio | Nombre | direccion | colonia | ciudad </p>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Buscar Cliente"/>  |  
+					<a class="success button" href="." title="Nueva busqueda">Nueva Busqueda</a>
+				</li>
+			</ul>
+		</form>
+	</section>
+	{%endif %}
+		{% if query %}
+		<section id="row">
+			<h3>Resultados para "{{ query|escape }}":</h3>
+			{% if resultsCli %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Folio</td>
+						<td id="gridhead">Nombre</td>
+						<td id="gridhead">Direccion</td>
+						<td id="gridhead">Colonia</td>
+						<td id="gridhead">Ciudad</td>
+						<td id="gridhead">Ingreso</td>
+						<td id="gridhead" colspan="2">Seleccionar</td>
+					</tr>
+					{% for x in resultsCli %}
+					<tr>
+						<td>{{ x.folio }}</td>
+						<td>{{ x.nombre }}</td>
+						<td>{{ x.direccion }}</td>
+						<td>{{ x.colonia.colonia }}</td>
+						<td>{{ x.ciudad.ciudad }}</td>
+						<td>{{ x.fxIngreso|date:"Y-m-d h:i a" }}</td>
+						<td title="Agregar Apartado">
+							<form class="wufoo" action="/ventas/ventas/apartados/nuevo_apartado/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="nvoA" type="image" src="/static/img/icons/book_add.png" value="{{ x.id|escape }}" />
+							</form>
+						</td>	
+						<td title="Mostrar Apartados">
+							<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="veA" type="image" src="/static/img/icons/books.png" value="{{ x.id|escape }}" />
+							</form>
+						</td>
+
+					</tr>
+					{%endfor %}
+				</table>
+			</div>
+			{% else %}
+				<p>El cliente que busca no se encuentra / esta mal escrito/ pertenece a otra Sucursal, verifique sus datos</p>
+			{% endif %}
+		</section>
+		{% endif %}
+
+		{% if apartados %}
+		<section id="row">
+			<h3>Apartados Asignados: {{ dequien.folio }} / {{ dequien.nombre }}</h3>
+			{% if apartadosCli %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Fecha</td>
+						<td id="gridhead">Equipo</td>
+						<td id="gridhead">Precio de Apartado</td>
+						<td id="gridhead">Observaciones</td>
+						<td id="gridhead">Estado</td>
+						<td id="gridhead" colspan="3">Seleccionar</td>
+					</tr>
+					{% for x in apartadosCli %}
+						{% for cad in caducado %}
+							{% if x.id == cad.0.id %}
+					<tr>
+						<td>{{ x.fxApartado|date:"Y-m-d h:i a" }}</td>
+						<td>{{ x.equipo.marca.marca }} {{ x.equipo.modelo }} {{ x.equipo.color }} <br> ${{ x.equipo.precioMenudeo}} </td>
+						<td>{{ x.precioEquipo }}</td>
+						<td>{{ x.observacion|default:'' }}</td>
+						<td>{{ x.estado.estado }}</td>
+						{%if x.pagado %}
+						<td title="Historial de Apartado" colspan="3">
+							<form class="wufoo" action="/ventas/ventas/apartados/historial/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="histA" type="image" src="/static/img/icons/books_stack.png" value="{{ x.id|escape }}" />
+							</form>
+						</td>
+						{%else %}
+						<td title="Historial de Apartado">
+							<form class="wufoo" action="/ventas/ventas/apartados/historial/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="histA" type="image" src="/static/img/icons/books_stack.png" value="{{ x.id|escape }}" />
+							</form>
+						</td>
+								{% if cad.2 %}
+								<td colspan="2">Caducado por: {{cad.1}} </td>
+								{% else %}
+						<td title="Abonar a Apartado">
+							<form class="wufoo" action="/ventas/ventas/apartados/abonos/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="aboA" type="image" src="/static/img/icons/book_picture.png" value="{{ x.id|escape }}" />
+							</form>
+						</td>
+						<td title="Liquidar Apartado">
+							<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="liquida" type="image" src="/static/img/icons/cart_remove.png" value="{{ x.id|escape }}" />
+							</form>
+						</td>
+								{%endif %}
+						{%endif %}
+					</tr>
+							{% endif %}
+						{% endfor %}
+					{%endfor %}
+				</table>
+			</div>
+			{% else %}
+				<p>El cliente No cuenta con Apartados Asignados</p>
+			{% endif %}
+		</section>
+		{% endif %}
+	
+	{%if mostrar %}
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Liquidacion de Apartado</h2>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Liquidacion de Apartado a Cliente</h3>
+					<p><strong>Reglas de liquidación o Cambio de Apartado</strong> </p> 
+					<p>1.- En esta seccion debe ingresar el equipo (marca|modelo) equivalente al que apartado.</p>
+					<p>2.- Sí el equipo que ingresa es diferente al apartado (Cambio de modelo|marca), se actualizará el cambio de equipo automaticamente, en este caso puede realizar abono por cambio de equipo o liquidarlo. </p>
+					<p>3.- No hay reembolso, sí el equipo es diferente al apartado original, el precio actual se aplica y puede ser mayor o igual al restante a Liquidar.</p>
+				</li>
+				{% for field in form %}
+				<li>
+					{%if field.label == 'Key' %}
+						{{ field.as_hidden }}
+					{%elif field.label == 'Key2' %}
+						{{ field.as_hidden }}
+					{% else %}
+					<label class="desc">{{field.label}}</label> 
+					<div>
+						{{field}}
+					</div>
+					<label> {{field.help_text}} <span class="req"> {{field.errors}} </span></label>
+					{% endif %}
+				</li>
+				{% endfor %}
+				<li><strong>{{info}}</strong></li>
+				{%if folioVenta %}
+				<li><a href="./?print={{ folioVenta }}" class="success button" target="_blank" ><img src="{{STATIC_URL}}img/icons/1366452634_print.png">  Imprimir Ticket</a></li>
+				{%endif %}
+				<li id="buttons">
+					{% if boton %}
+					<input class="submit success" type="submit" value="Agregar Abono"/>
+					{%endif %}
+					<a class="success button" href="." title="Nueva busqueda">Buscar de nuevo</a>
+				</li>
+			</ul>
+		</form>
+	</section>
+	{%endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Precios @Compras{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+				<div class="info">
+					<h2>Lista de Precios de Equipos</h2>
+					<div>Actualizacion y registro de los precios por modelo, marca</div>
+				</div>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead2">Modelo o Busqueda</td>
+							<td id="gridhead2">Buscar</td>
+						</tr>
+						<tr>
+							<form action='.'  method='GET' enctype="multipart/form-data">{% csrf_token %}
+								<td><input type='text' name='folio' value='{{ folio|escape }}'></td>
+								<td><input class="submit success" type="submit" value='buscar'></td>
+							</form>
+						</tr>
+					</table>
+				</div>
+				<strong>{{info}}</strong>
+				{% if r_items %}
+				<h2>Modelos-Marca Disponibles</h2>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead2">Folio</td>
+							<td id="gridhead2">Gama</td>
+							<td id="gridhead2">Marca</td>
+							<td id="gridhead2">Modelo</td>
+							<td id="gridhead2">Color</td>
+							<td id="gridhead2">Tiempo Garantia</td>
+							<td id="gridhead2">Precio Menudeo</td>
+							<td id="gridhead2">Precio Mayoreo</td>
+							<td id="gridhead2">Seleccionar</td>
+						</tr>
+						{% for item in r_items %}
+						<tr>
+							<td>{{ item.folio|escape}}</td>
+							<td>{{ item.gama|escape}}</td>
+							<td>{{ item.marca|escape}}</td>
+							<td>{{ item.modelo|escape}}</td>
+							<td>{{ item.color|escape}}</td>
+							<td>{{ item.tiempoGarantia|escape}}</td>
+							<td>{{ item.precioMenudeo|default:'Sin Asignar'}}</td>
+							<td>{{ item.precioMayoreo|default:'Sin Asignar'}}</td>
+							<td><a href="/compras/compras/lista_precios/equipos/?folio={{ item.folio|escape }}">Seleccionar</a></td>
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+				{% endif %}
+			{%if r_item %}
+			<br>
+			<h2>{{r_item}}</h2>
+			{%endif %}
+			<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div id='form2'>
+					<table id='form2'>
+						{{actPrecForm}}
+					</table>
+				</div>
+					<div style="text-align:right;padding-top:0.5em;"><input class="submit success" type="submit" name='actualizar' value="Actualizar Precios"/> </div>
+					<BR /><span class="req">*.Campos Obligatorios. No dejar vacios.</span>
+			</form>
+			
+			<strong>{{ informacion }}</strong>
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

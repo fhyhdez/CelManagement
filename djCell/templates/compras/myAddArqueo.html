@@ -1,0 +1,73 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Arqueo de Caja @Almacen{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div class="info">
+					<h2>Arqueo de Caja</h2>
+					<div>Total de Ventas del dia y/o Cortes Activos</div>
+					<div>Nota para el Auditor: Este arqueo solo es informativo, si desea añadir alguna Sancion economica ingrese 
+					<strong><a href="/contabilidad/sancion/agregar/">aquí</a></strong><br>
+					Sí hay una diferencia esta se tomará hasta la comprobación de cortes cerrados en Contabilidad. </div>
+				</div>
+				<ul>
+					<li class="section first">
+						<h3></h3>
+					</li>
+					{% for field in arqForm %}
+						<li>
+							<label class="desc">{{field.label}}</label> 
+							<div>
+								{{field}}
+							</div>
+							<label> {{field.help_text}} <span class="req"> {{field.errors}} </span></label>
+						</li>
+					{% endfor %}
+					<li><strong>{{ info }}</strong></li>
+					<li id="buttons">
+						{%if arqForm %}
+						<input class="submit success" type="submit" name="addArqueo" value="Agregar Arqueo"/>
+						{%endif %}
+						<a href="/compras/" class="success button" type="submit">Inicio de Compras</a>
+						<BR /><span class="req">*.Campos Obligatorios. No dejar vacios.</span>
+					</li>
+
+				</ul>
+		</form>
+		{%if arqForm %}
+		<div id="twoCol">
+					<table id="twoCol">
+						<tr>
+							<td colspan="2">Arqueo Desglosado</td>
+						</tr>
+						<tr>
+							<td>Folio</td>
+							<td>Fecha</td>
+							<td>usuario</td>
+							<td>Ventas</td>
+							<td>Gastos</td>
+							<td>Observaciones</td>
+							<td>Total</td>							
+						</tr>
+						{%for a in arq %}
+						<tr>
+							<td>{{a.folioCorteVta}}</td>
+							<td>{{a.fxCorte|date:"Y-m-d h:i a"}}</td>
+							<td>{{a.cierraCorte|upper}}</td>
+							<td>${{a.totalVta}}</td>
+							<td>${{a.totalGastos}}</td>
+							<td>{{a.observacion|default:"Ninguna"}}</td>
+							<td>${{a.total}}</td>
+						</tr>
+						{%endfor %}
+					</table>
+		</div>
+		{%endif %}
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

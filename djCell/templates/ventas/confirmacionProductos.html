@@ -1,0 +1,189 @@
+{% extends 'ventas/ventas-base.html' %}
+
+{% block titulo %}@Transferencias - @Ventas{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info">
+			<h3>Transferencias del Folio: {{ mov.folio|title }} </h3>
+			<div>Destino:{{ mov.sucursalDestino.nombre|title}} </div>
+		</div>
+		{%if transEq or transEx or transAc or transFic or transSaldo %}
+			{%if mostrar %}
+			<form class="wufoo" action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+				<strong>¿Cerrar la transferencia?</strong>
+				<p>Los productos que no se verifiquen, se tendr&aacute; que dar aviso a Almacen para quitar dicho producto de sus existencias.</p>
+				<input name="cerrarTransf" type="image" onClick="confirm( 'Esta ud. Seguro?, una vez aceptado ya no podra modificar la transferencia.' )" src="/static/img/icons/mail_red.png" title="Cerrar la Transferencia" value="cerrarTransf" />
+				<input type="hidden" name="transfGral" value="{{mov.folio}}"/>
+			</form>
+			<br>
+			{%endif %}
+			{% if transEq %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<th>FOLIO</th>
+						<th>MARCA/MODELO</th>
+						<th>IMEI</th>
+						<th>ICC</th>
+						<th>ESTADO</th>
+						<th>CONFIRMAR</th>
+					</tr>
+					{% for x in transEq %}
+						<tr>
+							<td>{{ x.movimiento.folio|escape }}</td>
+							<td>{{ x.equipo.detallesEquipo.marca.marca|escape }} {{ x.equipo.detallesEquipo.modelo|escape }}</td>
+							<td>{{ x.equipo.imei|title }}</td>
+							<td>{{ x.equipo.icc|title }}</td>
+							<td>{%if x.confirmacion %}Si{%else %}No{%endif %}</td>
+							<td title="Confirmar producto de Transferencia">
+								{%if x.confirmacion %}
+								CONFIRMADO<img src="/static/img/icons/page_save.png" />
+								{%else %}
+							<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="aceptEq" type="image" src="/static/img/icons/page_white_put.png" title="Aceptar Producto Transferencia" value="{{ x.id }}" />
+								<input type="hidden" name="transfGral" value="{{mov.folio}}"/>
+							</form>
+								{%endif %}
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			{% endif %}
+			<br>
+			{% if transEx %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<th>FOLIO</th>
+						<th>ICC</th>
+						<th>ESTADO</th>
+						<th>CONFIRMAR</th>
+					</tr>
+					{% for x in transEx %}
+						<tr>
+							<td>{{ x.movimiento.folio|escape }}</td>
+							<td>{{ x.expres.icc|title }}</td>
+							<td>{%if x.confirmacion %}Si{%else %}No{%endif %}</td>
+							<td title="Confirmar producto de Transferencia">
+								{%if x.confirmacion %}
+								CONFIRMADO<img src="/static/img/icons/page_save.png" />
+								{%else %}
+							<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="aceptEx" type="image" src="/static/img/icons/page_white_put.png" title="Aceptar Producto Transferencia" value="{{ x.id }}" />
+								<input type="hidden" name="transfGral" value="{{mov.folio}}"/>
+							</form>
+								{%endif %}
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			{% endif %}
+			<br>
+			{% if transAc %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<th>FOLIO</th>
+						<th>CODIGO DE BARRAS</th>
+						<th>MARCA/MODELO</th>
+						<th>ESTADO</th>
+						<th>CONFIRMAR</th>
+					</tr>
+					{% for x in transAc %}
+						<tr>
+							<td>{{ x.movimiento.folio|escape }}</td>
+							<td>{{ x.accesorio.codigoBarras|escape}}</td>
+							<td>{{ x.accesorio.detallesAccesorio|escape}} </td>
+							<td>{%if x.confirmacion %}Si{%else %}No{%endif %}</td>
+							<td title="Confirmar producto de Transferencia">
+								{%if x.confirmacion %}
+								CONFIRMADO<img src="/static/img/icons/page_save.png" />
+								{%else %}
+							<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="aceptAc" type="image" src="/static/img/icons/page_white_put.png" title="Aceptar Producto Transferencia" value="{{ x.id }}" />
+								<input type="hidden" name="transfGral" value="{{mov.folio}}"/>
+							</form>
+								{%endif %}
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			{% endif %}
+			<br>
+			{% if transFic %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<th>FOLIO</th>
+						<th>NOMINACION</th>
+						<th>SERIE</th>
+						<th>ESTADO</th>
+						<th>CONFIRMAR</th>
+					</tr>
+					{% for x in transFic %}
+						<tr>
+							<td>{{ x.movimiento.folio|escape }}</td>
+							<td>$ {{ x.ficha.nominacion.nominacion|escape}}</td>
+							<td>{{ x.ficha.folio|escape}}</td>
+							<td>{%if x.confirmacion %}Si{%else %}No{%endif %}</td>
+							<td title="Confirmar producto de Transferencia">
+								{%if x.confirmacion %}
+								CONFIRMADO<img src="/static/img/icons/page_save.png" />
+								{%else %}
+							<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="aceptFic" type="image" src="/static/img/icons/page_white_put.png" title="Aceptar Producto Transferencia" value="{{ x.id }}" />
+								<input type="hidden" name="transfGral" value="{{mov.folio}}"/>
+							</form>
+								{%endif %}
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			{% endif %}
+			<br>
+			{% if transSaldo %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<th>FOLIO</th>
+						<th>MONTO</th>
+						<th>OBSERVACIONES</th>
+						<th>ESTADO</th>
+					</tr>
+					{% for x in transSaldo %}
+						<tr>
+							<td>{{ x.movimiento.folio|escape }}</td>
+							<td>$ {{ x.monto|escape}}</td>
+							<td>{{ x.observaciones|escape}}</td>
+							<td>
+								CONFIRMADO<img src="/static/img/icons/page_save.png" />
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			{% endif %}
+			<br>
+			{%if mostrar %}
+			<form class="wufoo" action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+				<strong>¿Cerrar la transferencia?</strong>
+				<p>Los productos que no se verifiquen, se tendr&aacute; que dar aviso a Almacen para quitar dicho producto de sus existencias.</p>
+				<input name="cerrarTransf" type="image" onClick="confirm( 'Esta ud. Seguro?, una vez aceptado ya no podra modificar la transferencia.' )" src="/static/img/icons/mail_red.png" title="Cerrar la Transferencia" value="cerrarTransf" />
+				<input type="hidden" name="transfGral" value="{{mov.folio}}"/>
+			</form>
+			<br>
+			{%endif %}
+		{%else %}			
+		<strong>No hay transferencias relacionadas al folio.</strong>
+		{%endif %}
+
+	</section>
+	<div style="height:70px;"></div>
+</div>
+{% endblock %}

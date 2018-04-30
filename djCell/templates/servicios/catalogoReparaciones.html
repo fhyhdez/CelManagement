@@ -1,0 +1,142 @@
+{% extends 'servicios/servicios-base.html' %}
+
+{% block titulo %}@Catalogo de Reparaciones @Servicios Tecnicos{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Catalogo de Reparaciones</h2>
+				<div>Buscar reparaciones</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar</h3>
+				</li>
+				<li>
+					<label class="desc">Introduzca la descripcion o tipo de reparacion: <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query|escape}}" name="q" title="Ingrese la descripcion o tipo de reparacion a actualizar o filtrar"; placeholder="Ej. Nokia 5530 o Flexeos" required />
+					</div>
+					
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Buscar"/>  |  
+					<a class="success button" href="/servicios/catalogo_reparaciones/todos/" title="Nueva busqueda">Nueva Busqueda</a>
+				</li>
+			</ul>
+		</form>
+		<center>{{ info }}</center>
+		
+	</section>
+	
+		{% if query %}
+		<section id="row">
+			<h3>Resultados para "{{ query|escape }}":</h3>
+			{% if results %}
+			<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+				{% csrf_token %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Tipo</td>
+						<td id="gridhead">Descripcion</td>
+						<td id="gridhead">Monto</td>
+						<td id="gridhead">Activo</td>
+						<td id="gridhead">Seleccionar</td>
+						<td id="gridhead">Actualizar</td>
+					</tr>
+					{% for rep in results %}
+					<tr>
+						<td>{{ rep.tipoReparacion.tipo }} </td>
+						<td>{{ rep.descripcion }} </td>
+						<td>{{ rep.monto }} </td>
+						<td>{% if rep.activo %} Si {% else %} No {% endif %}	</td>
+						<td><input type="radio" name="updRep" value="{{ rep.id|escape }}"/></td>
+						<td><input name="actualizar" class="submit success" type="submit" value="Actualizar"/></td>
+					</tr>
+					{% endfor %}
+				</table>
+			</div>
+		</form>
+			{% else %}
+				<p>La descripcion o tipo de reparacion no se encuentra registrado, verifique sus datos &oacute; <br>
+					Agregue uno nuevo <a class="success button" href="/servicios/catalogo_reparaciones/agregar/" title="Nueva Reparacion">aqu&iacute;</a><br></p>
+			{% endif %}
+		</section>
+		{% endif %}
+	
+	{%if mostrar %}
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Actualizar Datos</h2>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Actualizacion de Reparacion</h3>
+				</li>
+				{% for field in form %}
+					<li>
+						<label class="desc">{{field.label}}</label> 
+						<div>
+							{{field}}
+						</div>
+						<label> {{field.help_text}} <small><span class="req"> {{field.errors}} </span></small></label>
+					</li>
+				{% endfor %}
+
+				<li id="buttons">
+					<input class="submit success" type="submit" value="Guardar Cambios"/>
+					<input type="hidden" name="key" value="{{key}}">
+				</li>
+			</ul>
+		</form>
+
+	</section>
+	{%endif %}
+	<section id = "row">
+		{% if reparaciones %}
+		<div id="grid">
+			<h3>Catalogo de Reparaciones</h3>
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Tipo</td>
+						<td id="gridhead">Descripcion</td>
+						<td id="gridhead">Monto</td>
+						<td id="gridhead">Activo</td>
+					</tr>
+					{% for rep in reparaciones %}
+					<tr>
+						<td>{{ rep.tipoReparacion.tipo|title }} </td>
+						<td>{{ rep.descripcion|title }} </td>
+						<td>{{ rep.monto }} </td>
+						<td>{% if rep.activo %} Si {% else %} No {% endif %}	</td>
+						
+					</tr>
+					{% endfor %}
+				</table>
+			</div>
+			<div class="pagination">
+				    <span class="step-links">
+				        {% if reparaciones.has_previous %}
+				            <a class="success button" href="?pagina={{ reparaciones.previous_page_number }}">...Anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ reparaciones.number }} de {{ reparaciones.paginator.num_pages }}.
+				        </span>
+
+				        {% if reparaciones.has_next %}
+				            <a class="success button" href="?pagina={{ reparaciones.next_page_number }}">Siguiente...</a>
+				        {% endif %}
+				    </span>
+				</div>
+		{% endif %}
+	</section>
+	<br><br><br><br>
+</div>
+{% endblock %}

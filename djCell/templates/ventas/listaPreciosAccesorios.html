@@ -1,0 +1,54 @@
+{% extends 'ventas/ventas-base.html' %}
+
+{% block titulo %}@Lista de Precios de Accesorios{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+				<div class="info">
+					<h3>Lista de Precios de Accesorios</h3>
+				</div>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Accesorio o Busqueda</td>
+							<td id="gridhead">Buscar</td>
+						</tr>
+						<tr>
+							<form action='.'  method='GET'>{% csrf_token %}
+								<td><input type='text' name='q' value='{{ query|escape }}' required></td>
+								<td><input class="submit success" type="submit" value='buscar'>
+									<a class="success button" href="." title="Nueva busqueda">Limpiar Busqueda</a>
+								</td>
+							</form>
+						</tr>
+					</table>
+				</div>
+
+
+				{% if r_items %}
+				<h3>Accesorios-Marca Disponibles</h3>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Marca</td>
+							<td id="gridhead">Descripcion</td>
+							<td id="gridhead">Seccion</td>
+							<td id="gridhead">Precio</td>
+						</tr>
+						{% for item in r_items %}
+						<tr>
+							<td>{{ item.marca.marca|escape}}</td>
+							<td>{{ item.descripcion|escape}}</td>
+							<td>{{ item.seccion.seccion|escape}}</td>
+							<td>$ {{ item.precioMenudeo|escape}}</td>
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+			{%elif query %}
+	<strong>No hay resultados</strong>
+				{% endif %}
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

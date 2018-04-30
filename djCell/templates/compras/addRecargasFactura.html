@@ -1,0 +1,110 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Bienvenido a @Compras{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+				<div class="info">
+					<h2>Agregar Recargas a Factura</h2>
+					<div>Registro de Productos a la Factura de Compras a Almacen</div>
+				</div>
+				<ul>
+					<li class="section first">
+						<h3>Datos Generales</h3>
+					</li>
+				</ul>
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<td id="gridhead">Factura</td>
+					<td id="gridhead">Buscar</td>
+				</tr>
+				<tr>
+					<form action='.'  method='GET' enctype="multipart/form-data">{% csrf_token %}
+						<td><input type='texto' name='factura' value='{{ b_factura|escape }}'></td>
+						<td><input class="submit success" type="submit" value='buscar'></td>
+					</form>
+				</tr>
+			</table>
+		</div>
+
+		{% if r_facturas %}
+			<h2>Facturas</h2>
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Folio</td>
+						<td id="gridhead">Documento</td>
+						<td id="gridhead">Proveedor</td>
+						<td id="gridhead">Fecha de Factura</td>
+						<td id="gridhead">Forma de Pago</td>
+						<td id="gridhead">Seleccionar</td>
+					</tr>
+					{% for item in r_facturas %}
+						<tr>
+							<td>{{ item.folio|escape}}</td>
+							<td>{{ item.documento|escape}}</td>
+							<td>{{ item.proveedor|escape}}</td>
+							<td>{{ item.fxFactura|date}}</td>
+							<td>{{ item.formaPago|escape}}</td>
+							<td><a href="/compras/almacen/recargas/?factura={{ item.folio|escape}}">Seleccionar
+							</a></td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			{%elif b_factura %}
+	.
+		{% endif %}
+			
+			<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div id='form2'>
+					<div id='info'><strong>{{ informacion }}</strong></div>
+					<table>
+						{{form}}
+					</table>
+				</div><br>
+				<ul>
+					<li id="buttons">
+						<input class="submit success" type="submit" value="Guardar y Agregar Otra Recarga >>>"/>
+						{%if b_factura %}
+							<br>
+							<a class="success button" href="/compras/almacen/equipos/?factura={{ b_factura|escape }}" title="Agregar Nuevo">Agregar Equipos</a>
+							<a class="success button" href="/compras/almacen/express/?factura={{ b_factura|escape }}" title="Agregar Express a la misma factura">Agregar Express</a>  |
+							<a class="success button" href="/compras/almacen/accesorios/?factura={{ b_factura|escape }}" title="Agregar Accesorios a la misma factura">Agregar Accesorios</a>  |
+							<a class="success button" href="/compras/almacen/fichas/?factura={{ b_factura|escape }}" title="Agregar Fichas a la misma factura">Agregar Fichas</a>  |
+							<a class="success button" href="/compras/almacen/recargas/?factura={{ b_factura|escape }}" title="Agregar Recargas a la misma factura">Agregar Recargas</a> |
+							<a class="success button" href="/compras/almacen/reporte/?q={{ b_factura|escape }}" title="Revisar Reposte de la misma factura">Revisar Reposte</a>
+						{%endif %}
+						<BR /><span class="req">*.Campos Obligatorios. No dejar vacios.</span>
+					</li>
+				</ul>
+			</form>
+			{% if agregados %}
+				<br>
+				<div class="info">
+				<h2>Saldo en Factura</h2>
+				</div>
+				<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Factura</td>
+						<td id="gridhead">Saldo</td>
+						<td id="gridhead">Precio Factura</td>
+					</tr>
+					{% for item in agregados %}
+					<tr>
+						<td>{{ item.factura|escape}}</td>
+						<td>{{ item.saldo|escape}}</td>
+						<td>{{ item.precioFac|escape}}</td>
+					</tr>
+					{%endfor %}
+				</table>
+			</div>
+			{% endif %}
+			
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

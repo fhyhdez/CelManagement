@@ -1,0 +1,117 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Seguimiento de Garantias @Almacen{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	{%if buscar %}
+	<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Clientes de Equipos en Garantia</h2>
+				<div>Equipos en Garantia enviados a Centro de Atencion a Clientes</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar Cliente:</h3>
+				</li>
+				<li>
+					<label class="desc">Cliente: <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query|escape}}" name="q" title="Buscar Cliente por nombre | imei de equipo | sucursal | folio de papeleta"; placeholder="Ej. J Perez" required />
+					</div>
+					<p class="instruct">Ingrese Nombre del cliente | folio de papeleta | Sucursal | imei de equipo. Gracias.</p>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Buscar"/>  |  
+					<a class="success button" href="/compras/garantias/consultar/" title="Nueva busqueda">Nueva Busqueda</a>
+				</li>
+			</ul>
+		</form>
+		{{ info }}
+	</section>
+	{%endif %}
+
+	{% if query %}
+		<section id="row">
+			<h3>Resultados para "{{ query|escape }}":</h3>
+			{% if results %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Sucursal</td>
+						<td id="gridhead">Papeleta</td>
+						<td id="gridhead">Nombre<br>/ Direccion </td>
+						<td id="gridhead">Equipo<br>/ Falla </td>
+						<td id="gridhead" title="Fecha de ingreso en sucursal">Sucursal</td>
+						<td id="gridhead">Estado<br>/ Revision </td>
+						<td id="gridhead" title="Actualizar Solicitud">Revisar</td>
+					</tr>
+					{% for g in results %}
+						<tr>
+							<td>{{ g.sucursal.nombre|title }} </td>
+							<td>{{ g.papeleta.folioPapeleta|title }} </td>
+							<td>{{ g.papeleta.nombre|title}}<br> {{ g.papeleta.calle|title }}.{{ g.papeleta.colonia.colonia|title }}, {{ g.papeleta.ciudad.ciudad|title }}, {{ g.papeleta.estado.estado|title }}. </td>
+							<td>{{ g.equipo.detallesEquipo.marca.marca|title }} {{ g.equipo.detallesEquipo.modelo|title }}<br> {{ g.equipo.imei }} <br>{{ g.falla|escape }} </td>
+							<td title="Fecha de ingreso en sucursal">{% if g.fxSucursal == None %} {%else %}{{ g.fxSucursal|date:"Y-m-d h:i a" }}{%endif %} </td>
+							<td>{{ g.estado.estado|title }} /{% if g.fxRevision == None %} {%else %} {{ g.fxRevision|date:"Y-m-d h:i a" }}{%endif %} </td>
+							<td>
+							<form class="wufoo" action="/compras/garantias/consultar/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="upd" type="image" src="/static/img/icons/zoom_refresh.png" title="Actualizar Solicitud" value="{{ g.id }}" />
+							</form>
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			{% else %}
+				<p>El cliente no se encuentra o no pertenece a esta seccion. <br> verifique sus datos</p>
+			{% endif %}
+		</section>
+	{% endif %}
+
+	{%if mostrarf %}
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div class="info">
+					<h2>Seguimiento y Actualizacion de Garantias de Equipo</h2>
+					<div>Actualizacion de Datos</div>
+				</div>
+				<ul>
+					
+					<li class="section first">
+						<h3>Datos Generales</h3>
+					</li>
+					{% if mostrar %}
+						{% for field in formC %}
+							<li>
+								{%if field.label == 'Key' %}
+									{{ field.as_hidden }}
+								{% else %}
+								<label class="desc">{{field.label}}</label> 
+								<div>
+									{{field}}
+								</div>
+								<label> {{field.help_text}} <span class="req"> {{field.errors}} </span></label>
+								{%endif %}
+							</li>
+						{% endfor %}								
+					{% endif %}
+					
+					<li><strong>{{ info }}</strong></li>
+					<li id="buttons">
+						{%if mostrar %}
+						<input class="submit success" type="submit" value="Actualizar"/> |  
+						{%endif %}
+						<a class="success button" href="/compras/garantias/consultar/" title="Buscar Solicitudes sin revisar">Buscar</a> <br>
+						<BR /><span class="req">*.Campos Obligatorios. No dejar vacios.</span>
+					</li>
+
+				</ul>
+		</form>			
+	</section>
+	{%endif %}
+	<div style="height:70px;"></div>
+</div>
+{% endblock %}

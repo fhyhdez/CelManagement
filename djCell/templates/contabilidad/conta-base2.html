@@ -1,0 +1,309 @@
+<!DOCTYPE>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name = "viewport" content = "width=device-width, maximum-scale = 1, minimum-scale=1" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/structure.css" media="all" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/theme2.css" media="all" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/buttons.css"  />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/flexslider.css" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/fuentes.css" media="screen" />
+		<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css' />
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+		<link rel="shortcut icon" type="image/x-icon" href="http://dhtml5.comoj.com/images/favicon.ico" />
+		<script src="{{STATIC_URL}}js/wufoo.js"></script>
+ 		<script src="{{STATIC_URL}}js/jquery-1.2.1.pack.js"></script>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="{{STATIC_URL}}js/jquery.flexslider.js"></script>
+		<script src="{{STATIC_URL}}js/default.js"></script>
+		{% block miscript %}
+		{% endblock %}
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+			<script src="js/respond.min.js"></script>
+		<![endif]-->
+		<title>@CM - @
+		{% if nivel == 0 %}
+		Django-Admin
+		{% elif nivel == 1 %}
+		Administrador
+		{% elif nivel == 2 %}
+		Gerente
+		{% elif nivel == 3 %}
+		Analista
+		{% elif nivel == 4 %}
+		Auditor
+		{% endif %}
+		{% block titulo %}
+		{% endblock %}</title>
+
+	</head>
+	<body>
+		<div id="pagewidth">
+			<header id="header">
+				<img src="{{STATIC_URL}}img/logoAccell2.png" id="imgLogo"/>
+				<div id="Logo"><h1><a href=".">Excess Complet Cellulaire</a></h1></div>
+			</header>
+			<nav id="minav">
+				<div class="center">
+					<ul class="navh">
+						{% if nivel == 1 %}
+						<li><a href="/administracion" class="tooltipbasic" data-tooltip="Pagina de Bienvenida">ADMIN</a></li>
+						{% else %}
+						<li><a href="/contabilidad" class="tooltipbasic" data-tooltip="Pagina de Bienvenida">INICIO</a></li>
+						{% endif %}
+
+						{% if nivel == 1 or nivel == 2 or nivel == 0 %}
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Seccion de Nomina">Nomina</a>
+							<ul>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Empleados">Empleados</a>
+									<ul>
+										<li><a href="/contabilidad/nomina/empleados/nuevo" class="tooltipbasic" data-tooltip="Agregar Nuevo Empleado">Nuevo</a></li>
+										<li><a href="/contabilidad/nomina/empleados/reporte" class="tooltipbasic" data-tooltip="Consulta y reporte de Empleados">Reporte</a></li>
+										<li class="dropdownh">
+											<a href="#" class="tooltipbasic" data-tooltip="Estados de cuenta de empleados">Estados Cta</a>
+											<ul>
+												<li><a href="/contabilidad/nomina/empleados/estado_cta/agregar" class="tooltipbasic" data-tooltip="Agregar nuevo estado de cuenta a empleado">Agregar</a></li>
+												<li><a href="/contabilidad/nomina/empleados/estado_cta/historial" class="tooltipbasic" data-tooltip="Consulta y reporte de estados de cuenta de empleados">Historial</a></li>
+												<li><a href="/contabilidad/nomina/empleados/estado_cta/abonar" class="tooltipbasic" data-tooltip="Consulta y reporte de estados de cuenta de empleados">Abonar</a></li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+								<li><a href="/contabilidad/nomina/usuarios" class="tooltipbasic" data-tooltip="Consulta y reporte de usuarios existentes">Usuarios</a></li>
+								<li><a href="/contabilidad/nomina/nueva_nomina" class="tooltipbasic" data-tooltip="Nueva nomina">Nueva Nomina</a></li>
+								<li><a href="/contabilidad/nomina/nominas" class="tooltipbasic" data-tooltip="Consulta y reporte de Nominas">Nominas</a></li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Comisiones de empleados/vendedores">Comisiones</a>
+									<ul>
+										<li><a href="/contabilidad/nomina/comisiones/gama" class="tooltipbasic" data-tooltip="Gamas de equipos para comision">Gamas</a></li>
+
+										<li><a href="/contabilidad/nomina/comisiones/reporte" class="tooltipbasic" data-tooltip="Consulta y reporte de cuotas de comisiones">Reporte</a></li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Manejo de Caja">Caja</a>
+							<ul>
+								<li><a href="/contabilidad/caja/gastos" class="tooltipbasic" data-tooltip="Gastos de caja">Gastos</a></li>
+								<li><a href="/contabilidad/caja/ingresos" class="tooltipbasic" data-tooltip="Reposiciones de caja">Ingresos</a></li>
+								<li><a href="/contabilidad/caja/reporte" class="tooltipbasic" data-tooltip="Consulta y reporte de gastos en caja">Reporte</a></li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Seccion de Polizas">Polizas</a>
+							<ul>
+								<li><a href="/contabilidad/polizas/cuentas" class="tooltipbasic" data-tooltip="Agregar/Consultar Cuentas">Cuentas</a></li>
+								<li class="dropdownh">
+								<a href="#" class="tooltipbasic" data-tooltip="Ingresos">Ingresos</a>
+									<ul>
+										<li><a href="/contabilidad/polizas/ingresos/depositos" class="tooltipbasic" data-tooltip="Depositos bancarios">Depositos</a></li>
+										<li><a href="/contabilidad/polizas/lineas_credito/proveedores/nuevo" class="tooltipbasic" data-tooltip="Agregar nuevo proveedor">Nuevo Proveedor</a></li>
+									</ul>
+								</li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Egresos">Egresos</a>
+									<ul>
+										<li><a href="/contabilidad/polizas/egresos/poliza_cheques" class="tooltipbasic" data-tooltip="Poliza de cheques de pago">Poliza de cheques</a></li>
+									</ul>
+								</li>
+								<li><a href="/contabilidad/polizas/reporte_poliza" class="tooltipbasic" data-tooltip="Consulta y reporte de polizas">Reporte Polizas</a></li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Lineas de Credito">Lineas Credito</a>
+									<ul>
+										
+										<li class="dropdownh">
+											<a href="#" class="tooltipbasic" data-tooltip="Proveedores">Proveedores</a>
+											<ul>
+												<li><a href="/contabilidad/polizas/lineas_credito/proveedores/nuevo" class="tooltipbasic" data-tooltip="Agregar nuevo proveedor">Nuevo</a></li>
+												<li><a href="/contabilidad/polizas/lineas_credito/proveedores/catalogo" class="tooltipbasic" data-tooltip="Catalogo de proveedores">Catalogo</a></li>
+											</ul>
+										</li>
+									
+										<li><a href="/contabilidad/polizas/lineas_credito/nueva" class="tooltipbasic" data-tooltip="Nueva linea de credito">Nueva Lin.</a></li>
+										<li><a href="/contabilidad/polizas/lineas_credito/abonos" class="tooltipbasic" data-tooltip="Abonos a creditos otorgados">Abonos</a></li>
+										<li><a href="/contabilidad/polizas/lineas_credito/historial" class="tooltipbasic" data-tooltip="Consulta y reporte de pagos a proveedores">Historial</a></li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						{% endif %}
+
+						{% if nivel == 1 or nivel == 2 or nivel == 3 or nivel == 0 %}
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Reportes de Facturacion">Facturacion</a>
+							<ul>
+								<li class="dropdownh">
+								<a href="#" class="tooltipbasic" data-tooltip="Facturas">Facturas</a>
+									<ul>
+										<li><a href="/contabilidad/facturacion/facturas/reporte" class="tooltipbasic" data-tooltip="Reporte de Facturas">Reporte</a></li>
+										<li><a href="/contabilidad/facturacion/facturas/agregar" class="tooltipbasic" data-tooltip="Agregar nueva factura">Agregar</a></li>
+									</ul>
+								</li>
+
+								<li class="dropdownh">
+								<a href="#" class="tooltipbasic" data-tooltip="Equipos">Equipos</a>
+									<ul>
+										<li><a href="/contabilidad/facturacion/equipo/facturada" class="tooltipbasic" data-tooltip="Equipos Facturados">Facturados</a></li>
+										<li><a href="/contabilidad/facturacion/equipo/pendiente" class="tooltipbasic" data-tooltip="Equipos pendientes a Facturar">No Facturados</a></li>
+									</ul>
+								</li>
+
+
+								<li class="dropdownh">
+								<a href="#" class="tooltipbasic" data-tooltip="Express">Express</a>
+									<ul>
+										<li><a href="/contabilidad/facturacion/express/facturada" class="tooltipbasic" data-tooltip="Express Facturados">Facturados</a></li>
+										<li><a href="/contabilidad/facturacion/express/pendiente" class="tooltipbasic" data-tooltip="Express pendientes a Facturar">No Facturados</a></li>
+									</ul>
+								</li>
+
+
+								<li class="dropdownh">
+								<a href="#" class="tooltipbasic" data-tooltip="Fichas">Fichas</a>
+									<ul>
+										<li><a href="/contabilidad/facturacion/ficha/facturada" class="tooltipbasic" data-tooltip="Fichas Facturados">Facturados</a></li>
+										<li><a href="/contabilidad/facturacion/ficha/pendiente" class="tooltipbasic" data-tooltip="Fichas pendientes a Facturar">No Facturados</a></li>
+									</ul>
+								</li>
+
+
+								<li class="dropdownh">
+								<a href="#" class="tooltipbasic" data-tooltip="Accesorios">Accesorios</a>
+									<ul>
+										<li><a href="/contabilidad/facturacion/accesorio/facturada" class="tooltipbasic" data-tooltip="Accesorios Facturados">Facturados</a></li>
+										<li><a href="/contabilidad/facturacion/accesorio/pendiente" class="tooltipbasic" data-tooltip="Accesorios pendientes a Facturar">No Facturados</a></li>
+									</ul>
+								</li>
+
+
+								<li class="dropdownh">
+								<a href="#" class="tooltipbasic" data-tooltip="Clientes">Clientes</a>
+									<ul>
+										<li><a href="/contabilidad/facturacion/facturas/cliente/catalogo" class="tooltipbasic" data-tooltip="Catalogo de Clientes">Catalogo</a></li>
+										<li><a href="/contabilidad/facturacion/facturas/cliente/nuevo" class="tooltipbasic" data-tooltip="Nuevo Cliente">Nuevo</a></li>
+									</ul>
+								</li>
+
+							</ul>
+						</li>
+						{% endif %}
+
+						{% if nivel == 1 or nivel == 2 or nivel == 0 %}
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Seccion de Sucursales">Sucursales</a>
+							<ul>
+								<li><a href="/contabilidad/sucursales/nueva" class="tooltipbasic" data-tooltip="Agregar sucursal o evento">Nueva</a></li>
+								<li><a href="/contabilidad/sucursales/sucursales" class="tooltipbasic" data-tooltip="Consultar y Actualizar sucursales">Sucursales</a></li>
+								<li><a href="/contabilidad/sucursales/vendedores" class="tooltipbasic" data-tooltip="Consultar y Actualizar Vendedores" >Vendedores</a></li>
+								<li><a href="/contabilidad/sucursales/papeletas" class="tooltipbasic" data-tooltip="Consulta y reporte de Papeletas ingresadas">Papeletas</a></li>
+								<li><a href="/contabilidad/sucursales/arqueos" class="tooltipbasic" data-tooltip="Consulta y reporte de Arqueos realizados">Arqueos</a></li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Cortes de Venta">Cortes</a>
+									<ul>
+										<li class="dropdownh">
+										<a href="#" class="tooltipbasic" data-tooltip="Verificacion de cortes de venta">Verificar</a>
+											<ul>
+												<li><a href="/contabilidad/sucursales/cortes/verificar/revisar" class="tooltipbasic" data-tooltip="Revision de cortes por sucursal">Revisar</a></li>
+												<li><a href="/contabilidad/sucursales/cortes/verificar/diferencias" class="tooltipbasic" data-tooltip="Consulta y reporte de Diferencias de corte">Diferencias</a></li>
+											</ul>
+										</li>
+										<li><a href="/contabilidad/sucursales/cortes/reporte" class="tooltipbasic" data-tooltip="Consulta y reporte de cortes de venta">Reporte Cortes</a></li>
+									</ul>
+								</li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Recargas electronicas">Recargas</a>
+									<ul>
+										<li><a href="/contabilidad/sucursales/recargas/reporte" class="tooltipbasic" data-tooltip="Consulta y reporte de depositos de recarga a sucursales">Reportes</a></li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						{% endif %}
+						
+						{% if nivel == 1 or nivel == 2 or nivel == 0 %}
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Reportes">Reportes</a>
+							<ul>
+								<li class="dropdownh">
+								<a href="#" class="tooltipbasic" data-tooltip="Area de Compras">Compras</a>
+									<ul>
+										<li><a href="/contabilidad/reportes/compras/facturas" class="tooltipbasic" data-tooltip="Consulta y reporte de Facturas ingresadas a almacen">Facturas</a></li>
+										<li><a href="/contabilidad/reportes/compras/costos" class="tooltipbasic" data-tooltip="Consulta y reporte de Costos Sucursales">Costos</a></li>
+										<li><a href="/contabilidad/reportes/compras/garantias" class="tooltipbasic" data-tooltip="Consulta y reporte de Garantias solicitadas">Garantias</a></li>
+									</ul>
+								</li>
+								{% if nivel == 1 or nivel == 2 or nivel == 0 %}
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Seccion de Credito y Cobranza">Cobranzas</a>
+							<ul>
+								<li class="dropdownh">
+								<a href="#" class="tooltipbasic" data-tooltip="Sub-distribuidores">Sub-Distribuidores</a>
+									<ul>
+										<li><a href="/contabilidad/cobranzas/sub_distribuidores/catalogo" class="tooltipbasic" data-tooltip="Catalogo de Subditribuidores">Catalogo</a></li>
+										<li><a href="/contabilidad/cobranzas/sub_distribuidores/historial" class="tooltipbasic" data-tooltip="Consulta y reporte de historiales de sub-distribuidores">Historial</a></li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						{% endif %}
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Estadisticas de Ventas">Estadisticas</a>
+									<ul>
+										<li><a href="/contabilidad/reportes/estadisticas/consultar" class="tooltipbasic" data-tooltip="Comparativo de ventas">Consultar</a></li>
+									</ul>
+								</li>
+								<li><a href="/contabilidad/reportes/existencias" class="tooltipbasic" data-tooltip="Consulta y reporte de existencias por sucursal">Existencias</a></li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Planes Tarifarios">Planes</a>
+									<ul>
+										<li><a href="/contabilidad/reportes/planes/pendientes" class="tooltipbasic" data-tooltip="Consulta y reporte de planes solicitados">Solicitudes</a></li>
+									</ul>
+								</li>
+								<li><a href="/contabilidad/reportes/servicios" class="tooltipbasic" data-tooltip="Consulta y reporte de seguimiento de servicios solicitados">Servicios</a></li>
+							</ul>
+						</li>
+						{% endif %}
+
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Auditorias">Auditorias</a>
+							<ul>
+								{% if nivel == 1 or nivel == 2 or nivel == 3  or nivel == 0 %}
+								<li><a href="/contabilidad/sucursales/auditorias/nueva" class="tooltipbasic" data-tooltip="Iniciar nueva auditoria: consulta y reporte de existencias de sucursal">Nueva</a></li>
+
+								<li><a href="/contabilidad/sucursales/auditorias/activas" class="tooltipbasic" data-tooltip="Consulta, cierre y cancelacion de las Auditorias actuales">Activas</a></li>
+
+								<li><a href="/contabilidad/sucursales/auditorias/reportes" class="tooltipbasic" data-tooltip="Reporte de las Auditorias Finalizadas">Reportes</a></li>
+								{% endif %}
+
+								{% if nivel == 4 or nivel == 2 or nivel == 3  or nivel == 0 %}
+								<li class="dropdownh"><a href="#" class="tooltipbasic" data-tooltip="Determinar faltantes en cuadro de analisis">Determinar</a>
+									<ul>
+										<li><a href="/contabilidad/sucursales/auditorias/determinar/equipo" class="tooltipbasic" data-tooltip="Determinar Equipos faltantes en cuadro de analisis">Equipos</a></li>
+										<li><a href="/contabilidad/sucursales/auditorias/determinar/accesorio" class="tooltipbasic" data-tooltip="Determinar Accesorios faltantes en cuadro de analisis">Accesorios</a></li>
+										<li><a href="/contabilidad/sucursales/auditorias/determinar/expres" class="tooltipbasic" data-tooltip="Determinar Expres faltantes en cuadro de analisis">Expres</a></li>
+										<li><a href="/contabilidad/sucursales/auditorias/determinar/ficha" class="tooltipbasic" data-tooltip="Determinar Fichas faltantes en cuadro de analisis">Fichas</a></li>
+										<li><a href="/contabilidad/sucursales/auditorias/determinar/estado" class="tooltipbasic" data-tooltip="Reporte de la Auditoria actual">Estado Actual</a></li>
+									</ul>
+								</li>
+								{% endif %}
+							</ul>
+						</li>
+
+
+						<li><a href="/cerrar">Salir</a></li>
+					</ul>
+			</div>
+			</nav>
+			{% block contenido %}{% endblock %}
+			<footer id="footer">
+				<div class="center">
+				<a href="#">Soporte T&eacute;cnico</a>
+			</div></footer>
+		</div>
+	</body>
+</html>

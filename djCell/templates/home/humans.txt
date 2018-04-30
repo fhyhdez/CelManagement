@@ -1,0 +1,23 @@
+﻿    ____          //   ) )                                              
+   //             ((                  ___    __  ___  ___      _   __    
+  //__     ____     \\     //   / / ((   ) )  / /   //___) ) // ) )  ) ) 
+      ) )             ) ) ((___/ /   \ \     / /   //       // / /  / /  
+((___/ /       ((___ / /      / / //   ) )  / /   ((____   // / /  / / 
+
+/* MAIN */
+  Develop & Main Design: Fatima Hernández
+  Twitter: @fai_hdez
+
+
+/* SITE */
+  Last update: 28/03/2014
+  Doctype: HTML5
+  IDE: SublimeText, Photoshop
+
+
+/* SPECIAL THANKS */
+  Developer / Backend : Luciano Marcos Solis
+  Twitter: @vash512
+
+  And, of course, all humanstxt.org team!
+  

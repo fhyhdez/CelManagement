@@ -1,0 +1,175 @@
+{% extends 'servicios/servicios-base.html' %}
+
+{% block titulo %}@Agregar Venta por Carga de Software @Servicios Tecnicos{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	{%if buscar %}
+	<section id="row">
+		<form class="wufoo" name="buscar" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Clientes de Servicios Tecnicos</h2>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar Cliente:</h3>
+				</li>
+				<li>
+					<label class="desc">Cliente: <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query|escape}}" name="q" title="Buscar Cliente, incluya nombre o folio del cliente o sucursal"; placeholder="Ej. Jhon Perez" required />
+					</div>
+					<p class="instruct">Ingrese Nombre del cliente | folio del cliente | sucursal, para realizar el filtrado, Gracias.</p>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Buscar" title="Buscar Cliente"/>  |  
+					
+				</li>
+			</ul>
+		</form>
+		<hr>
+		<form class="wufoo" name="nuevo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<input name="nvoCCosto" class="submit success" type="submit" value="Nuevo Cliente - Servicios" title="Nuevo Cliente de Servicios Tecnicos" />
+		</form>
+		{{ info }}
+	</section>
+	{%endif %}
+	{% if query %}
+		<section id="row">
+			<h3>Resultados para "{{ query|escape }}":</h3>
+		{% if results %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Tipo</td>
+						<td id="gridhead">Ingres&oacute;</td>
+						<td id="gridhead">Sucursal</td>
+						<td id="gridhead">Nombre</td>
+						<td id="gridhead">Direccion</td>
+						<td id="gridhead" title='Accion a Realizar'>Asignar</td>
+					</tr>
+					{% for x in results %}
+						<tr>
+							<td>{{ x.tipoCliente|escape }} </td>
+							<td>{{ x.fxIngreso|date:"Y-m-d h:i a" }} </td>
+							<td>{{ x.sucursal.nombre|escape }} </td>
+							<td>{{ x.nombre|escape}} </td>
+							<td>{{ x.direccion|escape }}.{{ x.colonia.colonia|escape }}, {{ x.ciudad.ciudad|escape }}, {{ x.ciudad.estado|escape }}.</td>
+							<td title="Asignar cliente - equipo para flexeo con costo">
+								<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="cliCCosto" type="image" src="/static/img/icons/setting_tools.png" value="{{ x.id|escape }}" />
+								</form>
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			{% else %}
+				<p>El cliente no se encuentra o no pertenece a esta seccion. <br> verifique sus datos</p>
+			{% endif %}
+		</section>
+	{% endif %}
+
+	{%if nvoCC %}
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div class="info">
+					<h2>Registro de Equipos para Carga de Software</h2>
+					<div>Registro de Equipo y Cliente</div>
+				</div>
+				<ul>
+					
+					<li class="section first">
+						<h3>Datos Generales</h3>
+					</li>
+					{% for field in form %}
+					<li>
+						<label class="desc">{{field.label}}</label> 
+						<div>
+							{{field}}
+						</div>
+						<label> {{field.help_text}} <span class="req"> {{field.errors}} </span></label>
+					</li>
+					{% endfor %}
+					
+					{% for field in formC %}
+						<li>
+							{%if field.label == 'Key' %}
+								{{ field.as_hidden }}
+							{% else %}
+							<label class="desc">{{field.label}}</label> 
+							<div>
+								{{field}}
+							</div>
+							<label> {{field.help_text}} <span class="req"> {{field.errors}} </span></label>
+							{% endif %}
+						</li>
+					{% endfor %}
+					
+					<li><strong>{{ info }}</strong></li>
+					{%if folioVenta %}
+					<li><a href="./?print={{ folioVenta }}" class="success button" target="_blank" ><img src="{{STATIC_URL}}img/icons/1366452634_print.png">  Imprimir Ticket</a></li>
+					{%endif %}
+					<li id="buttons">
+						{%if boton %}
+						<input name="regNvoCC" class="submit success" type="submit" value="Registrar Pago"/> |  
+						{%endif %}
+						<a class="success button" href="." title="Nueva Venta">Nuevo Registro</a> <br>
+						<BR /><span class="req">*.Campos Obligatorios. No dejar vacios.</span>
+					</li>
+
+				</ul>
+		</form>			
+	</section>
+	{%endif %}
+	
+	{%if yaCC %}
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div class="info">
+					<h2>Registro de Equipos para Carga de Software</h2>
+					<div>Registro de Equipo y Cliente</div>
+				</div>
+				<ul>
+					
+					<li class="section first">
+						<h3>Datos Generales</h3>
+					</li>
+					
+					{% for field in formC %}
+						<li>
+							{%if field.label == 'Key' %}
+								{{ field.as_hidden }}
+							{% else %}
+							<label class="desc">{{field.label}}</label> 
+							<div>
+								{{field}}
+							</div>
+							<label> {{field.help_text}} <span class="req"> {{field.errors}} </span></label>
+							{% endif %}
+						</li>
+					{% endfor %}
+					
+					<li><strong>{{ info }}</strong></li>
+					{%if folioVenta %}
+					<li><a href="./?print={{ folioVenta }}" class="success button" target="_blank" ><img src="{{STATIC_URL}}img/icons/1366452634_print.png">  Imprimir Ticket</a></li>
+					{%endif %}
+					<li id="buttons">
+						{%if boton %}
+						<input name="regCC" class="submit success" type="submit" value="Registrar Pago"/> |  
+						{%endif %}
+						<a class="success button" href="." title="Nueva Venta">Nuevo Registro</a> <br>
+						<BR /><span class="req">*.Campos Obligatorios. No dejar vacios.</span>
+					</li>
+
+				</ul>
+		</form>			
+	</section>
+	{%endif %}
+	<br><br>
+</div>
+{% endblock %}

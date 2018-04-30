@@ -1,0 +1,107 @@
+<!DOCTYPE>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name = "viewport" content = "width=device-width, maximum-scale = 1, minimum-scale=1" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/structure.css" media="all" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/theme2.css" media="all" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/buttons.css"  />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/flexslider.css" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/fuentes.css" media="screen" />
+		<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css' />
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+		<link rel="shortcut icon" type="image/x-icon" href="http://dhtml5.comoj.com/images/favicon.ico" />
+		<script src="{{STATIC_URL}}js/wufoo.js"></script>
+ 		<script src="{{STATIC_URL}}js/jquery-1.2.1.pack.js"></script>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="{{STATIC_URL}}js/jquery.flexslider.js"></script>
+		<script src="{{STATIC_URL}}js/default.js"></script>
+		{% block miscript %}
+		{% endblock %}
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+			<script src="js/respond.min.js"></script>
+		<![endif]-->
+		<title>@CM - {% block titulo %}{% endblock %}</title>
+	</head>
+	<body>
+		<div id="pagewidth">
+			<header id="header">
+				<img src="{{STATIC_URL}}img/logoAccell2.png" id="imgLogo"/>
+				<div id="Logo"><h1><a href=".">Excess Complet Cellulaire</a></h1></div>
+			</header>
+			<nav id="minav">
+				<div class="center">
+					<ul class="navh">
+						<li><a href="/servicios" class="tooltipbasic" data-tooltip="Pagina de Bienvenida">Inicio</a></li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Catalogo de Reparaciones">Catalogo</a>
+							<ul>
+								<li><a href="/servicios/catalogo_reparaciones/agregar" class="tooltipbasic" data-tooltip="Agregar Nuevo tipo de reparacion">Agregar</a></li>
+								<li><a href="/servicios/catalogo_reparaciones/todos" class="tooltipbasic" data-tooltip="Mostrar Catalogo de repaciones">Todos</a></li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Solicitudes ingresadas">Solicitudes</a>
+							<ul>
+								<li><a href="/servicios/solicitudes/flexeo_porta" class="tooltipbasic" data-tooltip="Por Flexeo de portabilidad sin costo">Flexeo Porta</a></li>
+								<li><a href="/servicios/solicitudes/flexeos" class="tooltipbasic" data-tooltip="Por Flexeos con costo">Flexeos</a></li>
+								<li><a href="/servicios/solicitudes/reparacion_fisica" class="tooltipbasic" data-tooltip="Por reparaciones fisicas">Reparacion fisica</a></li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Clientes de Reparaciones">Clientes Rep.</a>
+							<ul>
+								<li><a href="/servicios/clientes_rep/nuevo" class="tooltipbasic" data-tooltip="Agregar Nuevo Cliente">Nuevo</a></li>
+								<li><a href="/servicios/clientes_rep/abonos" class="tooltipbasic" data-tooltip="Abonos a reparaciones">Abonos</a></li>
+								<li><a href="/servicios/clientes_rep/historial" class="tooltipbasic" data-tooltip="Consulta y reporte de Historial de pagos a reparaciones">Historial</a></li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Seguimiento de Reparaciones">Seguimiento</a>
+							<ul>
+								<li><a href="/servicios/seguimiento/flexeo_porta" class="tooltipbasic" data-tooltip="Por Flexeo por portabilidad sin costo">Flexeo Porta</a></li>
+								<li><a href="/servicios/seguimiento/flexeos" class="tooltipbasic" data-tooltip="Por Flexeos con costo">Flexeos</a></li>
+								<li><a href="/servicios/seguimiento/reparacion_fisica" class="tooltipbasic" data-tooltip="Por reparaciones Fisicas">Reparacion fisica</a></li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Ventas de Servicios">Ventas</a>
+							<ul>
+								<li><a href="/servicios/ventas/flexeo_porta" class="tooltipbasic" data-tooltip="Ingreso de equipos, por Flexeo por portabilidad sin costo">Flexeo Porta</a></li>
+								<li><a href="/servicios/ventas/flexeos" class="tooltipbasic" data-tooltip="Por Flexeos con costo">Flexeos</a></li>
+								<li><a href="/servicios/ventas/reparacion_fisica" class="tooltipbasic" data-tooltip="Por reparaciones Fisicas">Reparacion fisica</a></li>
+								<li><a href="/servicios/ventas/carga_software" class="tooltipbasic" data-tooltip="Carga de solftware">Carga de Software</a></li>
+								<li><a href="/servicios/ventas/accesorios" class="tooltipbasic" data-tooltip="Venta de Accesorios">Accesorios</a></li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Corte de Ventas">Corte Vta</a>
+							<ul>
+								<li><a href="/servicios/corte_vta/caja" class="tooltipbasic" data-tooltip="Acumulado de ventas del dia">Caja</a></li>
+								<li><a href="/servicios/corte_vta/gastos" class="tooltipbasic" data-tooltip="Gastos realizados en el dia">Gastos</a></li>
+								<li><a href="/servicios/corte_vta/cerrar_corte" class="tooltipbasic" data-tooltip="Cierre de corte">Cerrar Corte</a></li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Existencias de Servicios">Inventario</a>
+							<ul>
+								<li><a href="/servicios/inventario/accesorios" class="tooltipbasic" data-tooltip="Accesorios">Accesorios</a></li>
+								<li><a href="/servicios/inventario/refacciones" class="tooltipbasic" data-tooltip="Refacciones">Refacciones</a></li>
+								<li><a href="/servicios/inventario/eq_obsoletos" class="tooltipbasic" data-tooltip="Equipos obsoletos">Eq.Obsoletos</a></li>
+								<li><a href="/servicios/transferencias" class="tooltipbasic" data-tooltip="Confirmacion de Transferencias">Transferencias</a></li>
+							</ul>
+						</li>
+						<li><a href="/cerrar">Salir</a></li>
+					</ul>
+			</div>
+			</nav>
+			{% block contenido %}{% endblock %}
+			<footer id="footer">
+				<div class="center">
+				<a href="#">Soporte T&eacute;cnico</a>
+			</div></footer>
+		</div>
+	</body>
+</html>

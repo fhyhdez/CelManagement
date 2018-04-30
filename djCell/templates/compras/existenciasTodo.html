@@ -1,0 +1,258 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Productos en Sucursal @Ventas{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info">
+			<h3>Existencias en Sucursal</h3>
+		</div>
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<td id="gridhead">Nombre Sucursal, Equipos, Express, Fichas, Accesorios </td>
+					<td id="gridhead">Buscar</td>
+				</tr>
+				<tr>
+					<form action='.'  method='GET' enctype="multipart/form-data">{% csrf_token %}
+					<td><input type='text' name='item' value='{{ query|escape }}'></td>
+					<td><input class="submit success" type="submit" value='buscar'>
+						<a class="success button" href="." title="Nueva busqueda">Limpiar Busqueda</a>
+					</td>
+					</form>
+				</tr>
+			</table>
+		</div>
+	</section>
+	{%if nineros %}
+	<section id="row">
+		<div id="twoCol">
+			<table id="twoCol">
+				{%for x in nineros %}
+				<tr>
+					<th>Sucursal:</th><td colspan="2">{{ x.0 }} </td>
+				</tr>
+				<tr>
+					<th>#Existentes</th><th>Producto</th>
+				</tr>
+				<tr>
+					<td>{{ x.1 }} </td><td>Equipos</td>
+				</tr>
+				<tr>
+					<td>{{ x.2 }} </td><td>Express</td>
+				</tr>
+				<tr>
+					<td>{{ x.3 }} </td><td>Accesorios</td>
+				</tr>
+				<tr>
+					<td>{{ x.4 }} </td><td>Fichas</td>
+				</tr>
+				
+				{%endfor %}
+			</table>
+		</div>
+	</section>
+	{%endif %}
+	<section id="row">
+		<div class="info">
+			<h3>Equipos en Sucursal</h3>
+		</div>
+		{% if almEquipos %}
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<td id="gridhead">Precio</td>
+					<td id="gridhead">Marca/Modelo</td>
+					<td id="gridhead">IMEI</td>
+					<td id="gridhead">ICC</td>
+					<td id="gridhead">Accesorios</td>
+					<td id="gridhead">Estado</td>
+				</tr>
+				{% for item in almEquipos %}
+				<tr>
+					<td>$ {{ item.equipo.detallesEquipo.precioMenudeo|escape}}</td>
+					<td>{{ item.equipo.detallesEquipo.marca.marca|escape}} {{ item.equipo.detallesEquipo.modelo|escape}}</td>
+					<td>{{ item.equipo.imei|escape}}</td>
+					<td>{{ item.equipo.icc|escape}}</td>
+					<td>{{ item.equipo.accesorioEqu|escape}}</td>
+					<td>{{ item.equipo.estatus|escape}}</td>
+				</tr>
+				{%endfor %}
+			</table>
+		</div>
+		<div class="pagination">
+			<span class="step-links">
+			    {% if almEquipos.has_previous %}
+			        <a class="success button" href="?pagEq={{ almEquipos.previous_page_number }}&amp;item={{query}}">Anterior</a>
+			    {% endif %}
+		        <span style="font-weight:bolder;">
+		            Pagina {{ almEquipos.number }} de {{ almEquipos.paginator.num_pages }}.
+		        </span>
+		        {% if almEquipos.has_next %}
+		            <a class="success button" href="?pagEq={{ almEquipos.next_page_number }}&amp;item={{query}}">Siguiente</a>
+		        {% endif %}
+			    </span>
+		</div>
+		{%else %}
+		<p>Por el momento no se encuentran equipos.</p>
+		{% endif %}
+	</section>
+	<section id="row">
+		<div class="info">
+			<h3>Express en Sucursal</h3>
+		</div>
+		{% if almExpress %}
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<td id="gridhead">Precio</td>
+					<td id="gridhead">Tipo</td>
+					<td id="gridhead">ICC</td>
+					<td id="gridhead">No.Asignado</td>
+					<td id="gridhead">Estado</td>
+				</tr>
+				{% for item in almExpress %}
+				<tr>
+					<td>$ {{ item.expres.detallesExpres.precioMenudeo|escape}}</td>
+					<td>{{ item.expres.detallesExpres|escape}}</td>
+					<td>{{ item.expres.icc|escape}}</td>
+					<td>{{ item.expres.noCell|escape}}</td>
+					<td>{{ item.expres.estatus|escape}}</td>
+				</tr>
+				{%endfor %}
+			</table>
+		</div>
+		<div class="pagination">
+			<span class="step-links">
+			    {% if almExpress.has_previous %}
+			        <a class="success button" href="?pagEx={{ almExpress.previous_page_number }}&amp;item={{query}}">Anterior</a>
+			    {% endif %}
+		        <span style="font-weight:bolder;">
+		            Pagina {{ almExpress.number }} de {{ almExpress.paginator.num_pages }}.
+		        </span>
+		        {% if almExpress.has_next %}
+		            <a class="success button" href="?pagEx={{ almExpress.next_page_number }}&amp;item={{query}}">Siguiente</a>
+		        {% endif %}
+			    </span>
+		</div>
+		{%else %}
+		<p>Por el momento no se encuentran Express.</p>
+		{% endif %}
+	</section>
+	<section id="row">
+		<div class="info">
+			<h3>Accesorios en Sucursal</h3>
+		</div>
+		{% if almAccs %}
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<td id="gridhead">Precio</td>
+					<td id="gridhead">Codigo de Barras</td>
+					<td id="gridhead">Marca / Descripcion</td>
+					<td id="gridhead">Estado</td>
+				</tr>
+				{% for item in almAccs %}
+				<tr>
+					<td>$ {{ item.accesorio.detallesAccesorio.precioMenudeo|escape}}</td>
+					<td>{{ item.accesorio.codigoBarras|escape}}</td>
+					<td>{{ item.accesorio.detallesAccesorio|escape}}</td>
+					<td>{{ item.accesorio.estatusAccesorio|escape}}</td>
+				</tr>
+				{%endfor %}
+			</table>
+		</div>
+		<div class="pagination">
+			<span class="step-links">
+			    {% if almAccs.has_previous %}
+			        <a class="success button" href="?pagC={{ almAccs.previous_page_number }}&amp;item={{query}}">Anterior</a>
+			    {% endif %}
+		        <span style="font-weight:bolder;">
+		            Pagina {{ almAccs.number }} de {{ almAccs.paginator.num_pages }}.
+		        </span>
+		        {% if almAccs.has_next %}
+		            <a class="success button" href="?pagC={{ almAccs.next_page_number }}&amp;item={{query}}">Siguiente</a>
+		        {% endif %}
+			    </span>
+		</div>
+		{%else %}
+		<p>No se Encuentran accesorios por el momento.</p>
+		{% endif %}
+	</section>
+	<section id="row">
+		<div class="info">
+			<h3>Series de Fichas en Sucursal</h3>
+		</div>
+		{%if almFic %}
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<td id="gridhead">Nominacion</td>
+					<td id="gridhead">Serie de Ficha</td>
+					<td id="gridhead">Estado</td>
+				</tr>
+				{% for item in almFic %}
+				<tr>
+					<td>$ {{ item.ficha.nominacion.nominacion|escape}}</td>
+					<td>{{ item.ficha.folio|escape}}</td>
+					<td>{{ item.ficha.estatusFicha|escape}}</td>
+				</tr>
+				{%endfor %}
+			</table>
+		</div>
+		<div class="pagination">
+			<span class="step-links">
+			    {% if almFic.has_previous %}
+			        <a class="success button" href="?pagF={{ almFic.previous_page_number }}&amp;item={{query}}">Anterior</a>
+			    {% endif %}
+		        <span style="font-weight:bolder;">
+		            Pagina {{ almFic.number }} de {{ almFic.paginator.num_pages }}.
+		        </span>
+		        {% if almFic.has_next %}
+		            <a class="success button" href="?pagF={{ almFic.next_page_number }}&amp;item={{query}}">Siguiente</a>
+		        {% endif %}
+			    </span>
+		</div>
+		{%else %}
+		<p>No se encuentrar Fichas en Sucursal</p>
+		{%endif %}
+	</section>
+	<section id="row">
+		<div class="info">
+			<h3>Saldo en Sucursal</h3>
+		</div>
+		{% if almSaldo %}
+		<div id="grid">
+			<table id="grid">
+				{%for item in almSaldo %}
+				<tr>
+					<td id="gridhead">Sucursal</td>
+					<td id="gridhead">Saldo</td>
+				</tr>
+				<tr>
+					<td> {{ item.sucursal.nombre|escape}}</td>
+					<td>$ {{ item.saldo|escape}}</td>
+				</tr>
+				{%endfor %}
+			</table>
+		</div>
+		<div class="pagination">
+			<span class="step-links">
+			    {% if almSaldo.has_previous %}
+			        <a class="success button" href="?pagT={{ almSaldo.previous_page_number }}&amp;item={{query}}">Anterior</a>
+			    {% endif %}
+		        <span style="font-weight:bolder;">
+		            Pagina {{ almSaldo.number }} de {{ almSaldo.paginator.num_pages }}.
+		        </span>
+		        {% if almSaldo.has_next %}
+		            <a class="success button" href="?pagT={{ almSaldo.next_page_number }}&amp;item={{query}}">Siguiente</a>
+		        {% endif %}
+			    </span>
+		</div>
+		{%else %}
+		<p>No se encuentra por el momento. Saldo en Sucursal</p>
+		{% endif %}
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

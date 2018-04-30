@@ -1,0 +1,102 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}--Contabilidad{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+	<div class="info">
+		<h2>Reporte de las Comisiones</h2>
+		<div>{{descr}}</div>
+		{{buscador|safe}}
+		<hr>
+			<div id="grid">
+				<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<table id="grid">
+					<tr>
+						<td id="gridhead"><input class="submit success" type="submit" name='faltantes' value="Filtrar Faltantes de Pago"/> </td>
+						<td id="gridhead"><input class="submit success" type="submit" name='generar' value="Generar Comisiones"/> </td>
+					</tr>
+				</table>
+				</form>
+			</div>
+			<hr>
+		{{mensaje}}
+		<hr>
+		<div class="info"><strong>Las comisiones se generan de un mes anterior. Las ventas deben estar aceptadas y pagadas para generar la comisión, siempre y cuando el equipo tenga una gama del tipo TIP, KIT y los servicios sean realizados bajo su nombre o usuario.</strong> </div>
+		{{comisiones|safe}}
+		<hr>
+		{%if comision %}
+			<br>
+			<h2>Descripcion de la Comision</h2>
+			<div class="info"><strong>Las comisiones se generan de un mes anterior. Las ventas deben estar aceptadas y pagadas para generar la comisión, siempre y cuando el equipo tenga una gama del tipo TIP, KIT y los servicios sean realizados bajo su nombre o usuario.</strong> </div>
+			<div id="twoCol">
+				<table id="twoCol">
+					<tr>
+						<td>Empleado</td>
+						<td>{{comision.empleado}}</td>
+					</tr>
+					<tr>
+						<td>Comision por EquipoKit</td>
+						<td>{{comision.comEquipoKit}}</td>
+					</tr>
+					<tr>
+						<td>Comision por EquipoTip</td>
+						<td>{{comision.comEquipoTip}}</td>
+					</tr>
+					<tr>
+						<td>Comision por Planes</td>
+						<td>{{comision.comPlanes}}</td>
+					</tr>
+					<tr>
+						<td>Comision por Servicios</td>
+						<td>{{comision.comServicios}}</td>
+					</tr>
+					<tr>
+						<td>Mes</td>
+						<td>{{comision.mes}}</td>
+					</tr>
+					<tr>
+						<td>Total</td>
+						<td>{{total}}</td>
+					</tr>
+					<tr>
+						<td>Pagado</td>
+						<td>
+							{%if comision.pagado %}
+							<img src="{{STATIC_URL}}img/icons/tick.png" />
+							{%else %}
+							<img src="{{STATIC_URL}}img/icons/exclamation.png" />
+							{%endif %}
+						</td>
+					</tr>
+					<tr>
+						<td>Pago</td>
+						<td>
+							{%if comision.pagado %}
+							{{comision.fxPago|date:"Y-m-d h:i a"}}
+							{%endif %}
+						</td>
+					</tr>
+				</table>
+			</div>
+			{%if comision.pagado %}
+			{%else %}
+				<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<ul>
+					<li id="buttons">
+						<input class="submit success" type="submit" name='pagar' value="Realizar el Pago"/> 
+						<input type="hidden" name="id" value="{{comision.id}}"/>
+					</li>
+				</ul>
+				</form>
+			{%endif %}
+		{%endif %}
+
+			<br><br><br><br>
+	</div>
+	</section>
+</div>
+{% endblock %}

@@ -1,0 +1,186 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Generacion de Compras @Compras{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Reporte de Compras</h2>
+				<div>Compras estimadas por demanda.</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Filtrar por:</h3>
+				</li>
+				{% for field in form %}
+						<li>
+							<label class="desc">{{ field.label }}</label>
+							<div>
+								{{ field }}
+							</div>
+							<label> {{field.help_text}} <small><span class="req"> {{field.errors}} </span></small></label>
+						</li>
+				{% endfor %}
+				<div style="clear:both;"></div>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Consultar"/>  |  
+					<a class="success button" href="." title="Nueva Consulta">Nueva Consulta</a>  |  
+					<a href="" class="tooltipbasic" data-tooltip="Seleccione para Generar el Archivo"><input type="checkbox" name="excel" value="Exportar">Descargar Reporte</a>
+				</li>
+				<li><strong>{{ info }}</strong></li>
+			</ul>
+		</form>
+		
+	</section>
+	
+	<section id="row">
+		<h3>"Equipos en General"</h3>
+		<hr style="clear:both;">
+		<div id="grid">
+			{% if eqGral %}
+			<table id="twoCol">
+				<tr>
+					<th>DEMANDA</th>
+					<th>EQUIPO</th>
+				</tr>
+				{% for item in eqGral %}
+					<tr>
+					{% for x in item %}
+					<td>{{ x|title }}</td>
+					{%endfor %}
+					</tr>
+				{%endfor %}
+			</table>
+			{% else %}
+			<strong>No Hay resultados</strong>
+			{% endif %}
+		</div>
+		<div class="pagination">
+			<span class="step-links">
+				{% if eqGral.has_previous %}
+				<a class="success button" href="?pagina1={{ eqGral.previous_page_number }}">...Anterior</a>
+				{% endif %}
+	        <span class="current">
+	            Pagina {{ eqGral.number }} de {{ eqGral.paginator.num_pages }}.
+	        </span>
+		        {% if eqGral.has_next %}
+	            <a class="success button" href="?pagina1={{ eqGral.next_page_number }}">Siguiente...</a>
+		        {% endif %}
+		    </span>
+		</div>	
+	</section>
+	<section id="row">
+		<h3>"Equipos por Sucursal"</h3>
+		<hr style="clear:both;">
+		<div id="grid">
+			{% if eqSuc %}
+			<table id="twoCol">
+				<tr>
+					<th>DEMANDA</th>
+					<th>EQUIPO</th>
+					<th>SUCURSAL</th>
+				</tr>
+				{% for item in eqSuc %}
+					<tr>
+					{% for x in item %}
+					<td>{{ x|title }}</td>
+					{%endfor %}
+					</tr>
+				{%endfor %}
+			</table>
+			{% else %}
+			<strong>No Hay resultados</strong>
+			{% endif %}
+		</div>
+		<div class="pagination">
+			<span class="step-links">
+				{% if eqSuc.has_previous %}
+				<a class="success button" href="?pagina2={{ eqSuc.previous_page_number }}">...Anterior</a>
+				{% endif %}
+	        <span class="current">
+	            Pagina {{ eqSuc.number }} de {{ eqSuc.paginator.num_pages }}.
+	        </span>
+		        {% if eqSuc.has_next %}
+	            <a class="success button" href="?pagina2={{ eqSuc.next_page_number }}">Siguiente...</a>
+		        {% endif %}
+		    </span>
+		</div>	
+	</section>
+	<section id="row">
+		<h3>"Accesorios en General"</h3>
+		<hr style="clear:both;">
+		<div id="grid">
+			{% if acGral %}
+			<table id="twoCol">
+				<tr>
+					<th>DEMANDA</th>
+					<th>ACCESORIO</th>
+				</tr>
+				{% for item in acGral %}
+					<tr>
+					{% for x in item %}
+					<td>{{ x|title }}</td>
+					{%endfor %}
+					</tr>
+				{%endfor %}
+			</table>
+			{% else %}
+			<strong>No Hay resultados</strong>
+			{% endif %}
+		</div>
+		<div class="pagination">
+			<span class="step-links">
+				{% if acGral.has_previous %}
+				<a class="success button" href="?pagina3={{ acGral.previous_page_number }}">...Anterior</a>
+				{% endif %}
+	        <span class="current">
+	            Pagina {{ acGral.number }} de {{ acGral.paginator.num_pages }}.
+	        </span>
+		        {% if acGral.has_next %}
+	            <a class="success button" href="?pagina3={{ acGral.next_page_number }}">Siguiente...</a>
+		        {% endif %}
+		    </span>
+		</div>	
+	</section>
+	<section id="row">
+		<h3>"Accesorios por Sucursal"</h3>
+		<hr style="clear:both;">
+		<div id="grid">
+			{% if acSuc %}
+			<table id="twoCol">
+				<tr>
+					<th>DEMANDA</th>
+					<th>ACCESORIO</th>
+					<th>SUCURSAL</th>
+				</tr>
+				{% for item in acSuc %}
+					<tr>
+					{% for x in item %}
+					<td>{{ x|title }}</td>
+					{%endfor %}
+					</tr>
+				{%endfor %}
+			</table>
+			{% else %}
+			<strong>No Hay resultados</strong>
+			{% endif %}
+		</div>
+		<div class="pagination">
+			<span class="step-links">
+				{% if acSuc.has_previous %}
+				<a class="success button" href="?pagina4={{ acSuc.previous_page_number }}">...Anterior</a>
+				{% endif %}
+	        <span class="current">
+	            Pagina {{ acSuc.number }} de {{ acSuc.paginator.num_pages }}.
+	        </span>
+		        {% if acSuc.has_next %}
+	            <a class="success button" href="?pagina4={{ acSuc.next_page_number }}">Siguiente...</a>
+		        {% endif %}
+		    </span>
+		</div>	
+	</section>
+	<div style="height:90px;"></div>
+</div>
+{% endblock %}

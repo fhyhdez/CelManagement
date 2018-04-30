@@ -1,0 +1,86 @@
+{% extends 'ventas/ventas-base.html' %}
+
+{% block titulo %}@Reporte de Activaciones - Equipos - @Ventas{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Activaciones de Equipos de Hoy</h2>
+				<div>Equipos activados y vendidos al dia de hoy.</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar Equipo:</h3>
+				</li>
+				<li>
+					<label class="desc">Buscar: <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query|escape}}" name="q" title="Buscar Equipo"; placeholder="Ej.Equipo sin precio" required />
+					</div>
+					<p class="instruct">Ingrese Marca/Modelo terminacion de imei o icc. gracias.</p>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Buscar"/>  |  
+					<a class="success button" href="/ventas/reportes/equipos/" title="Nueva busqueda">Nueva Busqueda</a>
+				</li>
+			</ul>
+		</form>
+		{{ info }}
+	</section>
+	<br>	
+		<section id="row">
+			<h3>Activaciones</h3>
+			{% if activacion %}
+			<div id="grid">
+			Equipos:
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Tipo Activacion</td>
+						<td id="gridhead">Sucursal</td>
+						<td id="gridhead">Equipo</td>
+						<td id="gridhead">IMEI</td>
+						<td id="gridhead">ICC</td>
+						<td id="gridhead">NO.ASIGNADO</td>
+						<td id="gridhead">Vendedor</td>
+						<td id="gridhead">Fecha</td>
+					</tr>
+					{% for equipoA in activacion %}
+						<tr>
+							<td>{{ equipoA.tipoActivacion.tipo|escape}}</td>
+							<td>{{ equipoA.sucursal.nombre|escape}}</td>
+							<td>{{ equipoA.equipo.detallesEquipo.marca.marca|escape}} {{ equipoA.equipo.detallesEquipo.modelo|escape}}</td>
+							<td>{{ equipoA.equipo.imei|escape}}</td>
+							<td>{{ equipoA.equipo.icc|escape}}</td>
+							<td>{{ equipoA.equipo.noCell|escape}}</td>
+							<td>{{ equipoA.empleado.curp|escape}}</td>
+							<td>{{ equipoA.fxActivacion|date:"Y-m-d h:i a"}}</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+				<div class="paxination">
+				    <span class="step-links">
+				        {% if activacion.has_previous %}
+				            <a class="success button" href="?pag1={{ activacion.previous_page_number }}&amp;q={{ query }}">...Anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ activacion.number }} de {{ activacion.paginator.num_pages }}.
+				        </span>
+
+				        {% if activacion.has_next %}
+				            <a class="success button" href="?pag1={{ activacion.next_page_number }}&amp;q={{query}}">Siguiente...</a>
+				        {% endif %}
+				    </span>
+				</div>
+		
+			{% elif query %}
+				<p>Lo sentimos, no encontramos lo que busca. Intente de nuevo con otros datos.</p>
+			{% endif %}
+		</section>
+	<br><br>
+</div>
+{% endblock %}

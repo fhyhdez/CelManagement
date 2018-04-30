@@ -1,0 +1,97 @@
+{% extends 'planes/planes-base2.html' %}
+
+{% block titulo %}@Reporte de Papeletas realizadas @Contabilidad{% endblock %}
+{% block contenido %}
+<div id="content2">
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Reporte de Papeletas</h2>
+				<div>Consulta de papeletas capturadas en sucursal</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Filtrar por:</h3>
+				</li>
+				{% for field in form %}
+						<li>
+							<label class="desc">{{ field.label }}</label>
+							<div>
+								{{ field }}
+							</div>
+							<label> {{field.help_text}} <small><span class="req"> {{field.errors}} </span></small></label>
+						</li>
+				{% endfor %}
+				<li><strong>*** La fecha final es opcional ***</strong></li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Consultar"/>  |  
+					<a class="success button" href="." title="Nueva Consulta">Nueva Consulta</a>  |  
+					<a href="" class="tooltipbasic" data-tooltip="Seleccione para Generar el Archivo"><input type="checkbox" name="excel" value="Exportar">Descargar Reporte</a>
+				</li>
+				<li><strong>{{ info }}</strong></li>
+			</ul>
+		</form>
+	</section>
+	{% if query %} 
+	<section id="row">
+		<h3>Resultados para "{{ query|escape }}":</h3>
+		<hr style="clear:both;">
+		<div id="grid">
+			{% if papeletas %}
+			<table id="grid">
+				<tr>
+					<td id="gridhead2">Tel. Asignado</td>
+					<td id="gridhead2">Nombre Cliente</td>
+					<td id="gridhead2">Calle</td>
+					<td id="gridhead2">Colonia</td>
+					<td id="gridhead2">Codigo P.</td>
+					<td id="gridhead2">Ciudad</td>
+					<td id="gridhead2">Estado</td>
+					<td id="gridhead2">Tel. Particular</td>
+					<td id="gridhead2">Fecha Activacion<br> (MM/DD/AAAA)</td>
+					<td id="gridhead2">ESN / IMEI</td>
+					<td id="gridhead2">DAT</td>
+					<td id="gridhead2">Producto</td>
+				</tr>
+				{% for x in papeletas %}
+					<tr>
+						<td>{{ x.telAsig|escape }}</td>
+						<td>{{ x.nombre|upper }}</td>
+						<td>{{ x.calle|upper }}</td>
+						<td>{{ x.colonia.colonia|upper }}</td>
+						<td>{{ x.codP.cp|escape }}</td>
+						<td>{{ x.ciudad.ciudad|upper }}</td>
+						<td>{{ x.estado.estado|upper }}</td>
+						<td>{{ x.telPart|default:'' }}</td>
+						<td>{{ x.fxActivacion|date:"m/d/Y" }}</td>
+						<td>{{ x.esnImei|escape }}</td>
+						<td>{{ x.dat|upper }}</td>
+						<td>{{ x.tipoProducto.tipo|upper }}</td>
+					</tr>
+				{%endfor %}
+			</table>
+			<div class="pagination">
+				    <span class="step-links">
+				        {% if papeletas.has_previous %}
+				            <a class="success button" href="?pagina={{ papeletas.previous_page_number }}">...Anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ papeletas.number }} de {{ papeletas.paginator.num_pages }}.
+				        </span>
+
+				        {% if papeletas.has_next %}
+				            <a class="success button" href="?pagina={{ papeletas.next_page_number }}">Siguiente...</a>
+				        {% endif %}
+				    </span>
+				</div>
+			{% else %}
+			<strong>No Hay resultados</strong>
+			{% endif %}
+		</div>		
+	</section>
+	{% endif %}
+<div style="height:190px;"></div>
+</div>
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}--Contabilidad{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+	<div class="info">
+		<h2>Cuentas de Empleados</h2>
+		<div>{{descr}}</div>
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<td id="gridhead">Filtro</td>
+					<td id="gridhead">Buscar</td>
+				</tr>
+				<tr>
+					<form action='.'  method='GET' enctype="multipart/form-data">{% csrf_token %}
+						<td><input type='texto' name='q' value='{{ q|escape }}'></td>
+						<td><input class="submit success" type="submit" value='buscar'></td>
+					</form>
+				</tr>
+			</table>
+		</div>
+			{% if cuentas %}
+				<br>
+				<br>
+				<h2>Descripción de las Cuentas de Empleados, Total de {{nCuentas}}</h2>
+				<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Empleado</td>
+						<td id="gridhead">Tipo de Cuenta</td>
+						<td id="gridhead">Monto</td>
+						<td id="gridhead">Fecha de Creacion</td>
+						<td id="gridhead">Observacion</td>
+						<td id="gridhead">Seleccionar</td>
+					</tr>
+					{% for item in cuentas %}
+					<tr>
+						<td>{{ item.empleado|upper}}</td>
+						<td>{{ item.tipoCuenta|upper}}</td>
+						<td>{{ item.monto|escape}}</td>
+						<td>{{ item.fxCreacion|date:"Y-m-d h:i a"}}</td>
+						<td>{{ item.observacion|default:'Ninguna'}}</td>
+						<td> <a href="?q={{item.id}}">Seleccionar</a></td>
+					</tr>
+					{%endfor %}
+				</table>
+				</div>
+				<div class="pagination">
+				    <span class="step-links">
+				        {% if cuentas.has_previous %}
+				            <a href="?pagina={{ cuentas.previous_page_number }}&amp;item={{q}}">anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ cuentas.number }} de {{ cuentas.paginator.num_pages }}.
+				        </span>
+
+				        {% if cuentas.has_next %}
+				            <a href="?pagina={{ cuentas.next_page_number }}&amp;item={{q}}">Siguiente</a>
+				        {% endif %}
+				    </span>
+				</div>
+			{%elif q %}
+				{{mensaje}}
+			{% endif %}
+
+
+			{%if cuenta %}
+					<br>
+					<br>
+					<br>
+					<div class="info">
+						<h2>Estado de Cuenta {{cuenta}}</h2>
+					</div>
+					<div id="twoCol">
+						<table id="twoCol">
+							<tr>
+								<td>Empleado</td>
+								<td>{{cuenta.empleado}}</td>
+							</tr>
+							<tr>
+								<td>Tipo de Cuenta</td>
+								<td>{{cuenta.tipoCuenta}}</td>
+							</tr>
+							<tr>
+								<td>Monto Original</td>
+								<td>{{cuenta.monto}}</td>
+							</tr>
+							<tr>
+								<td>Fecha de Creacion</td>
+								<td>{{cuenta.fxCreacion|date:"Y-m-d h:i a"}}</td>
+							</tr>
+							<tr>
+								<td>Observaciones</td>
+								<td>{{ cuenta.observacion|escape}}</td>
+							</tr>
+						</table>
+
+						{%if historial %}
+							<h3>Historial de la Cuenta</h3>
+							<table id="grid">
+								<tr>
+									<td id="gridhead">Descuento</td>
+									<td id="gridhead">Pago</td>
+									<td id="gridhead">Observacion</td>
+								</tr>
+								{%for item in historial %}
+								<tr>
+									<td>{{item.descuento}}</td>
+									<td>{{item.fxPago|date:"Y-m-d h:i a"}}</td>
+									<td>{{item.observacion|default:'Ninguna'}}</td>
+								</tr>
+								{%endfor %}
+							</table>
+						{%else %}
+							<h3>Sin Abonos Realizados</h3>
+						{%endif %}
+					</div>
+			{%endif %}
+
+			<br><br><br><br>
+	</div>
+	</section>
+</div>
+{% endblock %}

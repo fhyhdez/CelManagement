@@ -1,0 +1,43 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Nueva Factura de Ingreso a Almacen @Compras{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+			<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				
+				<div class="info">
+					<h2>Agregar Nueva Factura</h2>
+					<div>Registro de Factura de Compras a Almacen</div>
+				</div>
+				<ul>
+					<li class="section first">
+						<h3>Datos Generales</h3>
+					</li>
+					<li>
+					<strong>{{ informacion }}</strong>
+					</li>
+					<div id="form2">
+					<table id="form2">
+						{{form}}
+					</table>
+						
+					</div>
+					<li>
+					<strong>{{ informacion }}</strong>
+					</li>
+					<li id="buttons">
+							<input class="submit success" type="submit" name='guardar' value="Guardar "/>
+						 |  
+						<a class="warning button" href="/compras/almacen/registrar_fact/" title="Cancelar operacion y Realizar Nueva Factura: Los datos no se guardaran">Nueva Factura</a>
+						<BR /><span class="req">*.Campos Obligatorios. No dejar vacios.</span>
+					</li>
+				</ul>
+			</form>
+
+			
+			
+	</section>
+</div>
+{% endblock %}

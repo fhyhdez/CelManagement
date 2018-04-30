@@ -1,0 +1,89 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Mensajes: Solicitudes de Nuevos Productos en Sucursales {% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Mensajes a Compras/Almacen</h2>
+				<div>Mensajes de Sucursales pedidos o transferencias.</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar:</h3>
+				</li>
+				<li>
+					<label class="desc">Mensaje: <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query|escape}}" name="q" title="Buscar en mensajes: contenido, sucursal, sin revisar, revisado"; placeholder="Ej.Sin revisar" required />
+					</div>
+					<p class="instruct">Ingrese Sin Revisar | Revisado | Sucursales | contenido del mensaje.</p>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Buscar"/>  |  
+					<a class="success button" href="/compras/compras/pedidos/" title="Nueva busqueda">Nueva Busqueda</a>
+				</li>
+			</ul>
+		</form>
+		{{ info }}
+	</section>
+	<br>
+	<section id="row">
+		<div class="info"><h3>Mensajes</h3></div>
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<td id="gridhead">Folio</td>
+					<td id="gridhead">Sucursal</td>
+					<td id="gridhead">Mensaje</td>
+					<td id="gridhead">Estado</td>
+					<td id="gridhead" title="Accion a Realizar" colspan="2">Revisar<br>Eliminar | Leido</td>
+				</tr>
+				{%if Mensajes %}
+				{% for x in Mensajes %}
+					<tr>
+						<td>{{ x.folio|escape }} </td>
+						<td>{{ x.sucursal.nombre|escape }} </td>
+						<td>{{ x.nuevoProducto|escape }}.</td>
+						<td>{{ x.estado.estado|escape }}</td>
+						<td>
+							<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="elim" type="image" src="/static/img/icons/cross.png" title="Eliminar Mensaje" value="{{ x.id }}" />
+							</form>
+						</td>
+						<td>
+							<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="lei" type="image" src="/static/img/icons/check_box.png" title="Poner Mensaje como leido" value="{{ x.id }}" />
+							</form>
+						</td>
+					</tr>
+				{%endfor %}
+				{%else %}
+				<tr>
+					<td colspan="8">No se Encontraron resultados en esta seccion.</td>
+				</tr>
+				{%endif %}
+			</table>
+		</div>
+		<div class="pagination">
+			<span class="step-links">
+				{% if Mensajes.has_previous %}
+					<a class="success button" href="?pag={{ Mensajes.previous_page_number }}&amp;q={{ query|escape }}">... Anterior</a>
+				{% endif %}
+				<span class="current">
+					Pagina {{ Mensajes.number }} de {{ Mensajes.paginator.num_pages }}.
+				</span>
+
+				{% if Mensajes.has_next %}
+					<a class="success button" href="?pag={{ Mensajes.next_page_number }}&amp;q={{ query|escape }}"> Siguiente ...</a>
+				{% endif %}
+			</span>
+		</div>
+	</section>
+	<br>
+	<br><br>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Asignacion a @Compras{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+				<div class="info">
+					<h2>Asigna Expres al Equipos Para poder Transferirlo</h2>
+					<div>Sucursal a Sucursal</div>
+				</div>
+				<div id="grid">
+					<form action='.'  method='POST'>
+					{% csrf_token %}
+						<table id="grid">
+							<tr>
+								<td id="gridhead">IMEI de Equipo</td>
+								<td id="gridhead">ICC de Equipo</td>
+							</tr>
+							{% for x in '0123456789' %}
+							<tr>
+								<td><input type='texto' name='imei{{x}}' ></td>
+								<td><input type='texto' name='icc{{x}}' ></td>
+							</tr>
+							{%endfor %}
+							<tr>
+								<td colspan="2"><input class="submit success" type="submit" name='asignar' value='Asignar'></td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				{%if error %}
+				{{error}}
+				<br>
+				{%endif %}
+				{%if asignados %}
+					{{asignados}}
+				{%endif %}
+	</section>
+	<div style="height:70px;"></div>
+</div>
+{% endblock %}

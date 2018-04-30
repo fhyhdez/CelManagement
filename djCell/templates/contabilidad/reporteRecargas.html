@@ -1,0 +1,89 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}@Reporte de Depositos Saldo @Contabilidad{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Reporte de Saldos</h2>
+				<div>Consulta de Depositos o Transferencias de Saldo a Sucursales</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Filtrar por:</h3>
+				</li>
+				{% for field in form %}
+						<li>
+							<label class="desc">{{ field.label }}</label>
+							<div>
+								{{ field }}
+							</div>
+							<label> {{field.help_text}} <small><span class="req"> {{field.errors}} </span></small></label>
+						</li>
+				{% endfor %}
+				{% for field in form2 %}
+						<li>
+							<label class="desc">{{ field.label }}</label>
+							<div>
+								{{ field }}
+							</div>
+							<label> {{field.help_text}} <small><span class="req"> {{field.errors}} </span></small></label>
+						</li>
+				{% endfor %}
+				<li><strong>*** La fecha final es opcional ***</strong></li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Consultar"/>  |  
+					<a class="success button" href="." title="Nueva Consulta">Nueva Consulta</a>
+				</li>
+				<li><strong>{{ info }}</strong></li>
+			</ul>
+		</form>
+	</section>
+	{% if query %} 
+	<section id="row">
+		<h3>Resultados para "{{ query|escape }}":</h3>
+		<hr style="clear:both;">
+		<div id="grid">
+			{% if depositos %}
+			<table id="grid">
+				<tr>
+					<td id="gridhead2">Sucursal</td>
+					<td id="gridhead2">Fecha</td>
+					<td id="gridhead2">Observaciones</td>
+					<td id="gridhead2">Transferido</td>
+				</tr>
+				{% for x in depositos %}
+					<tr>
+						<td>{{ x.movimiento.sucursalDestino.nombre|upper }}</td>
+						<td>{{ x.movimiento.fx_movimiento|date:"Y-m-d h:i a" }}</td>
+						<td>{{ x.observaciones|upper }}</td>
+						<td>${{ x.monto|default:'0' }}</td>
+					</tr>
+				{%endfor %}
+			</table>
+			<div class="pagination">
+				    <span class="step-links">
+				        {% if depositos.has_previous %}
+				            <a class="success button" href="?pagina={{ depositos.previous_page_number }}">...Anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ depositos.number }} de {{ depositos.paginator.num_pages }}.
+				        </span>
+
+				        {% if depositos.has_next %}
+				            <a class="success button" href="?pagina={{ depositos.next_page_number }}">Siguiente...</a>
+				        {% endif %}
+				    </span>
+				</div>
+			{% else %}
+			<strong>No Hay resultados</strong>
+			{% endif %}
+		</div>		
+	</section>
+	{% endif %}
+<div style="height:190px;"></div>
+</div>
+{% endblock %}

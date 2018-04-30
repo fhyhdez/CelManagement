@@ -1,0 +1,28 @@
+{% extends 'datos/datos-base.html' %}
+
+{% block titulo %}@Agregacion de Datos iniciales al Sistema{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info"><h3>DAtos Iniciales - Welcome to the jungle!</h3></div>
+			<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div class="info">
+					<h2>Generar Datos iniciales</h2>
+					<div>Espere un momento... iniciando</div>
+
+				</div>
+				<ul>
+					{%if info == "" %}
+					<li id="buttons">
+						<input class="submit success" type="submit" value="Generar"/> 
+					</li>
+					{%else %}
+					<li>{{ info }} </li>
+					{%endif %}
+				</ul>
+		</form>
+	</section>
+</div>
+{% endblock %}

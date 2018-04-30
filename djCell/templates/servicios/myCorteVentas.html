@@ -1,0 +1,268 @@
+{% extends 'servicios/servicios-base.html' %}
+
+{% block titulo %}@Ventas del Dia - @Servicios{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<h3>Arqueo de caja: Cortes Activos</h3>
+		<p>El Arqueo de caja, mostrara el resultado de los cortes que esten activos o abiertos. Para esta seccion, se tienen que verificar los usuarios que tengan permiso para realizar este tipo de operacion.</p>
+		<center>
+			<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+				<input name="arqueo" type="image" src="/static/img/icons/book_key.png" value="Arqueo de Caja" /><br> Arqueo de Caja<br>
+				<input name="cancelaciones" type="image" src="/static/img/icons/cancel.png" value="Ventas Canceladas" /><br> Ventas Canceladas<br>
+				<input name="mopen" type="image" src="/static/img/icons/open_folder.png" value="Cortes sin cerrar" /><br> Cortes Abiertos 
+			</form>
+		</center>
+	</section>
+	{%for corte in Cortes %}
+	<section id="row">
+		<h3><strong>Corte de Venta: </strong>  {{ corte.folioCorteVta }}</h3>
+		<div id="twoCol">
+			<table>
+				<tr>
+					<td>Usuario:</td>
+					<td>{{ corte.cierraCorte.username }}</td>
+				</tr>
+				<tr>
+					<td>Folio:</td>
+					<td>{{ corte.folioCorteVta }}</td>
+				</tr>
+				<tr>
+					<td>Total Ventas:</td>
+					<td>{{ corte.totalVta }}</td>
+				</tr>
+				<tr>
+					<td>Total Gastos:</td>
+					<td>{{ corte.totalGastos }}</td>
+				</tr>
+				<tr>
+					<td>Total Corte:</td>
+					<td>{{ corte.total }}</td>
+				</tr>
+				<tr>
+					<td>Observaciones:</td>
+					<td>{{ corte.observacion|default:'Ninguna' }}</td>
+				</tr>
+				<tr>
+					<td>Estado del Corte:</td>
+					{%if corte.cerrado %}
+					<td>
+						Cerrado
+					<a href="./?print={{ corte.folioCorteVta }}" class="success button" target="_blank" ><img src="{{STATIC_URL}}img/icons/1366452634_print.png">  Imprimir Corte</a>
+					
+					</td>
+					{%else %}<td>Abierto</td>
+					{%endif %}
+				</tr>
+				{%if corte.cerrado %}
+				{%else %}
+				<tr>
+					<td title="Agregar Gastos al Corte">
+						<form class="wufoo" action="/servicios/corte_vta/gastos/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="thisCorte" type="image" src="/static/img/icons/wishlist_add.png" value="{{ corte.folioCorteVta }}" /><br> Agregar<br> Gastos al Corte
+						</form>
+					</td>
+					<td title="Cerrar el Corte">
+						<form class="wufoo" action="/servicios/corte_vta/cerrar_corte/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="thisCorte" type="image" src="/static/img/icons/cash_register_2.png" value="{{ corte.folioCorteVta }}" /><br>Cerrar Corte
+						</form>
+					</td>
+				</tr>
+				{%endif %}
+			</table>
+		</div>
+		<div id="grid2">
+			<table id="grid2">
+				<tr>
+					<td id="gridhead2">Vendedor</td>
+					<td id="gridhead2">Folio</td>
+					<td id="gridhead2">Producto</td>
+					<td id="gridhead2">Descripcion</td>
+					<td id="gridhead2" title="Tipo de Pago">Estado</td>
+					<td id="gridhead2" title="Tipo de Venta">Venta</td>
+					<td id="gridhead2">Sub-Total</td>
+				</tr>
+		{%for vc in vtasCorte %}
+			{%if vc.corteVenta.id == corte.id %}
+				{%if eqVendido or expVendido or accVendido or ficVendido or recVendido %}
+					{%for equipoV in eqVendido %}
+					<tr>
+						{%if vc.venta.folioVenta == equipoV.venta.folioVenta %}
+							<td>{{ vc.venta.usuario.username }} </td>
+							<td>{{ vc.venta.folioVenta }} </td>
+							<td>Equipo {{equipoV.equipo.detallesEquipo.marca.marca}} {{equipoV.equipo.detallesEquipo.modelo}} </td>
+							<td>Imei: {{equipoV.equipo.imei}} Icc: {{equipoV.equipo.icc}}</td>		
+							{%if vc.venta.estado.estado == 'Pagada' %}
+							<td style="border-color:#00733C;background-color: #61D89F;">{{vc.venta.estado.estado}} </td>
+							{%elif vc.venta.estado.estado == 'Proceso' %}
+							<td style="border-color:#4BBA1C;background-color: #CAEB5E;">{{vc.venta.estado.estado}} </td>
+							{%else %}
+							<td style="border-color:#FFAE00;background-color:#FFD373;">Cancelada</td>
+							{%endif %}
+							{%if vc.venta.credito %}
+							<td>Credito</td>
+							{%elif vc.venta.mayoreo %}
+							<td>Mayoreo</td>
+							{%else %}
+							<td>Contado</td>
+							{%endif %}
+							<td>
+								{%if vc.venta.credito and vc.venta.estado.estado != 'Pagada' %}
+								N/A - {{equipoV.precVenta}}{%else %}
+								{{equipoV.precVenta}}{%endif %} </td>
+						{%endif %}
+					</tr>
+					{%endfor %}
+							
+					{%for expV in expVendido %}
+					<tr>
+						{%if vc.venta.folioVenta == expV.venta.folioVenta %}
+							<td>{{ vc.venta.usuario.username }} </td>
+							<td>{{ vc.venta.folioVenta }} </td>
+							<td>Express {{expV.expres.detallesExpres.tipoIcc.tipo}}</td>
+							<td>{{expV.expres.icc}}</td>
+							{%if vc.venta.estado.estado == 'Pagada' %}
+							<td style="border-color:#00733C;background-color: #61D89F;">{{vc.venta.estado.estado}} </td>
+							{%elif vc.venta.estado.estado == 'Proceso' %}
+							<td style="border-color:#4BBA1C;background-color: #CAEB5E;">{{vc.venta.estado.estado}} </td>
+							{%else %}
+							<td style="border-color:#FFAE00;background-color:#FFD373;">Cancelada</td>
+							{%endif %}
+							{%if vc.venta.credito %}
+							<td>Credito</td>
+							{%elif vc.venta.mayoreo %}
+							<td>Mayoreo</td>
+							{%else %}
+							<td>Contado</td>
+							{%endif %}
+							<td>
+								{%if vc.venta.credito and vc.venta.estado.estado != 'Pagada' %}
+								N/A - {{expV.precVenta}}{%else %}
+								{{expV.precVenta}}{%endif %}
+							 </td>
+						{%endif %}
+					</tr>
+					{%endfor %}
+							
+					{%for ficV in ficVendido %}
+					<tr>
+						{%if vc.venta.folioVenta == ficV.venta.folioVenta %}
+							<td>{{ vc.venta.usuario.username }} </td>
+							<td>{{ vc.venta.folioVenta }} </td>
+							<td>Ficha {{ficV.ficha.nominacion.nominacion}}</td>
+							<td>{{ficV.ficha.folio}}</td>
+							{%if vc.venta.estado.estado == 'Pagada' %}
+							<td style="border-color:#00733C;background-color: #61D89F;">{{vc.venta.estado.estado}} </td>
+							{%elif vc.venta.estado.estado == 'Proceso' %}
+							<td style="border-color:#4BBA1C;background-color: #CAEB5E;">{{vc.venta.estado.estado}} </td>
+							{%else %}
+							<td style="border-color:#FFAE00;background-color:#FFD373;">Cancelada</td>
+							{%endif %}
+							{%if vc.venta.credito %}
+							<td>Credito</td>
+							{%elif vc.venta.mayoreo %}
+							<td>Mayoreo</td>
+							{%else %}
+							<td>Contado</td>
+							{%endif %}
+							<td>
+								{%if vc.venta.credito and vc.venta.estado.estado != 'Pagada' %}
+								N/A - {{ficV.precVenta}}{%else %}
+								{{ficV.precVenta}}
+								{%endif %}
+							</td>
+						{%endif %}
+					</tr>
+					{%endfor %}
+						
+					{%for acV in accVendido %}
+					<tr>
+						{%if vc.venta.folioVenta == acV.venta.folioVenta %}
+							<td>{{ vc.venta.usuario.username }} </td>
+							<td>{{ vc.venta.folioVenta }} </td>
+							<td>Acc. {{acV.accesorio.detallesAccesorio.seccion.seccion}} | {{acV.accesorio.codigoBarras}}</td>
+							<td>{{acV.accesorio.detallesAccesorio.marca}} {{acV.accesorio.detallesAccesorio.descripcion}}</td>
+							{%if vc.venta.estado.estado == 'Pagada' %}
+							<td style="border-color:#00733C;background-color: #61D89F;">{{vc.venta.estado.estado}} </td>
+							{%elif vc.venta.estado.estado == 'Proceso' %}
+							<td style="border-color:#4BBA1C;background-color: #CAEB5E;">{{vc.venta.estado.estado}} </td>
+							{%else %}
+							<td style="border-color:#FFAE00;background-color:#FFD373;">Cancelada</td>
+							{%endif %}
+							{%if vc.venta.credito %}
+							<td>Credito</td>
+							{%elif vc.venta.mayoreo %}
+							<td>Mayoreo</td>
+							{%else %}
+							<td>Contado</td>
+							{%endif %}
+							<td>
+								{%if vc.venta.credito and vc.venta.estado.estado != 'Pagada' %}
+								N/A - {{acV.precVenta}} {%else %}
+								{{acV.precVenta}}
+								{%endif %}
+							</td>
+						{%endif %}
+					</tr>
+					{%endfor %}
+							
+					{%for recV in recVendido %}
+					<tr>
+						{%if vc.venta.folioVenta == recV.venta.folioVenta %}
+							<td>{{ vc.venta.usuario.username }} </td>
+							<td>{{ vc.venta.folioVenta }} </td>
+							<td>Recarga {{recV.recarga.montos.monto}}</td>
+							<td>{{recV.recarga.folio}}</td>
+							{%if vc.venta.estado.estado == 'Pagada' %}
+							<td style="border-color:#00733C;background-color: #61D89F;">{{vc.venta.estado.estado}} </td>
+							{%elif vc.venta.estado.estado == 'Proceso' %}
+							<td style="border-color:#4BBA1C;background-color: #CAEB5E;">{{vc.venta.estado.estado}} </td>
+							{%else %}
+							<td style="border-color:#FFAE00;background-color:#FFD373;">Cancelada</td>
+							{%endif %}
+							{%if vc.venta.credito %}
+							<td>Credito</td>
+							{%elif vc.venta.mayoreo %}
+							<td>Mayoreo</td>
+							{%else %}
+							<td>Contado</td>
+							{%endif %}
+							<td>
+								{%if vc.venta.credito and vc.venta.estado.estado != 'Pagada' %}
+								N/A - {{recV.precVenta}}{%else %} 
+								{{ recV.precVenta}}
+								{%endif %}
+							</td>
+						{%endif %}
+					</tr>
+					{%endfor %}
+
+					{%for an in anticipo %}
+					<tr>
+						{%if vc.venta.folioVenta == an.folioVenta.folioVenta %}
+							<td>{{ vc.venta.usuario.username }} </td>
+							<td>{{ vc.venta.folioVenta }} </td>
+							<td>Anticipo</td>
+							<td>{{ an.tipoAnticipo }}<br>{{an.folioVenta.folioVenta}}</td>
+							<td>N/A</td>
+							<td>Anticipo</td>
+							<td>{{an.monto}}</td>
+						{%endif %}
+					</tr>
+					{%endfor %}
+
+				{%else %}
+					<tr>
+						<td colspan="3">NO HAY PRODUCTOS AGREGADOS</td>
+					</tr>
+				{%endif %}
+			{%endif %}
+		{%endfor %}
+			</table>
+		</div>
+	</section>
+	{%endfor %}
+	<br><br>
+</div>
+{% endblock %}

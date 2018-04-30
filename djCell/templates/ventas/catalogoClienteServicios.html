@@ -1,0 +1,102 @@
+{% extends 'ventas/ventas-base.html' %}
+
+{% block titulo %}@Catalogo Clientes de Servicios Tecnicos - @Ventas{% endblock %}
+
+{% block contenido %}
+<div id="content">
+		<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Catalogo de Clientes - Servicio Tecnico</h2>
+				<div>Clientes registrados en sucursales</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar Cliente lalalala</h3>
+				</li>
+				<li>
+					<label class="desc">Filtrar por : (Folio / Nombre / direccion / sucursal) <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query|escape}}" name="q" title="Ingrese parcial o totalmente el nombre, direccion o sucursal del cliente"; placeholder="Ej. carlos" required />
+					</div>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Consultar"/>  |  
+					<a class="success button" href="/ventas/servicios/clientes/catalogo/" title="Nueva busqueda">Nueva Búsqueda</a>
+				</li>
+			</ul>
+		</form>
+		{{ info }}
+	</section>
+	
+		{% if query %}
+		<section id="row">
+			<h3>Resultados para "{{ query|escape }}":</h3>
+			{% if results %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Folio</td>
+						<td id="gridhead">Nombre</td>
+						<td id="gridhead">Direccion</td>
+						<td id="gridhead">Ingreso</td>
+						<td id="gridhead">Editar</td>
+					</tr>
+					{% for cli in results %}
+					<tr>
+						{% if cli.tipoCliente == 'Servicio' %}
+						<td>{{ cli.folio }} </td>
+						<td>{{ cli.nombre }} </td>
+						<td>{{ cli.direccion }}. {{ cli.colonia.colonia }}, {{ cli.ciudad.ciudad }}, {{ cli.ciudad.estado }}.  </td>
+						<td>{{ cli.fxIngreso|date:"Y-m-d h:i a" }}</td>
+						<td title="Actualizar datos"> 
+							<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="updC" type="image" src="/static/img/icons/cards_bind_address.png" title="Editar" value="{{ cli.id }}" />
+							</form>
+						</td>
+						{%endif %}
+					</tr>
+					{%endfor %}
+				</table>
+			</div>
+			{% else %}
+				<p>El Cliente no se encuentra registrado, verifique sus datos o agregue uno nuevo<br>
+				<a class="success button" href="/ventas/servicios/clientes/nuevo/" title="Agregar Nuevo">Nuevo Cliente</a> </p>
+			{% endif %}
+		</section>
+		{% endif %}
+	{% if mostrar %}
+	<section id="row">
+		<div class="info"><h3>Clientes Registrados</h3></div>
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<td id="gridhead">Sucursal</td>
+					<td id="gridhead">Nombre</td>
+					<td id="gridhead">Direccion</td>
+					<td id="gridhead">Ingreso</td>
+					<td id="gridhead">Editar</td>
+				</tr>
+				{% for cli in clientes %}
+					<tr>
+						{% if cli.tipoCliente == 'Servicio' %}
+						<td>{{ cli.sucursal.nombre }} </td>
+						<td>{{ cli.nombre }} </td>
+						<td>{{ cli.direccion }}. {{ cli.colonia.colonia }}, {{ cli.ciudad.ciudad }}, {{ cli.ciudad.estado }}.  </td>
+						<td>{{ cli.fxIngreso|date:"Y-m-d h:i a" }}</td>
+						<td title="Actualizar datos"> 
+							<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="updC" type="image" src="/static/img/icons/cards_bind_address.png" title="Editar" value="{{ cli.id }}" />
+							</form>
+						</td>
+						{%endif %}
+					</tr>
+				{%endfor %}
+			</table>
+		</div>
+	</section>
+	{%endif %}
+	<br><br>
+</div>
+{% endblock %}

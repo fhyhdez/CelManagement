@@ -1,0 +1,16 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}--Contabilidad{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info">
+			<h2>Sub Distribuidores</h2>
+		</div>
+		{{buscador|safe}}
+		{{subDis|safe}}
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends 'ventas/ventas-base.html' %}
+
+{% block titulo %}@Ventas realizadas del Dia - @Ventas{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	{% if query %}
+		<section id="row">
+			<h3>Ventas realizadas en Sucursal "{{ Sucursal|escape }}" fecha: {{fecha|escape}} </h3>
+			{% if results %}
+			<div id="grid">
+				<table id="grid">
+							<tr>
+								<td id="gridhead">Producto</td>
+								<td id="gridhead">Descripcion</td>
+								<td id="gridhead">Importe</td>
+							</tr>
+						
+							{% for vtas in vtaNueva %}
+							<tr>
+								{%for equipoV in eqVendido %}
+									{%if vtas.folioVenta == equipoV.venta.folioVenta %}
+										<td>{{equipoV.equipo.detallesEquipo.marca.marca}} {{equipoV.equipo.detallesEquipo.modelo}} </td>
+										<td>Imei: {{equipoV.equipo.imei}} Icc: {{equipoV.equipo.icc}}</td>
+										<td>{{equipoV.precVenta}} </td>
+									{%endif %}
+								{%endfor %}
+								{%for expV in expVendido %}
+									{%if vtas.folioVenta == expV.venta.folioVenta %}
+										<td>{{expV.expres.detallesExpres.tipoIcc.tipo}}</td>
+										<td>{{expV.expres.icc}}</td>
+										<td>{{expV.precVenta}} </td>
+									{%endif %}
+								{%endfor %}
+								{%for ficV in ficVendido %}
+									{%if vtas.folioVenta == ficV.venta.folioVenta %}
+										<td>{{ficV.ficha.nominacion.nominacion}}</td>
+										<td>{{ficV.ficha.folio}}</td>
+										<td>{{ficV.precVenta}} </td>
+									{%endif %}
+								{%endfor %}
+								{%for acV in accVendido %}
+									{%if vtas.folioVenta == acV.venta.folioVenta %}
+										<td>{{acV.accesorio.detallesAccesorio.seccion.seccion}}</td>
+										<td> | {{acV.accesorio.codigoBarras}}| {{acV.accesorio.detallesAccesorio.marca}} {{acV.accesorio.detallesAccesorio.descripcion}}</td>
+										<td>{{acV.precVenta}} </td>
+									{%endif %}
+								{%endfor %}
+								{%for recV in recVendido %}
+									{%if vtas.folioVenta == recV.venta.folioVenta %}
+										<td>Recarga {{recV.recarga.montos.monto}}</td>
+										<td>{{recV.recarga.folio}}</td>
+										<td>{{recV.precVenta}} </td>
+									{%endif %}
+								{%endfor %}
+								{%for planV in planVendido %}
+									{%if vtas.folioVenta == planV.venta.folioVenta %}
+										<td>Plan {{planV.plan.plan}}</td>
+										<td>{{planV.observacion}}</td>
+										<td>{{planV.precVenta}} </td>
+									{%endif %}
+								{%endfor %}
+								{%for renV in rentaVendido %}
+									{%if vtas.folioVenta == recV.venta.folioVenta %}
+										<td>Renta: {{recV.recarga.montos.monto}}</td>
+										<td>{{recV.recarga.folio}}</td>
+										<td>{{recV.precVenta}} </td>
+									{%endif %}
+								{%endfor %}
+								{%for antV in anticipoVendido %}
+									{%if vtas.folioVenta == antV.folioVenta.folioVenta %}
+										<td>Anticipo<br>{{antV.folioVenta.folioVenta}} </td>
+										<td>{{antV.tipoAnticipo }}</td>
+										<td>{{antV.monto}} </td>
+									{%endif %}
+								{%endfor %}
+
+							</tr>
+							{%endfor %}
+						</table>
+			</div>
+			{% else %}
+				<p>No hay productos Agregados</p>
+			{% endif %}
+		</section>
+		{% endif %}
+</div>
+{% endblock %}

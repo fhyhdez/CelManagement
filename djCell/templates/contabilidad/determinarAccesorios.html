@@ -1,0 +1,72 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}--Contabilidad{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info">
+			<h2>{{titulo}}</h2>
+		</div>
+			<strong>{{ mensaje }}</strong>
+			{%if not inventarios %}
+			{{ buscador|safe }}
+			{%endif %}
+
+			{%if listas %}
+				<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<input  type="hidden" name='filtro' value="{{q}}"/> 
+					<div id='grid'>
+						<table id='grid'>
+							<tr>
+								<td id="gridhead2">Accesorio</td>
+								<td id="gridhead2">Verificar</td>
+								<td id="gridhead2">Comentario</td>
+							</tr>
+							{%for item in listas %}
+							<tr>
+								<td>{{item.accesorio|title}}</td>
+								<td><input  type="checkbox" name='CBox{{item.id}}'/></td>
+								<td><textarea rows="2" cols="20" name="TArea{{item.id}}"></textarea></td>
+							</tr>
+							{%endfor %}
+						</table>
+					</div>
+					<div style="text-align:center;padding-top:0.5em;">
+							<input class="submit success" type="submit" name='revisar' value="Verificar los seleccionados"/> 
+						</div>
+					
+				</form>
+			{%endif %}
+			
+			{%if inventarios %}
+				<br>
+					<div id='form2'>
+					<table id='form2'>
+					<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+					<input type="hidden" name="idInv" value="{{inventario.id}}">
+					{% csrf_token %}
+					<tr>
+						<td>Seleccion</td>
+						<td>Auditoria</td>
+					{% for inv in inventarios %}
+					</tr>
+						<td><input type="radio" name="audi_id" value={{inv.inventario.id}}></td>
+						<td>{{inv.inventario}}</td>
+					</tr>
+					{% endfor %}
+					
+					<tr>
+						<td></td>
+						<td><input class="submit success" type="submit" name='seleccion' value="Seleccionar"/> </td>
+					</tr>
+					
+					</form>
+					</table>
+					</div>
+			{%endif %}
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

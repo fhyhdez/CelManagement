@@ -1,0 +1,82 @@
+{% extends 'ventas/ventas-base.html' %}
+{% block titulo %}@Comisiones de Empleado{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info">
+			<h3>Datos del Empleado</h3>
+		</div>
+		<div id="twoCol">
+			<table id="twoCol">
+						<tr>
+							<td >CURP</td>
+							<td >{{empleado.curp}}</td>
+						</tr>
+						<tr>
+							<td >Nombre</td>
+							<td >{{empleado.nombre}} {{empleado.aPaterno}} {{empleado.aMaterno}}</td>
+						</tr>
+						<tr>
+							<td >Direccion</td>
+							<td >{{ empleado.direccion|escape}}, {{ empleado.colonia|escape}}, {{ empleado.ciudad|escape}}, {{ empleado.estado|escape}}</td>
+						</tr>
+						<tr>
+							<td >Telefono</td>
+							<td >{{empleado.telefono}}</td>
+						</tr>
+						<tr>
+							<td >Fecha de Nacimiento</td>
+							<td >{{empleado.fxNacimiento|date}}</td>
+						</tr>
+						<tr>
+							<td >Fecha de Ingreso</td>
+							<td >{{empleado.fxIngreso|date:"Y-m-d h:i a"}}</td>
+						</tr>
+						<tr>
+							<td >Puesto</td>
+							<td >{{empleado.puesto}}</td>
+						</tr>
+						<tr>
+							<td >Area</td>
+							<td >{{empleado.area}}</td>
+						</tr>
+			</table>
+		</div>
+	</section>
+	{%if comisiones %}
+	<section id="row">
+		<div class="info">
+			<h3>Las ultimas comisiones Ganadas</h3>
+		</div>
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<th>Equipos Kit</th>
+					<th >Equipos Tip</th>
+					<th >Planes</th>
+					<th >Servicios</th>
+					<th >Mes</th>
+					<th >Pagado</th>
+				</tr>
+				{%for x in comisiones %}
+				<tr>
+					<td>{{x.0 }} || $ {{x.4.comEquipoKit}}</td>
+					<td>{{x.1 }} || $ {{x.4.comEquipoTip}}</td>
+					<td>{{x.2 }} || $ {{x.4.comPlanes}}</td>
+					<td>{{x.3 }} || $ {{x.4.comServicios}}</td>
+					<td>{{x.4.mes}}</td>
+					<td>{%if x.4.pagado %}{{x.4.fxPago|date:"Y-m-d h:i a"}}{%else %}<img src="{{STATIC_URL}}img/icons/exclamation.png" />{%endif %}</td>
+				</tr>
+				{%endfor %}
+			</table>
+		</div>
+	</section>
+	{%else %}
+	<section id="row">
+		<h3>No hay Comisiones agregadas en este momento.</h3>
+	</section>
+	{%endif %}
+	<br><br><br>
+</div>
+{% endblock %}

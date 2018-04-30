@@ -1,0 +1,107 @@
+{% extends 'planes/planes-base.html' %}
+{% block miscript %} 
+<script type="text/javascript">
+ function SINO(cual) {
+   var elElemento=document.getElementById(cual);
+   if(elElemento.style.display == 'block') {
+      elElemento.style.display = 'none';
+   } else {
+      elElemento.style.display = 'block';
+   }
+}  
+ </script>
+{% endblock %}
+{% block titulo %}@Reporte de Activaciones @Planes{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Reporte de Servicios</h2>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Filtrar por:</h3>
+				</li>
+				{% for field in form %}
+						<li>
+							<label class="desc">{{ field.label }}</label>
+							<div>
+								{{ field }}
+							</div>
+							<label> {{field.help_text}} <small><span class="req"> {{field.errors}} </span></small></label>
+						</li>
+				{% endfor %}
+				<div style="clear:both;"></div>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Consultar"/>  |  
+					<a class="success button" href="." title="Nueva Consulta">Nueva Consulta</a>
+				</li>
+				<li><strong>{{ info }}</strong></li>
+			</ul>
+		</form>
+		
+	</section>
+	<section id="row">
+			<h3>Solicitudes de Servicios Ingresadas:</h3>
+			{% if solicitudes %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<th>FECHA</th>
+						<th>SUCURSAL</th>
+						<th>SOLICITANTE</th>
+						<th>SERVICIO QUE SOLICITA</th>
+						<th>FECHA<BR>DE ATENCION</th>
+						<th>ATENDIDO</th>
+					</tr>
+					
+					{% for x in solicitudes %}
+						<tr>
+							<td>{{ x.fxSolicitud|date:"Y-m-d h:i a"}} </td>
+							<td>{{ x.sucursal.nombre|title }}</td>
+							<td>{{ x.solicitante.nombre|title }} {{ x.solicitante.aPat|title }} {{ x.solicitante.aMat|title}}</td>
+							<td>
+								<a href="javascript:void(0);" onclick="SINO('div{{ x.id }}')">Detalles</a>
+								<div id="div{{ x.id }}" style="display:none;">
+								<div style="font-size:12px;width:150px;padding:3%;">{{x.servicioRequiere|title}}</div>
+								</div>
+							</td>
+							<td title="Ultima fecha de atencion">{{ x.fxAtencion|date:"Y-m-d h:i a" }}</td>
+							<td title="El Servicio ya fue Atendido??">
+								{%if x.atendido %}
+								<strong>Atendido</strong><img src="/static/img/icons/accept.png" />
+								{%else %}
+								<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+									<img src="/static/img/icons/alarm_bell.png" /><br>
+									<input name="upd" type="image" src="/static/img/icons/zoom_refresh.png" title="Poner como atendido" value="{{ x.id }}" />
+								</form>
+								{%endif %}
+							</td>
+						</tr>
+					{%endfor %}
+
+				</table>
+			</div>
+			<div class="pagination">
+				<span class="step-links">
+				        {% if solicitudes.has_previous %}
+				            <a class="success button" class="success button" href="?pagina={{ solicitudes.previous_page_number }}&amp;q={{ query }}">...Anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ solicitudes.number }} de {{ solicitudes.paginator.num_pages }}.
+				        </span>
+
+				        {% if solicitudes.has_next %}
+				            <a class="success button" class="success button" href="?pagina={{ solicitudes.next_page_number }}&amp;q={{query}}">Siguiente...</a>
+				        {% endif %}
+				    </span>
+			</div>
+			{% else %}
+				<p>El cliente no se encuentra o no pertenece a esta seccion. <br> verifique sus datos</p>
+			{% endif %}
+	</section>
+</div>
+{% endblock %}

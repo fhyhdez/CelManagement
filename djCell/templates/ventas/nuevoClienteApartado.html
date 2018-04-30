@@ -1,0 +1,40 @@
+{% extends 'ventas/ventas-base.html' %}
+
+{% block titulo %}@Apartados Clientes - Nuevo - @Ventas{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div class="info">
+					<h2>Agregar Nuevo Cliente - Apartados</h2>
+					<div>Registro de Clientes</div>
+				</div>
+				<ul>
+					<li class="section first">
+						<h3>Datos Generales</h3>
+					</li>
+					<li><strong>{{ info }}</strong></li>
+					{% for field in form %}
+						<li>
+							<label class="desc">{{field.label}}</label> 
+							<div>
+								{{field}}
+							</div>
+							<label><small> {{field.help_text}} </small><span class="req"> {{field.errors}} </span></label>
+						</li>
+					{% endfor %}
+					<li id="buttons">
+						<input class="submit success" type="submit" value="Guardar"/> |  
+						<a class="success button" href="/ventas/ventas/apartados/clientes/nuevo/" title="Agregar Nuevo">Nuevo Cliente</a> 
+						<BR /><span class="req">*.Campos Obligatorios. No dejar vacios.</span>
+					</li>
+				</ul>
+			</form>
+			
+	</section>
+	<br>
+	<br>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'home/base.html' %}
+
+{% block titulo %}Error de Acceso{% endblock %}
+
+{% block contenido %}
+	<div id="stylized" class="myform">
+		<form id="formulario" method='post' name="form" method="post" action="">{% csrf_token %}
+			<img src="{{STATIC_URL}}img/logoAccell2.png" id="imgLogo"/>
+
+			<h1>Error de Acceso!</h1>
+			<p>El usuario y la contraseña no coinciden o no existen. </p>
+			
+			<div class="spacer"></div>
+			<a href="/cerrar/">Regresar</a>
+		</form>
+	</div>
+{% endblock %}

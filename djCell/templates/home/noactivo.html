@@ -1,0 +1,18 @@
+{% extends 'home/base.html' %}
+
+{% block titulo %}Usuario Desactivado{% endblock %}
+
+{% block contenido %}
+	<div id="stylized" class="myform">
+		<form id="formulario" method='post' name="form" method="post" action="">{% csrf_token %}
+			<img src="{{STATIC_URL}}img/logoAccell2.png" id="imgLogo"/>
+			
+			<h1>Usuario Desactivado!</h1>
+			<p>Al parecer la cuenta con la que trata de entrar ha sido desactivada. </p>
+			<p>Consulte a su Administrador. </p>
+
+			<div class="spacer"></div>
+			<a href="/">Regresar</a>
+		</form>
+	</div>
+{% endblock %}

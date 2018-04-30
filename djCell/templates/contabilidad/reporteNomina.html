@@ -1,0 +1,150 @@
+{% extends 'contabilidad/conta-base2.html' %}
+ctx={'nivel':nivel, 'nominaE':nominaE, 'nominaEmls':nominaEmls, 'nominas':nominas, 'nomina':nomina, 'cuentas':cuentas, 'mensaje':mensaje, 'buscador':buscador}
+{% block titulo %}--Contabilidad{% endblock %}
+
+{% block miscript %}
+<script language="Javascript">
+function seleccionar(obj){ 
+    if(obj.nodeName.toLowerCase()=='textarea' || (obj.nodeName.toLowerCase()=='input' && obj.type=='text')){ 
+        obj.select(); 
+        return; 
+    } 
+    if (window.getSelection) {  
+        var sel = window.getSelection(); 
+        var range = document.createRange(); 
+        range.selectNodeContents(obj); 
+        sel.removeAllRanges(); 
+        sel.addRange(range); 
+        range.execCommand("Copy");
+    }  
+    else if (document.selection) {  
+        document.selection.empty(); 
+        var range = document.body.createTextRange(); 
+        range.moveToElementText(obj); 
+        range.select();
+        range.execCommand("Copy");
+    } 
+} 
+</script>
+{% endblock %}
+
+{% block contenido %}
+<div id="content2">
+	<section id="row">
+	<div class="info">
+		<h2>Reporte de las Nomina</h2>
+		<div>{{descr}}</div>
+		{{buscador|safe}}
+		<hr>
+		{{mensaje}}
+<hr>
+
+		{%if nomina %}
+		<h2>Nomina {{nomina}}</h2>
+		<p>{{nomina.descripcion}}</p>
+		{%if nominaEmls %}	
+			<div OnClick="seleccionar(this)">		
+			{{nominaEmls|safe}}
+			</div>
+		{%endif %}
+
+			{%if nominaE %}
+
+				<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<input type="hidden" name="idN" value="{{nominaE.id}}">
+				<div id="twoCol">
+					<table id="twoCol">
+						<tr>
+							<td>Folio</td>
+							<td>{{nominaE.nomina.folio}}</td>
+						</tr>
+						<tr>
+							<td>Empleado</td>
+							<td>{{nominaE.empleado}}</td>
+						</tr>
+						<tr>
+							<td>Salario x Dia</td>
+							<td>{{nominaE.empleado.salarioxDia}}</td>
+						</tr>
+						<tr>
+							<td>Dias Trabajados</td>
+							<td>{{nominaE.diasTrab}}</td>
+						</tr>
+						<tr>
+							<td>Bono de Puntualidad</td>
+							<td>{{nominaE.bonoPuntualidad}}</td>
+						</tr>
+						<tr>
+							<td>Vales de despensa</td>
+							<td>{{nominaE.bonoVales}}</td>
+						</tr>
+						<tr>
+							<td>Bono de Productividad</td>
+							<td>{{nominaE.bonoProductividad}}</td>
+						</tr>
+						<tr>
+							<td>Descuento</td>
+							<td>{{nominaE.descuento}}</td>
+						</tr>
+						<tr>
+							<td>Observacion</td>
+							<td>{{nominaE.observacion}}</td>
+						</tr>
+						<tr>
+							<td>Total</td>
+							<td>$ {{nominaE.total}}</td>
+						</tr>
+						{%if not nominaE.pagado %}
+						<tr>
+							<td>Fecha de Creacion</td>
+							<td>{{nominaE.fxCreacion|date:"Y-m-d h:i a"}}</td>
+						</tr>
+						{%else %}
+						<tr>
+							<td>Fecha de Pago</td>
+							<td>{{nominaE.fxPago|date:"Y-m-d h:i a"}}</td>
+						</tr>
+						{%endif %}
+					</table>
+				</div>
+				{%if nominaE.pagado %}
+					<div class="info">
+						<h3>Esta Nomina ya fue Pagada</h3>
+					</div>
+				{%else %}
+					{%if cuentas %}
+						<br>
+						<div class="info">
+							<h3>Seleccione las Cuentas a las cuales Desea abonar el descuento</h3>
+						</div>
+						<div id="twoCol">
+							<table id="twoCol">
+								{%for cuen in cuentas %}
+									<tr>
+										<td>{{cuen}}</td>
+										<td><input type='checkbox' name='{{cuen.folio}}'></td>
+									</tr>
+								{%endfor %}
+							</table>
+						</div>
+					{%endif %}
+				<ul>
+					<li id="buttons">
+						<input class="submit success" type="submit" name='pagar' value="Marcar como Pagado"/> 
+					</li>
+				</ul>
+				{%endif %}
+				</form>
+			{%endif %}
+
+		{%endif %}
+<hr>
+		{%if nominas %}
+			{{nominas|safe}}
+		{%endif %}
+			<br><br><br><br>
+	</div>
+	</section>
+</div>
+{% endblock %}

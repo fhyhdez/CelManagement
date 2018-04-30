@@ -1,0 +1,94 @@
+{% extends 'admingral/admin-base2.html' %}
+
+{% block titulo %}@Metas @Administracion{% endblock %}
+
+{% block contenido %}
+<div id="content2">
+		<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Empleados Activos</h2>
+				<div>Encargados y Vendedores de Sucursales</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar Empleado</h3>
+				</li>
+				<li>
+					<label class="desc">Filtrar por : (Nombre / Apellidos / Curp) <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query|escape}}" name="q" title="Ingrese parcial o totalmente el nombre, apellidos, curp del empleado"; placeholder="Ej. carlos" required />
+					</div>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Consultar"/>  |  
+					<a class="success button" href="." title="Nueva busqueda">Nueva Busqueda</a>
+				</li>
+				<li><strong>{{ info }}</strong></li>
+			</ul>
+		</form>
+		
+	</section>
+		<section id="row">
+			<h3>{{ query|escape }}</h3>
+			{% if empleados %}
+			
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Curp</td>
+						<td id="gridhead">Empleado</td>
+						<td id="gridhead" colspan="3">Metas</td>
+						<td id="gridhead">Aceptar</td>
+					</tr>
+					{% for x in empleados %}
+				
+					<tr>
+						<td>{{ x.0.curp|upper }} </td>
+						<td>{{ x.0.nombre|title }} {{ x.0.aPaterno|title }} {{ x.0.aMaterno|title }}</td>
+					<form action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+						{% for field in x.1 %}
+						<td>
+							<label class="desc">{{field.label}}</label> 
+							<div>
+								{{field}}
+							</div>
+							<label> {{field.help_text}} <small><span class="req"> {{field.errors}} </span></small></label>
+						</td>
+						{% endfor %}
+						<td>
+							<input class="submit success" type="submit" value="Guardar Cambios"/>
+							<input type="hidden" name="empSelec" value="{{x.0.id}}"/>
+							<input type="hidden" name="indice" value="{{ x.2 }}"/>
+						</td>
+					</form>
+					</tr>
+				
+					{%endfor %}
+				</table>
+			</div>
+		
+			<div class="pagination">
+				    <span class="step-links">
+				        {% if empleados.has_previous %}
+				            <a class="success button" href="?pagina={{ empleados.previous_page_number }}&amp;q={{ query }}">...Anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ empleados.number }} de {{ empleados.paginator.num_pages }}.
+				        </span>
+
+				        {% if empleados.has_next %}
+				            <a class="success button" href="?pagina={{ empleados.next_page_number }}&amp;q={{query}}">Siguiente...</a>
+				        {% endif %}
+				    </span>
+				</div>
+
+			{% else %}
+				<p>No hay resultados por el momento</p>
+			{% endif %}
+		</section>
+	<br><br>
+</div>
+{% endblock %}

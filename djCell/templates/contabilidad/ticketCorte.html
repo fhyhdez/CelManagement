@@ -1,0 +1,246 @@
+{% extends 'admingral/base-ticket.html' %}
+{% block miscript %}
+<style type="text/css">
+a{
+	text-decoration: none;
+}
+.button{
+	/* estilos tipograficos */
+	
+	color: #fff;
+	font-family: sans-serif;
+	font-size: 1em;
+	font-weight: bold;
+	text-transform: uppercase;
+	
+	/* padding, margin y borde */
+	
+    padding: 1em 2em;
+	margin-right: 1.5em;
+	cursor: pointer;
+	border: 0;
+    border-radius: 2em;
+
+	/* propiedades para la animacion  */
+	
+	transition: all 0.20s linear;
+	-webkit-transition: all 0.20s linear;
+	-moz-transition: all 0.20s linear;
+	position: relative;
+	bottom: 0;
+}
+.azul{
+	background: #04a8bf;
+	box-shadow: 0px 5px 0 #0491a5;
+}
+.button:active{
+	bottom: -5px;
+}
+.azul:active{
+	box-shadow:0 0 0 #0491a5, inset 0 0 5px rgba(0, 0, 0, 0.4);			
+}
+.rojo{
+	background: #bf1b04;
+	box-shadow: 0px 5px 0 #8F1502;			
+}
+.rojo:active{
+	box-shadow:0 0 0 #9a1604, inset 0 0 5px rgba(0, 0, 0, 0.4);			
+}
+table.simple {
+	font-family: Arial,Tahoma,sans-serif;
+	font-size: 0.580em;
+	border-width: 0px;
+	border-spacing: 1px;
+	border-style: hidden;
+	border-collapse: collapse;
+	background-color: white;
+	width: 250px;
+}
+table.simple th {
+	border-width: thin;
+	padding: 3px 12px;
+	border-style: dotted;
+	border-color: gray;
+	background-color: white;
+}
+table.simple td {
+	border-width: thin;
+	padding: 3px 12px;
+	border-style: dotted;
+	border-color: gray;
+	background-color: white;
+}
+table.simple2 {
+	font-family: Arial,Tahoma,sans-serif;
+	font-size: 0.580em;
+	border-width: 0px;
+	border-spacing: 1px;
+	border-style: dotted hidden;
+	border-collapse: collapse;
+	background-color: white;
+	width:250px;
+}
+table.simple2 th {
+	border-width: thin;
+	padding: 3px 12px;
+	border-style: dashed dashed;
+	background-color: white;
+}
+table.simple2 td {
+	border-width: thin;
+	padding: 3px 12px;
+	border-style: dashed;
+	background-color: white;
+	width: 90%;
+}
+table.simple2 td:first-child{
+	text-align: center;
+	width:4%;
+	border-style: dashed;
+	border-width: thin;
+}
+table.simple2 td:last-child {
+	text-align: center;
+	width: 4%;
+	border-style: dashed;
+	border-width: thin;
+}
+hr.comon{
+	border-style: dashed;
+	border: 1px;
+	width: 200px;
+	vertical-align: left;
+}
+</style>
+<style type="text/css" media="print">
+@media print {
+	.button {display:none;}
+	.azul {display:none;}
+	.rojo {display:none;}
+}
+</style>
+{% endblock %}
+{% block titulo %}@Ticket{% endblock %}
+
+{% block contenido %}
+{%if info %}
+<strong>{{ info }} </strong>
+{%else %}
+<div id="ticket"> 
+	{%for x in aio %}
+	<table class="simple">
+		<tr>
+			<th colspan="2">Grupo Accell</th>
+		</tr>
+		<tr>
+			<th>Usuario:</th><td>{{ x.0.cierraCorte.username|upper }}</td>
+		</tr>
+		<tr>
+			<th>Folio:</th><td>{{ x.0.folioCorteVta }}</td>
+		</tr>
+		<tr>
+			<th>Total Ventas:</th><td>{{ x.0.totalVta }}</td>
+		</tr>
+		<tr>
+			<th>Total Gastos:</th><td>{{ x.0.totalGastos }}</td>
+		</tr>
+		<tr>
+			<th>Total Corte:</th><td>{{ x.0.total }}</td>
+		</tr>
+		<tr>
+			<th>Observaciones:</th><td>{{ x.0.observacion|default:'Ninguna' }}</td>
+		</tr>
+	</table>
+	<hr class="comon">
+	<table class="simple2">
+		<tr>
+			<th>Producto</th>
+			<th>Descripcion</th>
+			<th>Importe</th>
+		</tr>
+		{%for equipoV in x.1 %}
+		<tr>
+			<td>Equipo </td>
+			<td>{{equipoV.equipo.detallesEquipo.marca.marca|title}} {{equipoV.equipo.detallesEquipo.modelo|title}} Imei: {{equipoV.equipo.imei}} Icc: {{equipoV.equipo.icc}}</td>										
+			<td>{%if equipoV.venta.credito and equipoV.venta.estado.estado != 'Pagada' %} N/A - {%endif %} {{equipoV.precVenta}} </td>
+		</tr>
+		{%endfor %}
+		{%for expV in x.2 %}
+		<tr>
+			<td>Express </td>
+			<td>{{expV.expres.detallesExpres.tipoIcc.tipo}} - {{expV.expres.icc}}</td>
+			<td>{%if expV.venta.credito and expV.venta.estado.estado != 'Pagada' %} N/A - {%endif %} {{expV.precVenta}} </td>
+		</tr>
+		{%endfor %}
+		{%for acV in x.3 %}
+		<tr>
+			<td>Acc. </td>
+			<td>{{acV.accesorio.detallesAccesorio.seccion.seccion}} | {{acV.accesorio.codigoBarras}} - {{acV.accesorio.detallesAccesorio.marca}} {{acV.accesorio.detallesAccesorio.descripcion}}</td>
+			<td>{%if acV.venta.credito and acV.venta.estado.estado != 'Pagada' %} N/A - {%endif %} {{acV.precVenta}} </td>
+		</tr>
+		{%endfor %}
+		{%for ficV in x.4 %}
+		<tr>
+			<td>Ficha </td>
+			<td>{{ficV.ficha.nominacion.nominacion}} - {{ficV.ficha.folio}}</td>
+			<td>{%if ficV.venta.credito and ficV.venta.estado.estado != 'Pagada' %} N/A - {%endif %} {{ficV.precVenta}} </td>
+		</tr>
+		{%endfor %}
+		{%for recV in x.5 %}
+		<tr>
+			<td>Recarga </td>
+			<td>{{recV.recarga.montos.monto}} - {{recV.recarga.folio}} <br> Observaciones:<br>{{ recV.observaciones|default:'Ninguna'}}</td>
+			<td>{%if recV.venta.credito and recV.venta.estado.estado != 'Pagada' %} N/A - {%endif %} {{recV.precVenta}} </td>
+		</tr>
+		{%endfor %}
+		{%for planV in x.6 %}
+		<tr>
+			<td>Plan </td>
+			<td>{{planV.plan.plan}} - {{planV.observacion|default:'Ninguna'}}</td>
+			<td>{%if planV.venta.credito and planV.venta.estado.estado != 'Pagada' %} N/A - {%endif %} {{planV.precVenta}} </td>
+		</tr>
+		{%endfor %}
+		{%for rV in x.7 %}
+		<tr>
+			<td>Renta</td>
+			<td>Cuenta: {{rV.numeroReferencia}} <br> Observaciones:<br>{{ rV.observacion|default:'Ninguna'}} </td>
+			<td>{%if rV.venta.credito and rV.venta.estado.estado != 'Pagada' %} N/A - {%endif %} {{rV.abono}} </td>
+		</tr>
+		{%endfor %}
+		{%for an in x.8 %}
+		<tr>
+			<td>Anticipo</td>
+			<td>{{ an.tipoAnticipo|title }}</td>
+			<td>{{an.monto}}</td>
+		</tr>
+		{%endfor %}
+	</table>
+		
+	{%endfor %}
+	<hr class="comon">
+	<table class="simple">
+		<tr>
+			<td style="padding:2em;"></td>
+		</tr>
+		<tr>
+			<th>Entrega:<br>Encargado en Turno</th>
+		</tr>
+		<tr>
+			<td  style="padding:3em;"></td>
+		</tr>
+		<tr>
+			<th>Recibe:</th>
+		</tr>
+		<tr>
+			<td  style="padding:3em;"></td>
+		</tr>
+		<tr>
+			<th>Revisa:</th>
+		</tr>
+	</table>
+</div>
+<div style="clear:both;height:4em;"></div>
+<a href="javascript:window.print()" class="button azul">Imprimir</a>   
+{%endif %}
+<a href="javascript:close();" class="button rojo">Cerrar ventana</a>
+{% endblock %}

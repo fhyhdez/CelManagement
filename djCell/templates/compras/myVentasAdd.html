@@ -1,0 +1,302 @@
+{% extends 'compras/compras-base.html' %}
+{% block miscript %} 
+<link rel="stylesheet" href="{{STATIC_URL}}css/tabstyle.css" type="text/css">
+{% endblock %}
+
+{% block titulo %}@Venta de Productos - @COMPRAS{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info">
+			<h3><strong>Registro de Ventas</strong>
+				<br>Elija Tipo de Venta:
+			</h3>
+		</div>
+		<div id="tabContainer">
+		    <div id="tabs">
+			    <ul>
+					<li id="tabHeader_1">Equipos</li>
+					<li id="tabHeader_2">Express</li>
+					<li id="tabHeader_3">Accesorios</li>
+					<li id="tabHeader_4">Fichas</li>
+					<li id="tabHeader_5">Recargas</li>
+				</ul>
+			</div>
+			<div id="tabscontent">
+				<div class="tabpage" id="tabpage_1">
+					<form class="wufoo" name="addEq" action="." method="GET" enctype="multipart/form-data">
+						{% csrf_token %}
+						<div class="info"><h2>Venta de equipos</h2></div>
+						<ul>
+							<li class="section first"><h3>Agregar Equipos</h3></li>
+							<li>
+								<label class="desc">IMEI: <span class="req">*</span></label>
+								<input class="field text medium" type="number" min="10000000000000" max="900000000000000" value="{{ queryEq|escape}}" name="qEq" title="Ingrese los 15 digitos del equipo"; placeholder="359121076754241" autofocus required />
+							</li>
+							<li>
+								<label class="desc">Elejir Precio de Venta</label>
+									<input id="choice1" name="mcPrecio" class="field radio" type="radio" value="Mayoreo" checked="checked" required />
+									<label class="choice" for="choice1">Mayoreo</label>
+									<input id="choice2" name="mcPrecio" class="field radio" type="radio" value="Publico"/>
+									<label class="choice" for="choice2">De Lista (Normal)</label>
+							</li>
+							<li id="buttons">
+								<input type="hidden" name="vtaGral" value="{{vtaGenerada}}"/>
+								<input name="addEq" class="submit success" type="image" src="/static/img/1362824176_shoppingbasket--add.png" value="equipo"/>
+							</li>
+						</ul>
+					</form>
+				</div>  
+				<div class="tabpage" id="tabpage_2">
+					<form class="wufoo" name="addExp" action="." method="GET" enctype="multipart/form-data">
+						{% csrf_token %}
+					    <div class="info"><h2>Venta Chip Express</h2></div>
+							<ul>
+								<li class="section first">
+									<h3>Venta Express</h3>
+								</li>
+							
+								<li>
+									<label class="desc">ICC: <span class="req">*</span></label>
+									<input class="field text medium" type="number" min="100000000000000000" max="9999999999999999999" value="{{ queryExp|escape}}" name="qExp" title="Ingrese los 19 digitos de la express"; placeholder="8952020007671606148" autofocus required />
+								</li>
+								<li>
+								<label class="desc">Elejir Precio de Venta</label>
+									<input id="choice1" name="mcPrecio" class="field radio" type="radio" value="Mayoreo" checked="checked" required />
+									<label class="choice" for="choice1">Mayoreo</label>
+									<input id="choice2" name="mcPrecio" class="field radio" type="radio" value="Publico"/>
+									<label class="choice" for="choice2">De Lista (Normal)</label>
+								</li>
+								<li id="buttons">
+									<input type="hidden" name="vtaGral" value="{{vtaGenerada}}"/>
+									<input name="addExp" class="submit success" type="image" src="/static/img/1362824176_shoppingbasket--add.png" value="producto"/>
+								</li>
+							</ul>
+					</form>
+				</div>
+				<div class="tabpage" id="tabpage_3">
+					<form class="wufoo" name="addAcc" action="." method="GET" enctype="multipart/form-data">
+						{% csrf_token %}
+					    <div class="info"><h2>Venta de Accesorios</h2></div>
+							<ul>
+								<li class="section first">
+									<h3>Agregar Folio de Accesorio</h3>
+								</li>
+							
+								<li>
+									<label class="desc">FOLIO: <span class="req">*</span></label>
+									<input class="field text medium" type="text" value="{{ queryAcc|escape}}" name="qAcc" title="Ingrese parte del codigo de barras"; placeholder="Ej. FMV03-10293" required />
+								</li>
+								<li>
+								<label class="desc">Elejir Precio de Venta</label>
+									<input id="choice1" name="mcPrecio" class="field radio" type="radio" value="Mayoreo" checked="checked" required />
+									<label class="choice" for="choice1">Mayoreo</label>
+									<input id="choice2" name="mcPrecio" class="field radio" type="radio" value="Publico"/>
+									<label class="choice" for="choice2">De Lista (Normal)</label>
+								</li>
+								<li id="buttons">
+									<input type="hidden" name="vtaGral" value="{{vtaGenerada}}"/>
+									<input name="addAcc" class="submit success" type="image" src="/static/img/1362824176_shoppingbasket--add.png" value="producto"/>
+								</li>
+							</ul>
+					</form>
+				</div>
+				<div class="tabpage" id="tabpage_4">
+					<form class="wufoo" name="addFic" action="." method="GET" enctype="multipart/form-data">
+						{% csrf_token %}
+					    <div class="info"><h2>Fichas</h2></div>
+							<ul>
+								<li class="section first">
+									<h3>Venta de fichas amigo Kit</h3>
+								</li>
+							
+								<li>
+									<label class="desc">Folio de Inicio: <span class="req">*</span></label>
+									<input class="field text medium" type="number" min="100000000000" max="9999999999999" value="{{ queryFic|escape}}" name="qFic" title="Ingrese el folio de inicio de ficha"; placeholder="703019103524" autofocus required />
+								</li>
+								<li>
+									<label class="desc">Folio Final: <span class="req">(Opcional)</span></label>
+									<input class="field text medium" type="number" min="100000000000" max="9999999999999" value="{{ queryFic2|escape}}" name="qFic2" title="Ingrese el folio final de la ficha"; placeholder="703019103530" />
+								</li>
+								{% for field in cliente %}
+									<li>
+										<label class="desc">{{field.label}}</label> 
+										{{field}}
+										<label> {{field.help_text}} <span class="req"> {{field.errors}} </span></label>
+									</li>
+								{% endfor %}
+								
+								<li id="buttons">
+									<input type="hidden" name="vtaGral" value="{{vtaGenerada}}"/>
+									<input name="addFic" class="submit success" type="image" src="/static/img/1362824176_shoppingbasket--add.png" value="producto"/>
+								</li>
+							</ul>
+					</form>
+				</div>
+				<div class="tabpage" id="tabpage_5">
+					<form class="wufoo" name="addRec" action="." method="GET" enctype="multipart/form-data">
+						{% csrf_token %}
+						<div class="info">
+							<h2>Venta de Recargas</h2>
+							<div>Registro de Ventas de Recargas Electronicas</div>
+						</div>
+						<ul>
+							<li class="section first">
+								<h3></h3>
+							</li>
+							{% for field in recForm %}
+								<li>
+									<label class="desc">{{field.label}}</label> 
+									{{field}}
+									<label> {{field.help_text}} <span class="req"> {{field.errors}} </span></label>
+								</li>
+							{% endfor %}
+							<br>
+							{% for field in cliente %}
+								<li>
+									<label class="desc">{{field.label}}</label> 
+										{{field}}
+									<label> {{field.help_text}} <span class="req"> {{field.errors}} </span></label>
+								</li>
+							{% endfor %}
+							<input type="hidden" name="qRec" value="recargasForm"/>
+							<li id="buttons">
+								<input type="hidden" name="vtaGral" value="{{vtaGenerada}}"/>
+									<input name="addRec" class="submit success" type="image" src="/static/img/1362824176_shoppingbasket--add.png" value="producto"/>
+							</li>
+						</ul>
+					</form>
+				</div> 
+			</div>
+		</div>	
+		<script src="{{STATIC_URL}}js/tabs_old.js"></script>
+	<script type="text/javascript">
+	  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-1332079-8']);
+		  _gaq.push(['_trackPageview']);
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+	</script>
+		<div id="grid">
+			{%if resultAdd or informefichas %}
+				<p><strong> {{resultAdd}} </strong></p>
+			{%elif queryEq or queryExp or queryAcc or queryFic %}
+			<p>El Producto Ingresado no Pertenece o no Existe en Almacen.</p>
+			{%endif %}
+		</div>
+	</section>
+	<section id="row">
+		<h3><strong>Folio de Venta:</strong>{{ vtaGenerada }} </h3>
+			<div id="grid" style="float:left;width:70%;">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Producto</td>
+						<td id="gridhead">Descripcion</td>
+						<td id="gridhead">Importe</td>
+					</tr>
+					{%if eqVendido or expVendido or accVendido or ficVendido or recVendido %}
+						{%for equipoV in eqVendido %}
+						<tr>
+							{%if vtaGenerada == equipoV.venta.folioVenta %}
+								<td>Equipo {{equipoV.equipo.detallesEquipo.marca.marca}} {{equipoV.equipo.detallesEquipo.modelo}} </td>
+								<td>Imei: {{equipoV.equipo.imei}} Icc: {{equipoV.equipo.icc}}</td>										
+								<td>{{equipoV.precVenta}} </td>
+							{%endif %}
+						</tr>
+						{%endfor %}
+							
+						{%for expV in expVendido %}
+						<tr>
+							{%if vtaGenerada == expV.venta.folioVenta %}
+								<td>Express {{expV.expres.detallesExpres.tipoIcc.tipo}}</td>
+								<td>{{expV.expres.icc}}</td>
+								<td>{{expV.precVenta}} </td>
+							{%endif %}
+						</tr>
+						{%endfor %}
+							
+						{%for ficV in ficVendido %}
+						<tr>
+							{%if vtaGenerada == ficV.venta.folioVenta %}
+								<td>Ficha {{ficV.ficha.nominacion.nominacion}}</td>
+								<td>{{ficV.ficha.folio}}</td>
+								<td>{{ficV.precVenta}} </td>
+							{%endif %}
+						</tr>
+						{%endfor %}
+						
+						{%for acV in accVendido %}
+						<tr>
+							{%if vtaGenerada == acV.venta.folioVenta %}
+								<td>Acc. {{acV.accesorio.detallesAccesorio.seccion.seccion}} | {{acV.accesorio.codigoBarras}}</td>
+								<td>{{acV.accesorio.detallesAccesorio.marca}} {{acV.accesorio.detallesAccesorio.descripcion}}</td>
+								<td>{{acV.precVenta}} </td>
+							{%endif %}
+						</tr>
+						{%endfor %}
+							
+						{%for recV in recVendido %}
+						<tr>
+							{%if vtaGenerada == recV.venta.folioVenta %}
+								<td>Recarga {{recV.recarga.montos.monto}}</td>
+								<td>{{recV.recarga.folio}}</td>
+								<td>{{recV.precVenta}} </td>
+							{%endif %}
+						</tr>
+						{%endfor %}
+					{%else %}
+						<tr>
+							<td colspan="3">NO HAY PRODUCTOS AGREGADOS</td>
+						</tr>
+					{%endif %}
+				</table>
+			</div>
+			<img src="/static/img/1362823556_shopping-basket-full.png" style="float:right;padding:3%">
+			<div style="clear:both;"></div>
+	</section>
+	<section id="row">
+		<h3>Caja: Cobrar Venta</h3>
+			<form class="wufoo" action="." name="caja" method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+				<ul>
+					{% for field in vtaForm %}
+						<li>
+							<label class="desc">{{field.label}}</label> 
+							<div>
+								{{field}}
+							</div>
+							<label> {{field.help_text}} <span class="req"> {{field.errors}} </span></label>
+						</li>
+					{% endfor %}
+					<br>
+					{% for field in cliente %}
+					<li>
+						<label class="desc">{{field.label}}</label> 
+						<div>
+							{{field}}
+						</div>
+						<label> {{field.help_text}} <span class="req"> {{field.errors}} </span></label>
+					</li>
+					{% endfor %}
+					<li><br><strong>{{info}}</strong><br></li>
+					{%if folioVenta %}
+					<li><a href="./?print={{ folioVenta }}" class="success button" target="_blank" ><img src="{{STATIC_URL}}img/icons/1366452634_print.png">  Imprimir Ticket</a></li>
+					{%endif %}
+					<li id="buttons">
+						<input name="cobrar" title="Cobrar venta" class="submit success" type="image" src="/static/img/1362824182_shoppingbasket-accept.png" value="cobrar"/> |  
+						<input name="cancelar" title="Cancelar venta" class="submit success" type="image" src="/static/img/1362824162_shoppingbasket-delete.png" value="cancelar"/>
+						{%if show %}
+						{%else %}
+						<a href="{{ url }}" title="Nueva Venta"><img src="/static/img/1362823528_shopping-basket-add.png"></a>
+						{%endif %}
+					</li>
+				</ul>
+			</form>
+	</section>
+	<br><br>
+</div>
+{% endblock %}

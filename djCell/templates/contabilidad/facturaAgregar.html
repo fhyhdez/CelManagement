@@ -1,0 +1,122 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}--Contabilidad{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info">
+			<h2>{{titulo}}</h2>
+		</div>
+	<form class="wufoo" method="POST" action="." enctype="multipart/form-data">{% csrf_token %}
+			<h2>Marque los productos antes de registrar la factura</h2>
+			<ul>
+				{% for field in form %}
+					{% if field.label == 'Key' %}
+					{{ field.as_hidden }}
+					{% else %}
+				<li>
+					<label class="desc">{{field.label|upper}}</label> 
+					<div>
+						{{field}}
+					</div>
+					<label> {{field.help_text}} <small><span class="req"> {{field.errors}} </span></small></label>
+				</li>
+					{% endif %}
+				{% endfor %}
+				<li id="buttons">
+					<input class="submit success" type="submit" name="guardar" value="Guardar Cambios"/> |  
+					<a class="success button" href="." title="Limpiar Campos, la informacion anterior se perdera">Nuevo</a>
+				</li>
+			</ul>
+			{{info|safe}}
+			{%if liga%}
+				<a  href="{{liga}}" >Reporte de la Factura</a>
+			{%endif%}
+			<br>
+			
+			{% if equipos %}
+			<h2>Equipos Pendientes de Factura</h2>
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead2">Equipo</td>
+						<td id="gridhead2">Agregar</td>
+					</tr>
+					{%for equ in equipos %}
+						<tr>
+							<td>{{equ.equipo|upper}}</td>
+							<td><input type="checkbox" name="eq_{{equ.equipo.id}}"></td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			<br>
+			{% endif %}
+			
+			{% if expres %}
+			<h2>Expres Pendientes de Factura</h2>
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead2">Expres</td>
+						<td id="gridhead2">Agregar</td>
+					</tr>
+					{%for exp in expres %}
+						<tr>
+							<td>{{exp.expres|upper}}</td>
+							<td><input type="checkbox" name="ex_{{exp.expres.id}}"></td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			<br>
+			{% endif %}
+			
+			{% if accesorios %}
+			<h2>Accesorios Pendientes de Factura</h2>
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead2">Accesorios</td>
+						<td id="gridhead2">Agregar</td>
+					</tr>
+					{%for acc in accesorios %}
+						<tr>
+							<td>{{acc.accesorio|upper}}</td>
+							<td><input type="checkbox" name="ac_{{acc.accesorio.id}}"></td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			<br>
+			{% endif %}
+			
+			{% if fichas %}
+			<h2>Fichas Pendientes de Factura</h2>
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead2">Fichas</td>
+						<td id="gridhead2">Agregar</td>
+					</tr>
+					{%for fic in fichas %}
+						<tr>
+							<td>{{fic.ficha|upper}}</td>
+							<td><input type="checkbox" name="fi_{{fic.ficha.id}}"></td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			<br>
+			{% endif %}
+
+
+
+			
+		</form>
+
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

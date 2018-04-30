@@ -1,0 +1,162 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Bienvenido a @Compras{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+				<div class="info">
+					<h2>Agregar Accesorios a la Devolucion</h2>
+					<div>Sucursal a Sucursal</div>
+				</div>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Devolucion</td>
+							<td id="gridhead">Buscar</td>
+						</tr>
+						<tr>
+							<form action='.'  method='GET' enctype="multipart/form-data">{% csrf_token %}
+								<td><input type='text' name='movimiento' value='{{ b_movimiento|escape }}'></td>
+								<td><input class="submit success" type="submit" value='buscar'></td>
+							</form>
+						</tr>
+					</table>
+				</div>
+
+
+			{% if r_movis %}
+				<h2>Movimientos Disponibles</h2>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Folio</td>
+							<td id="gridhead">Fecha</td>
+							<td id="gridhead">Destino</td>
+							<td id="gridhead">Seleccionar</td>
+						</tr>
+						{% for item in r_movis %}
+						<tr>
+							<td>{{ item.folio|escape}}</td>
+							<td>{{ item.fx_movimiento|date:"Y-m-d h:i a"}}</td>
+							<td>{{ item.sucursalDestino|escape}}</td>
+							<td><a href="/compras/movimientos/devoluciones/accesorios/?movimiento={{ item.folio|escape}}&amp;qitem={{ b_item|escape }}">Seleccionar
+							</a></td>
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+			{%elif b_movimiento %}
+	No hay resultados
+			{% endif %}
+
+				
+			<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+
+				{%if formMov %}
+				<h3>Nueva Devolucion</h3>
+			<div id="form2">
+				<table id='form2'>
+					{{formMov}}
+					<tr>
+						<td></td>
+						<td><input class="submit success" type="submit" name='gmovimiento' value="Guardar Movimiento"></td>
+					</tr>
+				</table>
+			</div>
+				{%else %}
+			<ul>
+				<li id="buttons">
+					<input class="submit success" type="submit" name='addmovimiento' value="Crear Nueva Devolución">
+				</li>
+			</ul>
+				{%endif %}
+
+
+				<h3>Datos Globales</h3>
+				<div id="grid">
+					<table id='grid'>
+						{{formMovItem}}
+					</table>
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Codigos de Barras</td>
+						</tr>
+						<tr>
+							<td><input type='text' name='item0'></td>
+						</tr>
+						<tr>
+							<td><input type='text' name='item1'></td>
+						</tr>
+						<tr>
+							<td><input type='text' name='item2'></td>
+						</tr>
+						<tr>
+							<td><input type='text' name='item3'></td>
+						</tr>
+						<tr>
+							<td><input type='text' name='item4'></td>
+						</tr>
+						<tr>
+							<td><input type='text' name='item5'></td>
+						</tr>
+						<tr>
+							<td><input type='text' name='item6'></td>
+						</tr>
+						<tr>
+							<td><input type='text' name='item7'></td>
+						</tr>
+						<tr>
+							<td><input type='text' name='item8'></td>
+						</tr>
+						<tr>
+							<td><input type='text' name='item9'></td>
+						</tr>
+					</table>
+				</div>
+				{%if info %}
+				Informe de errores: {{ info }}
+				<br>
+				{%endif %}
+				{%if agregados %}
+				Se realizó con exito: {{agregados}}
+				{%endif %}
+				<ul>
+					<li id="buttons">
+						<input class="submit success" type="submit" name='gmovitem' value="Guardar y Agregar Otro >>>">
+					</li>
+				</ul>
+			</form>
+			{%if b_movimiento %}
+				<br>
+				<a class="success button" href="/compras/movimientos/devoluciones/equipos/?movimiento={{ b_movimiento|escape }}" title="Agregar Equipos a la misma Devolucion">Agregar Equipos</a>
+				<a class="success button" href="/compras/movimientos/devoluciones/express/?movimiento={{ b_movimiento|escape }}" title="Agregar Express a la misma Devolucion">Agregar Express</a>  |
+				<a class="success button" href="/compras/movimientos/devoluciones/accesorios/?movimiento={{ b_movimiento|escape }}" title="Agregar Accesorios a la misma Devolucion">Agregar Accesorios</a>  |
+				<a class="success button" href="/compras/movimientos/devoluciones/fichas/?movimiento={{ b_movimiento|escape }}" title="Agregar Fichas a la misma Devolucion">Agregar Fichas</a>  |
+				<a class="success button" href="/compras/movimientos/devoluciones/recargas/?movimiento={{ b_movimiento|escape }}" title="Agregar Recargas a la misma Devolucion">Agregar Recargas</a> |
+				<a class="success button" href="/compras/movimientos/devoluciones/consultar/?movimiento={{ b_movimiento|escape }}" title="Revisar Reposte de la misma Devolucion">Revisar Reposte</a>
+			{%endif %}
+			{%if items %}
+
+				<h2>Accesorios Añadidos</h2>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Codigo de Barras</td>
+							<td id="gridhead">Detalles del Accesorio</td>
+						</tr>
+						{% for item in items %}
+						<tr>
+							<td>{{ item.accesorio.codigoBarras|escape}}</td>
+							<td>{{ item.accesorio.detallesAccesorio|escape}}</td>
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+			{%endif %}
+
+
+	</section>
+	<div style="height:70px;"></div>
+</div>
+{% endblock %}

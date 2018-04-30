@@ -1,0 +1,97 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Accesorios @Compras{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info">
+			<h2>Agregar Accesorios a Factura</h2>
+			<div>Registro de Productos a la Factura de Compras a Almacen</div>
+		</div>
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			{% if glovales %}
+				<span class="req">{{ glovales }}</span>
+			{% endif %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Factura</td>
+						<td id="gridhead">Detalles del Accesorio</td>
+						<td id="gridhead">Importe Factura c/p</td>
+					</tr>
+					<tr>
+						<td>{{ f_accesorios.0.factura }}</td>
+						<td>{{ f_accesorios.0.detallesAccesorio }}
+						</td>
+						<td>{{ f_accesorios.0.precioFact }}</td>
+					</tr>
+					<tr>
+						<td>{{ f_accesorios.0.factura.errors }}</td>
+						<td>{{ f_accesorios.0.detallesAccesorio.errors }}</td>
+						<td>{{ f_accesorios.0.precioFact.errors }}</td>
+					</tr>
+				</table>
+			</div>
+			<br>
+			<br>
+		{%if guardados %}
+			Codigos Almacenados con exito:{{guardados}}
+		{%endif %}
+			<h3>Codigos de Barra</h3>
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">{{ f_accesorios.0.codigoBarras.label }}</td>
+					</tr>
+					{% for field in f_accesorios %}
+						<tr>
+							<td>{{ field.codigoBarras }}{{field.codigoBarras.errors}}</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+
+			<ul>
+				<li id="buttons">
+					<input class="submit success" type="submit" name='accesorios' value="Guardar y Agregar Accesorio >>>"/>
+						{%if b_factura %}
+							<br>
+							<a class="success button" href="/compras/almacen/Accesorios/?factura={{ b_factura|escape }}" title="Agregar Nuevo">Agregar Accesorios</a>
+							<a class="success button" href="/compras/almacen/express/?factura={{ b_factura|escape }}" title="Agregar Express a la misma factura">Agregar Express</a>  |
+							<a class="success button" href="/compras/almacen/accesorios/?factura={{ b_factura|escape }}" title="Agregar Accesorios a la misma factura">Agregar Accesorios</a>  |
+							<a class="success button" href="/compras/almacen/fichas/?factura={{ b_factura|escape }}" title="Agregar Fichas a la misma factura">Agregar Fichas</a>  |
+							<a class="success button" href="/compras/almacen/recargas/?factura={{ b_factura|escape }}" title="Agregar Recargas a la misma factura">Agregar Recargas</a> |
+							<a class="success button" href="/compras/almacen/reporte/?q={{ b_factura|escape }}" title="Revisar Reporte de la misma factura">Revisar Reporte</a>
+						{%endif %}
+					<BR /><span class="req">*.Campos Obligatorios. No dejar vacios.</span>
+				</li>
+			</ul>
+
+		</form>
+			{% if agregados %}
+				<br>
+				<div class='info'>
+					<h2>Accesorios Agregados</h2>
+				</div>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Codigo de Barras</td>
+							<td id="gridhead">Detalles del Accesorio</td>
+						</tr>
+						{% for item in agregados %}
+						<tr>
+							<td>{{ item.codigoBarras }}</td>
+							<td>{{ item.detallesAccesorio }}</td>
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+			{%endif %}
+		<strong>{{ informacion }}</strong>
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

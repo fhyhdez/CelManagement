@@ -1,0 +1,328 @@
+{% extends 'contabilidad/base-pop.html' %}
+{% block miscript %}
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/structure.css" media="all" />
+{% endblock %}
+
+{% block titulo %}Solicitud de Plan Tarifario @Planes{% endblock %}
+
+{% block contenido %}
+	<div id="stylized" class="myform">
+		<div id="grid">
+			<table id="twoCol2">
+				<tr>
+					<th colspan="2">A) CONTROL DE DATOS</th>
+				</tr>
+				<tr>
+					<td>Fecha de Solicitud</td>
+					<td>{{grrr.fxSolicitud|date}}</td>
+				</tr>
+				<tr>
+					<td>Canal de Venta</td>
+					<td>{{grrr.canalVta|upper}}</td>
+				</tr>
+				<tr>
+					<td>Folio SISACT</td>
+					<td>{{grrr.folioSisAct|upper}}</td>
+				</tr>
+				<tr>
+					<td>Lineas Solicitadas</td>
+					<td>{{grrr.lineaSolicitadas|default:'0'}}</td>
+				</tr>
+				<tr>
+					<td>Vendedor</td>
+					<td>{{grrr.vendedor.curp|upper}} <br>{{ grrr.vendedor.nombre|title }} {{ grrr.vendedor.aPaterno|title}} {{ grrr.vendedor.aMaterno|title}} </td>
+				</tr>
+				<tr>
+					<td>Sub-Distribuidor</td>
+					<td>{{grrr.subdist|upper}}</td>
+				</tr>
+				<tr>
+					<td>Distribuidor Telcel</td>
+					<td>{%if grrr.diTelcel %}<img src="/static/img/icons/tick.png" title="Si"/> {%else %}<img src="/static/img/icons/cross.png" title="No"/> {%endif %}</td>
+				</tr>
+				<tr>
+					<td>Linea de Referencia</td>
+					<td>{{grrr.lineaReferencia|default:''}}</td>
+				</tr>
+
+				<tr>
+					<th colspan="2">B) USO EXCLUSIVO TELCEL(MESA DE CONTROL)</th>
+				</tr>
+				<tr>
+					<td>Fecha de Consulta BC</td>
+					<td>{{grrr.fxConsultaBuro|date}}</td>
+				</tr>
+				<tr>
+					<td>Folio BC</td>
+					<td>{{grrr.folioConsultaBuro|default:''}}</td>
+				</tr>
+				<tr>
+					<td>Observaciones</td>
+					<td>{{grrr.observacionSolicitud|default:''}}</td>
+				</tr>
+				<tr>
+					<th colspan="2">C) DATOS PERSONALES</th>
+				</tr>
+				<tr>
+					<td>Nombre</td>
+					<td>{{grrr.nombre|title}}</td>
+				</tr>
+				<tr>
+					<td>Apellido Paterno</td>
+					<td>{{grrr.aPat|title}}</td>
+				</tr>
+				<tr>
+					<td>Apellido Materno</td>
+					<td>{{grrr.aMat|title}}</td>
+				</tr>
+				<tr>
+					<td>Fecha de Nacimiento</td>
+					<td>{{grrr.fxNac|date}}</td>
+				</tr>
+				<tr>
+					<td>Nacionalidad</td>
+					<td>{{grrr.nacionalidad|title}}</td>
+				</tr>
+				<tr>
+					<td>E-mail</td>
+					<td>{{grrr.email|default:''}}</td>
+				</tr>
+				<tr>
+					<td>Tipo de Identificacion</td>
+					<td>{{grrr.tipoIdentif|title}}</td>
+				</tr>
+				<tr>
+					<td>Folio de Identificacion</td>
+					<td>{{grrr.folIdent|upper}}</td>
+				</tr>
+				<tr>
+					<td>Forma de Pago</td>
+					<td>{{grrr.formPago.forma|title}}</td>
+				</tr>
+				<tr>
+					<td>Banco</td>
+					<td>{{grrr.banco.banco|title}}</td>
+				</tr>
+				<tr>
+					<td>No. de Tarjeta de Credito</td>
+					<td>{{grrr.numTc|default:''}}</td>
+				</tr>
+				<tr>
+					<th colspan="2">D) DOMICILIO</th>
+				</tr>
+				<tr>
+					<td>Calle</td>
+					<td>{{grrr.calleP|title}}</td>
+				</tr>
+				<tr>
+					<td>No. Exterior</td>
+					<td>{{grrr.noextP|default:''}}</td>
+				</tr>
+				<tr>
+					<td>No. Interior</td><td>{{grrr.nointP|default:''}}</td>
+				</tr>
+				<tr>
+					<td>Colonia</td><td>{{grrr.coloniaP.colonia|default:''}}</td>
+				</tr>
+				<tr>
+					<td>Codigo Postal</td><td>{{grrr.cpP.cp|default:''}}</td>
+				</tr>
+				<tr>
+					<td>Entre la Calle</td><td>{{grrr.calle1P|title}}</td>
+				</tr>
+				<tr>
+					<td>Y La calle</td><td>{{grrr.calle2P|title}}</td>
+				</tr>
+				<tr>
+					<td>Ciudad</td><td>{{grrr.ciudadP.ciudad|default:''}}</td>
+				</tr>
+				<tr>
+					<td>Estado</td><td>{{grrr.countryP.estado|default:''}}</td>
+				</tr>
+				<tr>
+					<td>Telefono</td><td>{{grrr.telP|default:''}}</td>
+				</tr>
+				<tr>
+					<td>Referencia del Domicilio</td><td>{{grrr.refDomP|title}}</td>
+				</tr>
+				<tr>
+					<th colspan="2">E) OCUPACION</th>
+				</tr>
+				<tr>
+					<td>Puesto</td><td>{{grrr.puesto|title}}</td>
+				</tr>
+				<tr>
+					<td>Antiguedad</td><td>{{grrr.antiguedad|default:''}}</td>
+				</tr>
+				<tr>
+					<td>Ingreso Mensual</td><td>${{grrr.ingresomens|default:''}}</td>
+				</tr>
+				<tr>
+					<td>Empresa o Negocio</td><td>{{grrr.empNegocio|default:''}}</td>
+				</tr>
+				<tr>
+					<td>Giro</td><td>{{grrr.giro|default:''}}</td>
+				</tr>
+				<tr>
+					<th colspan="2">F) DOMICILIO DEL EMPLEO</th>
+				</tr>
+				<tr>
+					<td>Calle</td><td>{{grrr.ecalle|title}}</td>
+				</tr>
+				<tr>
+					<td>No. Exterior</td><td>{{grrr.enoext|default:''}}</td>
+				</tr>
+				<tr>
+					<td>No. Interior</td><td>{{grrr.enoint|default:''}}</td>
+				</tr>
+				<tr>
+					<td>Colonia</td><td>{{grrr.ecolonia.colonia|default:''}}</td>
+				</tr>
+				<tr>
+					<td>Codigo Postal</td><td>{{grrr.ecp.cp|default:''}}</td></tr>
+				<tr>
+					<td>Entre la Calle</td><td>{{grrr.ecalle1|title}}</td></tr>
+				<tr>
+					<td>Y la Calle</td><td>{{grrr.ecalle2|title}}</td></tr>
+				<tr>
+					<td>Ciudad</td><td>{{grrr.eciudad.ciudad|default:''}}</td></tr>
+				<tr>
+					<td>Estado</td><td>{{grrr.ecountry.estado|default:''}}</td></tr>
+				<tr>
+					<td>Telefono</td><td>{{grrr.etel|default:''}}</td></tr>
+				<tr>
+					<td>Extension</td><td>{{grrr.eextension|default:''}}</td></tr>
+	
+				<tr>
+					<th colspan="2">G) EVALUACION SOCIOECONOMICA (SOLO PARA KITS A CREDITO) </th>
+				</tr>
+				
+				<tr>
+					<td>No. de Autos</td><td>{{grrr.numautos|default:''}}</td></tr>
+				<tr>
+					<td>Modelo(Año)</td><td>{{grrr.modelo|default:''}}</td></tr>
+				<tr>
+					<td>Casa Propia</td><td>{%if grrr.casaPropia %}<img src="/static/img/icons/tick.png" title="Si"/> {%else %}<img src="/static/img/icons/cross.png" title="No"/> {%endif %}</td>
+				</tr>
+
+				<tr>
+					<td>Propia indique el valor aprox.</td><td>{{grrr.casaValor|default:''}}</td></tr>
+				<tr>
+					<td>Renta Indique monto</td><td>{{grrr.renta|default:''}}</td></tr>
+	
+				<tr>
+					<th colspan="2">H) REFERENCIAS</th>
+				</tr>
+				<tr>
+					<td>Banco(1) </td><td>{{grrr.banco1.banco|default:''}}</td></tr>
+				<tr>
+					<td>No. de Cuenta</td><td>{{grrr.ctaBanco1|default:''}}</td></tr>
+				<tr>
+					<td>Telefono</td><td>{{grrr.telBanco1|default:''}}</td></tr>
+				<tr>
+					<td>Banco(2)</td><td>{{grrr.banco2.banco|default:''}}</td></tr>
+				<tr>
+					<td>No. de Cuenta</td><td>{{grrr.ctaBanco2.banco|default:''}}</td></tr>
+				<tr>
+					<td>Telefono</td><td>{{grrr.telBanco2|default:''}}</td></tr>
+				<tr>
+					<td>Banco Comercial (1)</td><td>{{grrr.banco1Comercial.banco|default:''}}</td></tr>
+				<tr>
+					<td>No. de Cuenta</td><td>{{grrr.ctaBanco1Comercial|default:''}}</td></tr>
+				<tr>
+					<td>Telefono</td><td>{{grrr.telBanco1Comercial|default:''}}</td></tr>
+				<tr>
+					<td>Banco Comercial (2)</td><td>{{grrr.banco2Comercial.banco|default:''}}</td></tr>
+				<tr>
+					<td>No. de Cuenta</td><td>{{grrr.ctaBanco2Comercial|default:''}}</td></tr>
+				<tr>
+					<td>Telefono</td><td>{{grrr.telBanco2Comercial|default:''}}</td></tr>
+	
+				<tr>
+					<td>Nombre y Apellidos (1)</td><td>{{grrr.nombreApellidos1|title}}</td></tr>
+				<tr>
+					<td>Direccion</td><td>{{grrr.direccRef1|title}}</td></tr>
+				<tr>
+					<td>Telefono</td><td>{{grrr.telOfiRef1|default:''}}</td></tr>
+				<tr>
+					<td>Relacion</td><td>{{grrr.tipoRef1.tipo|default:''}}</td></tr>
+				<tr>
+					<td>Nombre y Apellidos (2)</td><td>{{grrr.nombreApellidos2|default:''}}</td></tr>
+				<tr>
+					<td>Direccion</td><td>{{grrr.direccRef2|default:''}}</td></tr>
+				<tr>
+					<td>Telefono</td><td>{{grrr.telOfiRef2|default:''}}</td></tr>
+				<tr>
+					<td>Relacion</td><td>{{grrr.tipoRef2.tipo|default:''}}</td></tr>
+				<tr>
+					<td>Nombre y Apellidos (3)</td><td>{{grrr.nombreApellidos3|default:''}}</td></tr>
+				<tr>
+					<td>Direccion</td><td>{{grrr.direccRef3|default:''}}</td></tr>
+				<tr>
+					<td>Telefono</td><td>{{grrr.telOfiRef3|default:''}}</td></tr>
+				<tr>
+					<td>Relacion</td><td>{{grrr.tipoRef3.tipo|default:''}}</td></tr>
+				<tr>
+					<th colspan="2">FACTURACION ( OPCIONAL ) </th>
+				</tr>
+				<tr>
+					<td>Nombre o Razon Social</td><td>{{grrr.nomRazon|default:''}}</td></tr>
+				<tr>
+					<td>Sexo</td><td>{{grrr.sexo|default:''}}</td></tr>
+				<tr>
+					<td>RFC</td><td>{{grrr.rfc|default:''}}</td></tr>
+				<tr>
+					<td>Nombre del representante</td><td>{{grrr.nomRep|default:''}}</td></tr>
+				<tr>
+					<td>Profesion</td><td>{{grrr.profesion|default:''}}</td></tr>
+				<tr>
+					<td>Ocupacion</td><td>{{grrr.ocupacion|default:''}}</td></tr>
+				<tr>
+					<td>Cargo</td><td>{{grrr.cargo|default:''}}</td></tr>
+				<tr>
+					<td>Direccion</td><td>{{grrr.direcc|default:''}}</td></tr>
+				<tr>
+					<td>Telefono Particular</td><td>{{grrr.telPart|default:''}}</td></tr>
+				<tr>
+					<td>Telefono Oficina</td><td>{{grrr.telOfi|default:''}}</td></tr>
+				<tr>
+					<td>Referencia Personal</td><td>{{grrr.refPersonal|default:''}}</td></tr>
+				<tr>
+					<td>Telefono de Referencia</td><td>{{grrr.telRefpers|default:''}}</td></tr>
+				<tr>
+					<td>Tipo de Identificacion</td><td>{{grrr.tipoIdent|default:''}}</td></tr>
+				<tr>
+					<td>No. de Identificacion</td><td>{{grrr.noIdent|default:''}}</td></tr>
+				<tr>
+					<th colspan="2">EQUIPO Y PLAN SOLICITADO</th>
+				</tr>
+				<tr>
+					<td>Equipo(s) Solicitado(s)</td><td>{{grrr.equipoSolicitado|default:''}}</td></tr>
+				<tr>
+					<td>Plan Solicitado</td><td>{{grrr.plan.plan|title}} {{grrr.plan.costo|default:''}}</td></tr>
+				<tr>
+					<th colspan="2">CONTROL INTERNO DE LA SOLICITUD</th>
+				</tr>
+	
+				<tr>
+					<td>Sucursal</td><td>{{grrr.sucursal.nombre|title}}</td></tr>
+				<tr>
+					<td>&Uacute;ltima Modificacion</td><td>{{grrr.fxModificacion|date}}</td></tr>
+				<tr>
+					<td>Estado de Solicitud</td><td>{{grrr.estado.estado|title}}</td></tr>
+				<tr>
+					<td>Observaciones</td><td>{{grrr.observacion|default:''}}</td></tr>
+				<tr>
+					<td>Folio de Captura</td><td>{{grrr.folio|default:''}}</td></tr>
+				<tr>
+					<th colspan="2">{{ info }} </th>
+				</tr>
+				<tr>
+					<th colspan="2">
+						<a href="javascript:close();window.opener.document.location.reload();" class="submit"><img src="/static/img/icons/cross.png" /><br>Cerrar ventana</a>
+					</th>
+				</tr>
+			</table>
+		</div>
+	</div>
+{% endblock %}

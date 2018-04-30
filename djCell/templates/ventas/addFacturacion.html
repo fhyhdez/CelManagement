@@ -1,0 +1,241 @@
+{% extends 'ventas/base-pop.html' %}
+
+{% block titulo %}Añadir Factura a Productos @Ventas{% endblock %}
+
+{% block miscript %}
+<style type="text/css">
+	#grid table {
+		border-style:1px inset hidden dotted;
+		border-spacing: 5px;
+		font-size:smaller;
+		font-family: Tahoma,"Lucida Grande", Arial, Verdana, sans-serif;
+		width: 100%;
+	}
+	#gridhead {
+		text-align: center;
+		border-style:solid;
+		font-weight: bolder;
+	}
+	#grid td{
+		border: 1px solid navy;
+		text-align: center;
+		border-spacing: 5%;
+	}
+	#grid tr{
+		border: 1px solid navy;
+		text-align: center;
+		border-spacing: 5%;
+	}
+
+	#grid tr:nth-child(2n+1) {
+		background-color: #C4E2F9;
+	}
+</style>
+{% endblock %}
+
+{% block contenido %}
+	<div id="stylized" class="myform">
+		<div class="info"><strong>Registro de Facturacion a productos en 2 pasos.</strong> <br>
+		<ul>
+			<li>1.- Registre la Factura con los datos correspondientes</li>
+			<li>2.- Añada los productos, marcandolos con el check de confirmación</li>
+			<li>Listo, puede cerrar la ventana.</li>
+			<li>Nota: Las fichas/recargas acumuladas de diferentes ventas, el registro es a nivel Contabilidad.</li>
+			<li>En esta sección, recargas, anticipos, rentas, pago de planes, no son permitidos para facturar.</li>
+			<li id="col3"> {{info}} </li>
+			{%if cerrar %}
+			<br>
+			<a href="javascript:close();" class="submit"><img src="/static/img/icons/cross.png" /><br>Cerrar ventana</a>
+			{% endif %}
+		</ul>
+		</div>
+		{% if form%}
+		<form id="form" name="form" method="POST" action="." enctype="multipart/form-data">{% csrf_token %}
+			<h1>PASO 1 .- REGISTRO DE FACTURA</h1>
+			<p>Registrar los datos.</p>
+			<table>
+				{% for field in form %}
+					{% if field.label == 'Key' %}
+					{{ field.as_hidden }}
+					{% else %}
+				<tr>
+					<td id="col1"><label>{{field.label}}</label></td>
+					<td id="col2">{{field}}</td>
+					<td id="col3">{{field.errors}} <br> {{field.help_text}}</td>
+				</tr>
+				{% endif %}
+				{% endfor %}
+				<tr> 
+					<td colspan="3"><strong>{{info}}</strong></td>
+				</tr>
+			</table>
+			<input type="hidden" name="paso1" value="1"/>
+			<center><button type="submit" class="submit">Registrar Datos</button></center>
+			<div class="spacer"></div>
+		</form>
+		{% endif %}
+		{% if paso2 %}
+		{%if eqVendido or expVendido or accVendido or ficVendido %}
+			{%if mostrar %}
+			<form id = "form" action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+				<strong>¿Marcar todos los productos como facturados?</strong>
+				<p>Los productos que no se verifiquen, los revisará el nivel de contabilidad.
+				<input name="cerrarFactura" type="image" onClick="confirm( 'Esta ud. Seguro?. Ya no habrá cambios' )" src="/static/img/icons/mail_red.png" title="Marcar venta completa facturada" value="cerrarFactura" />
+				
+				<input type="hidden" name="factGral" value="{{fact.id}}"/>
+				<input type="hidden" name="vtaGral" value="{{ vta.folioVenta }}"/>
+				</p>
+			</form>
+			<br>
+			{%endif %}
+			{% if eqVendido %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<th>FOLIO</th>
+						<th>MARCA/MODELO</th>
+						<th>IMEI / ICC</th>
+						<th>FACTURADO</th>
+						<th>CONFIRMAR</th>
+					</tr>
+					{% for x in eqVendido %}
+						<tr>
+							<td>{{ x.venta.folioVenta|escape }}</td>
+							<td>{{ x.equipo.detallesEquipo.marca.marca|escape }} {{ x.equipo.detallesEquipo.modelo|escape }}</td>
+							<td>{{ x.equipo.imei|escape }} {{ x.equipo.icc|escape }}</td>
+							<td id="col2">{% if x.equipo.equipoFacturado %}Si {% else %}No{% endif %}</td>
+							<td title="Confirmar producto factura">
+								{% if x.equipo.equipoFacturado == True %}
+								FACTURADO<img src="/static/img/icons/page_save.png" />
+								{% else %}
+							<form id = "form" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="aceptEq" type="image" src="/static/img/icons/page_white_put.png" title="Facturar Producto" value="{{ x.equipo.id }}" />
+								<input type="hidden" name="factGral" value="{{ fact.id }}"/>
+								<input type="hidden" name="vtaGral" value="{{ vta.folioVenta }}"/>
+							</form>
+								{% endif %}
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			{% endif %}
+			<br>
+			{% if expVendido %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<th>FOLIO</th>
+						<th>ICC</th>
+						<th>FACTURADO</th>
+						<th>CONFIRMAR</th>
+					</tr>
+					{% for x in expVendido %}
+						<tr>
+							<td>{{ x.venta.folioVenta|escape }}</td>
+							<td>{{ x.expres.icc|title }}</td>
+							<td id="col2">{%if x.expres.productoFacturado %}Si{%else %}No{%endif %}</td>
+							<td title="Confirmar producto Factura">
+								{% if x.expres.productoFacturado %}
+								CONFIRMADO<img src="/static/img/icons/page_save.png" />
+								{% else %}
+							<form id = "form" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="aceptEx" type="image" src="/static/img/icons/page_white_put.png" title="Aceptar Producto Factura" value="{{ x.expres.id }}" />
+								<input type="hidden" name="factGral" value="{{fact.id}}"/>
+								<input type="hidden" name="vtaGral" value="{{ vta.folioVenta }}"/>
+							</form>
+								{% endif %}
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			{% endif %}
+			<br>
+			{% if accVendido %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<th>FOLIO</th>
+						<th>CODIGO DE BARRAS</th>
+						<th>MARCA/MODELO</th>
+						<th>FACTURADO</th>
+						<th>CONFIRMAR</th>
+					</tr>
+					{% for x in accVendido %}
+						<tr>
+							<td>{{ x.venta.folioVenta|escape }}</td>
+							<td>{{ x.accesorio.codigoBarras|escape}}</td>
+							<td>{{ x.accesorio.detallesAccesorio|escape}} </td>
+							<td id="col2">{%if x.accesorio.productoFacturado %}Si{%else %}No{%endif %}</td>
+							<td title="Confirmar producto Factura">
+								{% if x.accesorio.productoFacturado %}
+								CONFIRMADO<img src="/static/img/icons/page_save.png" />
+								{% else %}
+							<form id = "form" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="aceptAc" type="image" src="/static/img/icons/page_white_put.png" title="Aceptar Producto Factura" value="{{ x.accesorio.id }}" />
+								<input type="hidden" name="factGral" value="{{fact.id}}"/>
+								<input type="hidden" name="vtaGral" value="{{ vta.folioVenta }}"/>
+							</form>
+								{% endif %}
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			{% endif %}
+			<br>
+			{% if ficVendido %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<th>FOLIO</th>
+						<th>NOMINACION</th>
+						<th>SERIE</th>
+						<th>FACTURADO</th>
+						<th>CONFIRMAR</th>
+					</tr>
+					{% for x in ficVendido %}
+						<tr>
+							<td>{{ x.venta.folioVenta|escape }}</td>
+							<td>$ {{ x.ficha.nominacion.nominacion|escape}}</td>
+							<td>{{ x.ficha.folio|escape}}</td>
+							<td id="col2">{%if x.ficha.productoFacturado %}Si{%else %}No{%endif %}</td>
+							<td title="Confirmar producto Factura">
+								{% if x.ficha.productoFacturado %}
+								CONFIRMADO<img src="/static/img/icons/page_save.png" />
+								{% else %}
+							<form id = "form" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="aceptFic" type="image" src="/static/img/icons/page_white_put.png" title="Aceptar Producto Factura" value="{{ x.ficha.id }}" />
+								<input type="hidden" name="factGral" value="{{fact.id}}"/>
+								<input type="hidden" name="vtaGral" value="{{ vta.folioVenta }}"/>
+							</form>
+								{% endif %}
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			{% endif %}
+			<br>
+			{%if mostrar %}
+			<form id = "form" action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+				<strong>¿Marcar todos los productos como facturados?</strong>
+				<p>Los productos que no se verifiquen, los revisará el nivel de contabilidad.
+				<input name="cerrarFactura" type="image" onClick="confirm( 'Esta ud. Seguro?. Ya no habrá cambios' )" src="/static/img/icons/mail_red.png" title="Marcar venta completa facturada" value="cerrarFactura" />
+				
+				<input type="hidden" name="factGral" value="{{fact.id}}"/>
+				<input type="hidden" name="vtaGral" value="{{ vta.folioVenta }}"/>
+				</p>
+			</form>
+			<br>
+			{%endif %}
+			<br>
+			<a href="javascript:close();" class="submit"><img src="/static/img/icons/cross.png" /><br>Cerrar ventana</a			
+		{%else %}			
+		<strong>No hay Ventas a facturar.</strong><br>
+		<a href="javascript:close();" class="submit"><img src="/static/img/icons/cross.png" /><br>Cerrar ventana</a			
+		{%endif %}
+		{% endif %}
+	</div>
+{% endblock %}

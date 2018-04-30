@@ -1,0 +1,172 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Express a @Compras{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info">
+			<h2>Agregar Express a Factura</h2>
+			<div>Registro de Productos a la Factura de Compras a Almacen</div>
+		</div>
+
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<td id="gridhead">Factura</td>
+					<td id="gridhead">Detalles de Express</td>
+					<td id="gridhead">Buscar</td>
+				</tr>
+				<tr>
+					<form action='.'  method='GET' enctype="multipart/form-data">{% csrf_token %}
+						<td><input type='texto' name='factura' value='{{ b_factura|escape }}'></td>
+						<td><input type='texto' name='detalles' value='{{ b_detalles|escape }}'></td>
+						<td><input class="submit success" type="submit" value='buscar'></td>
+					</form>
+				</tr>
+			</table>
+		</div>
+
+		{% if r_facturas %}
+			<h2>Facturas</h2>
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Folio</td>
+						<td id="gridhead">Documento</td>
+						<td id="gridhead">Proveedor</td>
+						<td id="gridhead">Fecha de Factura</td>
+						<td id="gridhead">Forma de Pago</td>
+						<td id="gridhead">Seleccionar</td>
+					</tr>
+					{% for item in r_facturas %}
+						<tr>
+							<td>{{ item.folio|escape}}</td>
+							<td>{{ item.documento|escape}}</td>
+							<td>{{ item.proveedor|escape}}</td>
+							<td>{{ item.fxFactura|date}}</td>
+							<td>{{ item.formaPago|escape}}</td>
+							<td><a href="/compras/almacen/express/?factura={{ item.folio|escape}}&amp;detalles={{ b_detalles|escape }}">Seleccionar
+							</a></td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			{%elif b_factura %}
+	No hay resultados
+		{% endif %}
+
+		{% if r_detalles %}
+			<h2>Detalles de Express</h2>
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Descripcion</td>
+						<td id="gridhead">Tipo de Icc</td>
+						<td id="gridhead">Seleccionar</td>
+					</tr>
+					{% for item in r_detalles %}
+						<tr>
+							<td>{{ item.descripcion|escape}}</td>
+							<td>{{ item.seccion.seccion|escape}}</td>
+							<td><a href="/compras/almacen/express/?factura={{ b_factura|escape }}&amp;detalles={{ item.id|escape }}">Seleccionar</a></td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			{%elif b_detalles %}
+	No hay resultados
+		{% endif %}
+
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<h3>Datos Globales</h3>
+				{% if glovales %}
+				<span class="req">{{ glovales }}</span>
+				{% endif %}
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Factura</td>
+							<td id="gridhead">Detalles Express</td>
+							<td id="gridhead">Importe Factura c/p</td>
+						</tr>
+						<tr>
+							<td>{{ f_express.0.factura }}</td>
+							<td>{{ f_express.0.detallesExpres }}</td>
+							<td>{{ f_express.0.importeFactura }}</td>
+						</tr>
+						<tr>
+							<td>{{ f_express.0.factura.errors }}</td>
+							<td>{{ f_express.0.detallesExpres.errors }}</td>
+							<td>{{ f_express.0.importeFactura.errors }}</td>
+						</tr>
+					</table>
+
+				</div>
+				<br>
+				<br>
+		{%if guardados %}
+			Express Almacenados con exito:{{guardados}}
+		{%endif %}
+		{%if repetidas %}
+			No se guardaron los siguientes Expres porque ya existen:{{repetidas}}
+		{%endif %}
+				<h3>Datos Generales</h3>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead2" style="text-align:center;">ICC</td>
+							<td id="gridhead2" style="text-align:center;">NO. ASIGNADO</td>
+						</tr>
+						{% for field in f_express %}
+						<tr>
+							<td>{{ field.icc }}{{field.icc.errors}}</td>
+							<td>{{ field.noCell }}{{field.noCell.errors}}</td>
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+				<ul>
+					<li id="buttons">
+						<input class="submit success" type="submit" name='expresss' value="Guardar y Agregar Mas Express >>>"/> <input class="submit success" type="submit" name='serial' value="Serializar los 2 Primeros >>>"/>
+						{%if b_factura %}
+							<br>
+							<a class="success button" href="/compras/almacen/equipos/?factura={{ b_factura|escape }}" title="Agregar Nuevo">Agregar Equipos</a>
+							<a class="success button" href="/compras/almacen/express/?factura={{ b_factura|escape }}" title="Agregar Express a la misma factura">Agregar Express</a>  |
+							<a class="success button" href="/compras/almacen/accesorios/?factura={{ b_factura|escape }}" title="Agregar Accesorios a la misma factura">Agregar Accesorios</a>  |
+							<a class="success button" href="/compras/almacen/fichas/?factura={{ b_factura|escape }}" title="Agregar Fichas a la misma factura">Agregar Fichas</a>  |
+							<a class="success button" href="/compras/almacen/recargas/?factura={{ b_factura|escape }}" title="Agregar Recargas a la misma factura">Agregar Recargas</a> |
+							<a class="success button" href="/compras/almacen/reporte/?q={{ b_factura|escape }}" title="Revisar Reporte de la misma factura">Revisar Reporte</a>
+						{%endif %}
+						<BR /><span class="req">*.Campos Obligatorios. No dejar vacios.</span>
+					</li>
+				</ul>
+		</form>
+			{% if agregados %}
+				<br>
+				<div class='info'>
+					<h2>Express Agregados</h2>
+				</div>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">ICC</td>
+							<td id="gridhead">No de Cel</td>
+							<td id="gridhead">Detalles del Express</td>
+						</tr>
+						{% for item in agregados %}
+						<tr>
+							<td>{{ item.icc }}</td>
+							<td>{{ item.noCell }}</td>
+							<td>{{ item.detallesExpres }}</td>
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+			{%endif %}
+
+		<strong>{{ informacion }}</strong>
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

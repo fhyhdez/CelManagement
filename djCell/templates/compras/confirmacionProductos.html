@@ -1,0 +1,203 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Transferencias - @compras{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info">
+			<h3>Transferencias del Folio: {{ mov.folio|title }} Destino: {{ mov.sucursalDestino.nombre|title }} </h3>
+			<div>La Sucursal que se muestra es donde actualmente se encuentra el Producto.</div>{{info}}
+		</div>
+		{%if transEq or transEx or transAc or transFic or transSaldo %}
+			{% if transEq %}
+			<div id="grid">
+				<h3>Equipos</h3>
+				<table id="grid">
+					<tr>
+						<th>SUCURSAL</th>
+						<th>MARCA/MODELO</th>
+						<th>IMEI</th>
+						<th>ICC</th>
+						<th>MOVIMIENTO</th>
+						<th>PRODUCTO</th>
+						<th>ACTUALIZAR</th>
+					</tr>
+					{% for x in transEq %}
+						<tr>
+							<td>{{ x.equipo.sucursal.nombre|title }}</td>
+							<td>{{ x.equipo.detallesEquipo.marca.marca|escape }} {{ x.equipo.detallesEquipo.modelo|escape }}</td>
+							<td>{{ x.equipo.imei|title }}</td>
+							<td>{{ x.equipo.icc|title }}</td>
+							<td>{%if x.confirmacion %}Aceptado{%else %}No Confirmado{%endif %}</td>
+							<td>{{ x.equipo.estatus.estatus|escape }} </td>
+							<td>
+								{%if x.confirmacion %}
+								CONFIRMADO<img src="/static/img/icons/page_save.png" />
+								{%else %}
+							<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input id="choice1" name="mChoice" class="field radio" type="radio" value="robado" />
+									<label class="choice" for="choice1">|| Robado ||</label><br>
+								<input id="choice2" name="mChoice" class="field radio" type="radio" value="devolver"/>
+									<label class="choice" for="choice2">|| Devolver a Almacen ||</label>
+								<input name="aceptEq" type="image" src="/static/img/icons/page_white_put.png" title="Actualizar Producto Transferencia" value="{{ x.id }}" />
+								<input type="hidden" name="transfGral" value="{{mov.folio}}"/>
+							</form>
+								{%endif %}
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			<hr>
+			{% endif %}
+			<br>
+			{% if transEx %}
+			<div id="grid">
+				<h3>Express</h3>
+				<table id="grid">
+					<tr>
+						<th>SUCURSAL</th>
+						<th>ICC</th>
+						<th>MOVIMIENTO</th>
+						<th>PRODUCTO</th>
+						<th>ACTUALIZAR</th>
+					</tr>
+					{% for x in transEx %}
+						<tr>
+							<td>{{ x.expres.sucursal.nombre|escape }}</td>
+							<td>{{ x.expres.icc|title }}</td>
+							<td>{%if x.confirmacion %}Aceptado{%else %}No Confirmado{%endif %}</td>
+							<td>{{ x.expres.estatus.estatus|escape }} </td>
+							<td title="Confirmar producto de Transferencia">
+								{%if x.confirmacion %}
+								CONFIRMADO<img src="/static/img/icons/page_save.png" />
+								{%else %}
+							<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input id="choice1" name="mChoice" class="field radio" type="radio" value="robado" />
+									<label class="choice" for="choice1">|| Robado ||</label><br>
+								<input id="choice2" name="mChoice" class="field radio" type="radio" value="devolver"/>
+									<label class="choice" for="choice2">|| Devolver a Almacen ||</label>
+								<input name="aceptEx" type="image" src="/static/img/icons/page_white_put.png" title="Actualizar Producto Transferencia" value="{{ x.id }}" />
+								<input type="hidden" name="transfGral" value="{{mov.folio}}"/>
+							</form>
+								{%endif %}
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			<hr>
+			{% endif %}
+			<br>
+			{% if transAc %}
+			<div id="grid">
+				<h3>Accesorios</h3>
+				<table id="grid">
+					<tr>
+						<th>SUCURSAL</th>
+						<th>CODIGO DE BARRAS</th>
+						<th>MARCA/MODELO</th>
+						<th>MOVIMIENTO</th>
+						<th>PRODUCTO</th>
+						<th>ACTUALIZAR</th>
+					</tr>
+					{% for x in transAc %}
+						<tr>
+							<td>{{ x.accesorio.sucursal.nombre|escape }}</td>
+							<td>{{ x.accesorio.codigoBarras|escape}}</td>
+							<td>{{ x.accesorio.detallesAccesorio|escape}} </td>
+							<td>{%if x.confirmacion %}Aceptado{%else %}No Confirmado{%endif %}</td>
+							<td>{{ x.accesorio.estatusAccesorio.estatus|escape }} </td>
+							<td title="Confirmar producto de Transferencia">
+								{%if x.confirmacion %}
+								CONFIRMADO<img src="/static/img/icons/page_save.png" />
+								{%else %}
+							<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input id="choice1" name="mChoice" class="field radio" type="radio" value="robado" />
+									<label class="choice" for="choice1">|| Robado ||</label><br>
+								<input id="choice2" name="mChoice" class="field radio" type="radio" value="devolver"/>
+									<label class="choice" for="choice2">|| Devolver a Almacen ||</label>
+								<input name="aceptAc" type="image" src="/static/img/icons/page_white_put.png" title="Actualizar Producto Transferencia" value="{{ x.id }}" />
+								<input type="hidden" name="transfGral" value="{{mov.folio}}"/>
+							</form>
+								{%endif %}
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			<hr>
+			{% endif %}
+			<br>
+			{% if transFic %}
+			<div id="grid">
+				<h3>Fichas</h3>
+				<table id="grid">
+					<tr>
+						<th>SUCURSAL</th>
+						<th>NOMINACION</th>
+						<th>SERIE</th>
+						<th>MOVIMIENTO</th>
+						<th>PRODUCTO</th>
+						<th>ACTUALIZAR</th>
+					</tr>
+					{% for x in transFic %}
+						<tr>
+							<td>{{ x.ficha.sucursal.nombre|escape }}</td>
+							<td>$ {{ x.ficha.nominacion.nominacion|escape}}</td>
+							<td>{{ x.ficha.folio|escape}}</td>
+							<td>{%if x.confirmacion %}Aceptado{%else %}No Confirmado{%endif %}</td>
+							<td>{{ x.ficha.estatusFicha.estatus|escape }} </td>
+							<td title="Confirmar producto de Transferencia">
+								{%if x.confirmacion %}
+								CONFIRMADO<img src="/static/img/icons/page_save.png" />
+								{%else %}
+							<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input id="choice1" name="mChoice" class="field radio" type="radio" value="robado" />
+									<label class="choice" for="choice1">|| Robado ||</label><br>
+								<input id="choice2" name="mChoice" class="field radio" type="radio" value="devolver"/>
+									<label class="choice" for="choice2">|| Devolver a Almacen ||</label>
+								<input name="aceptFic" type="image" src="/static/img/icons/page_white_put.png" title="Actualizar Producto Transferencia" value="{{ x.id }}" />
+								<input type="hidden" name="transfGral" value="{{mov.folio}}"/>
+							</form>
+								{%endif %}
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			<hr>
+			{% endif %}
+			<br>
+			{% if transSaldo %}
+			<div id="grid">
+				<h3>Recargas</h3>
+				<table id="grid">
+					<tr>
+						<th>SUCURSAL</th>
+						<th>MONTO</th>
+						<th>OBSERVACIONES</th>
+						<th>MOVIMIENTO</th>
+					</tr>
+					{% for x in transSaldo %}
+						<tr>
+							<td>{{ x.movimiento.sucursalDestino.nombre|escape }}</td>
+							<td>$ {{ x.monto|escape}}</td>
+							<td>{{ x.observaciones|escape}}</td>
+							<td>{%if x.confirmacion %}Aceptado{%else %}No Confirmado{%endif %}</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+			<hr>
+			{% endif %}
+			<br>
+		{%else %}			
+		<strong>No hay transferencias relacionadas al folio.</strong>
+		{%endif %}
+
+	</section>
+	<div style="height:70px;"></div>
+</div>
+{% endblock %}

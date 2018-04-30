@@ -1,0 +1,33 @@
+<!DOCTYPE>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name = "viewport" content = "width=device-width, maximum-scale = 1, minimum-scale=1" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/pop.css" media="all" />
+		<link rel="stylesheet" href="{{STATIC_URL}}css/flexslider.css" type="text/css" />
+		<link rel="stylesheet" href="{{STATIC_URL}}css/fuentes.css" type="text/css" media="screen" />
+		<link rel="shortcut icon" type="image/x-icon" href="http://dhtml5.comoj.com/images/favicon.ico" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="{{STATIC_URL}}js/jquery.flexslider.js"></script>
+		<script src="{{STATIC_URL}}js/default.js"></script>
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+			<script src="js/respond.min.js"></script>
+		<![endif]-->
+		{% block miscript %}
+		{% endblock %}
+		<title>@CM - 
+		{% block titulo %}
+		{% endblock %}</title>
+	</head>
+	<body>
+		{%if nivel == 0 or nivel == 1 or nivel == 9 %}
+
+		{% block contenido %}{% endblock %}
+		{%else %}
+	<div id="stylized" class="myform">
+		<p>Ud. No tiene permiso para ver esta seccion.</p>		
+	</div>
+		{%endif %}
+	</body>
+</html>

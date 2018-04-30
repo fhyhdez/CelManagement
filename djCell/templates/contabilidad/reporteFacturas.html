@@ -1,0 +1,48 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}--Contabilidad{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info">
+			<h2>{{titulo}}</h2>
+		</div>
+		{{buscador|safe}}
+		{%if factura %}
+			<br>
+				<div class="info">
+					<h3><strong>Detalles de la Factura</strong></h3>
+				</div>
+				<div id="twoCol">
+					<table id="twoCol">
+						<tr>
+							<td>Cliente</td>
+							<td><a href="/contabilidad/facturacion/facturas/cliente/nuevo/?filtro={{factura.clienteFacturacion.id}}" >{{factura.clienteFacturacion|upper}}</a></td>
+						</tr>
+						<tr>
+							<td>Venta</td>
+							<td>{{factura.venta|default:'Varias'|upper}}</td>
+						</tr>
+						<tr>
+							<td>Fecha de Facturacion</td>
+							<td>{{ factura.fxFactura}}</td>
+						</tr>
+						<tr>
+							<td>Folio Fiscal</td>
+							<td>{{factura.folioFiscal|upper}}</td>
+						</tr>
+						<tr>
+							<td>Total</td>
+							<td>{{factura.totalvta|upper}}</td>
+						</tr>
+					</table>
+				</div>
+		{%endif %}
+		{%if reporte %}
+			{{reporte|safe}}
+		{%endif %}
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

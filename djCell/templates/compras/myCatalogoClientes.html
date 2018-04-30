@@ -1,0 +1,137 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Catalogo de clientes @Subdistribuidores y Mayoristas {% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Clientes</h2>
+				<div>Catalogo de clientes Subdistribuidores y Mayoristas</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar Cliente:</h3>
+				</li>
+				<li>
+					<label class="desc">Cliente: <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query|escape}}" name="q" title="Buscar Cliente, se filtraran resultados por medio del nombre, rfc, direccion"; placeholder="Ej. Jhon Perez" required />
+					</div>
+					<p class="instruct">Ingrese Nombre o Razon Social | RFC | Direccion. Gracias.</p>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Buscar"/>  |  
+					<a class="success button" href="/compras/compras/clientes/catalogos/" title="Nueva busqueda">Nueva Busqueda</a>
+				</li>
+			</ul>
+		</form>
+		{{ info }}
+	</section>
+	<br>
+	<section id="row">
+		<div class="info"><h3>Clientes Subdistribuidores</h3></div>
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<td id="gridhead">RFC</td>
+					<td id="gridhead">Nombre</td>
+					<td id="gridhead">Direccion</td>
+					<td id="gridhead">Tipo</td>
+					<td id="gridhead">Credito</td>
+					<td id="gridhead" title="Accion a Realizar" colspan="3">Revisar<br>Actualizar</td>
+				</tr>
+				{%if Subdist %}
+				{% for x in Subdist %}
+					<tr>
+						<td>{{ x.cliente.rfc|escape }} </td>
+						<td>{{ x.cliente.razonSocial|escape }} </td>
+						<td>{{ x.cliente.direccion|escape }}. {{ x.cliente.colonia.colonia|escape }}, {{ x.cliente.ciudad.ciudad|escape }}, {{ x.cliente.ciudad.estado|escape }}.</td>
+						<td>{{ x.edo.estado|escape }}</td>
+						<td>{{ x.limCredito|escape }}</td>
+						<td>
+							<form class="wufoo" action="/compras/compras/clientes/subdistribuidor/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="upd" type="image" src="/static/img/icons/vcard_edit.png" title="Actualizar Datos" value="{{ x.id }}" />
+							</form>
+						</td>
+					</tr>
+				{%endfor %}
+				{%else %}
+				<tr>
+					<td colspan="3">No se Encontraron resultados en esta seccion.</td>
+					<td colspan="5"><a class="success button" href="/compras/compras/clientes/catalogos/" title="Nueva busqueda">Nueva Busqueda</a></td>
+				</tr>
+				{%endif %}
+			</table>
+		</div>
+		<div class="pagination">
+			<span class="step-links">
+				{% if Subdist.has_previous %}
+					<a class="success button" href="?pagSub={{ Subdist.previous_page_number }}&amp;q={{ query|escape }}">... Anterior</a>
+				{% endif %}
+				<span class="current">
+					Pagina {{ Subdist.number }} de {{ Subdist.paginator.num_pages }}.
+				</span>
+
+				{% if Subdist.has_next %}
+					<a class="success button" href="?pagSub={{ Subdist.next_page_number }}&amp;q={{ query|escape }}"> Siguiente ...</a>
+				{% endif %}
+			</span>
+		</div>
+	</section>
+	<br>
+	<section id="row">
+		<div class="info"><h3>Clientes Mayoristas</h3></div>
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<td id="gridhead">RFC</td>
+					<td id="gridhead">Nombre</td>
+					<td id="gridhead">Direccion</td>
+					<td id="gridhead">%Desc.<br>Fichas</td>
+					<td id="gridhead">%Desc.<br>Recargas</td>
+					<td id="gridhead" title="Accion a Realizar">Revisar<br>Actualizar</td>
+				</tr>
+				{%if Mayorista %}
+				{% for x in Mayorista %}
+					<tr>
+						<td>{{ x.cliente.rfc|escape }} </td>
+						<td>{{ x.cliente.razonSocial|escape }} </td>
+						<td>{{ x.cliente.direccion|escape }}. {{ x.cliente.colonia.colonia|escape }}, {{ x.cliente.ciudad.ciudad|escape }}, {{ x.cliente.ciudad.estado|escape }}.</td>
+						<td>{{ x.descuentoFichas|escape }}</td>
+						<td>{{ x.descuentoRecargas|escape }}</td>
+						<td>
+							<form class="wufoo" action="/compras/compras/clientes/mayorista/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="upd" type="image" src="/static/img/icons/vcard_edit.png" title="Actualizar Datos" value="{{ x.id }}" />
+							</form>
+						</td>
+					</tr>
+				{%endfor %}
+				{%else %}
+				<tr>
+					<td colspan="3">No se Encontraron resultados en esta seccion.</td>
+					<td colspan="5"><a class="success button" href="/compras/compras/clientes/catalogos/" title="Nueva busqueda">Nueva Busqueda</a></td>
+				</tr>
+				{%endif %}
+			</table>
+		</div>
+		<div class="pagination">
+			<span class="step-links">
+				{% if Mayorista.has_previous %}
+					<a class="success button" href="?pagMay={{ Mayorista.previous_page_number }}&amp;q={{ query }}"><img src="/static/img/icons/book_previous.png" alt="Anterior" title="Anterior"/></a>
+				{% endif %}
+				<span class="current">
+					Pagina {{ Mayorista.number }} de {{ Mayorista.paginator.num_pages }}.
+				</span>
+
+				{% if Mayorista.has_next %}
+					<a class="success button" href="?pagMay={{ Mayorista.next_page_number }}&amp;q={{ query }}"><img src="/static/img/icons/book_next.png" alt="Siguiente" title="Siguiente"/></a>
+				{% endif %}
+			</span>
+		</div>
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

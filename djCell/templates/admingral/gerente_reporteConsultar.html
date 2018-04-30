@@ -1,0 +1,150 @@
+{% extends 'admingral/admin-base.html' %}
+
+{% block titulo %}@Reporte de Activaciones @Gerencia{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Reporte de Activaciones : Concentrado</h2>
+				<div>Equipos y Express</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Filtrar por fechas:</h3>
+					<div>La fecha inicial y los tipos de activacion son obligatorios***</div>
+				</li>
+				<li>
+					<label class="desc">Fecha de Inicio</label>
+					<div>
+						<input type="date" name="fxInicio" required>
+					</div>
+				</li>
+				<li>
+					<label class="desc">Fecha de Final</label>
+					<div>
+						<input type="date" name="fxFinal">
+					</div>
+				</li>
+				{% for field in form %}
+				<li>
+					{% if field.label != 'Tipo de Activacion' %}
+
+					<label class="desc">{{ field.label }}</label>
+					<div>
+						{{ field }}
+					</div>
+					<label> {{field.help_text}} <small><span class="req">{{field.errors}} </span></small></label>
+					{% endif %}
+				</li>
+				{% endfor %}
+				<li><label class="desc">Tipo de Activacion:</label></li>
+				<li>
+				{% for radio in form.tipoActivacion %}
+				    <label>
+						||{{ radio.choice_label }}<span class="radio">{{ radio.tag }}</span>
+					</label>
+					
+				{% endfor %}
+				<small><span class="req">*Seleccione uno.</span></small>
+				</li>
+
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Consultar"/>  |  
+					<a class="success button" href="." title="Nueva Consulta">Nueva Consulta</a>  |  
+					<a href="" class="tooltipbasic" data-tooltip="Seleccione para Generar el Archivo"><input type="checkbox" name="excel" value="Exportar">Descargar Reporte</a>
+				</li>
+				<li><span class="req"><strong>{{ info }}</strong></span></li>
+			</ul>
+		</form>
+	</section>
+	<section id="row">
+		<h3>{{ query|escape }}</h3>
+		<hr style="clear:both;">
+		<div id="grid">
+			<h3>Equipos:</h3>
+			{% if resultsEq %}
+			<table id="grid">
+				<tr>
+					<td id="gridhead">Sucursal</td>
+					<td id="gridhead">Tipo Activacion</td>
+					<td id="gridhead">Equipo</td>
+					<td id="gridhead">IMEI</td>
+					<td id="gridhead">ICC</td>
+					<td id="gridhead">NO.ASIGNADO</td>
+					<td id="gridhead">Vendedor</td>
+					<td id="gridhead">Fecha</td>
+				</tr>
+				{% for item in resultsEq %}
+					<tr>
+						{% for x in item %}
+						<td>{{ x }}</td>
+						{%endfor %}
+					</tr>
+				{%endfor %}
+			</table>
+			<div class="pagination">
+				    <span class="step-links">
+				        {% if resultsEq.has_previous %}
+				            <a class="success button" href="?pagina1={{ resultsEq.previous_page_number }}">...Anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ resultsEq.number }} de {{ resultsEq.paginator.num_pages }}.
+				        </span>
+
+				        {% if resultsEq.has_next %}
+				            <a class="success button" href="?pagina1={{ resultsEq.next_page_number }}">Siguiente...</a>
+				        {% endif %}
+				    </span>
+				</div>
+			{% else %}
+			<strong>No Hay resultados</strong>
+			{% endif %}
+		</div>
+		<hr>
+		<div style="height:40px;"></div>
+		<div id="grid">
+			<h3> Express:</h3>
+			{% if resultsExp %}
+			<table id="grid">
+				<tr>
+					<td id="gridhead">Sucursal</td>
+					<td id="gridhead">Tipo Activacion</td>
+					<td id="gridhead">ICC</td>
+					<td id="gridhead">NO.ASIGNADO</td>
+					<td id="gridhead">Vendedor</td>
+					<td id="gridhead">Fecha</td>
+				</tr>
+				{% for item in resultsExp %}
+					<tr>
+						{% for x in item %}
+						<td>{{ x }}</td>
+						{%endfor %}
+					</tr>
+				{%endfor %}
+			</table>
+			<div class="pagination">
+				    <span class="step-links">
+				        {% if resultsExp.has_previous %}
+				            <a class="success button" href="?pagina2={{ resultsExp.previous_page_number }}">...Anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ resultsExp.number }} de {{ resultsExp.paginator.num_pages }}.
+				        </span>
+
+				        {% if resultsExp.has_next %}
+				            <a class="success button" href="?pagina2={{ resultsExp.next_page_number }}">Siguiente...</a>
+				        {% endif %}
+				    </span>
+				</div>
+			{% else %}
+			<strong>No Hay resultados</strong>
+			{% endif %}
+		</div>
+	</section>
+<br><br><br>
+</div>
+{% endblock %}

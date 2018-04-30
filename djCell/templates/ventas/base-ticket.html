@@ -1,0 +1,42 @@
+<!DOCTYPE>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name = "viewport" content = "width=device-width, maximum-scale = 1, minimum-scale=1" />
+		<link href='http://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
+		<link rel="shortcut icon" type="image/x-icon" href="http://dhtml5.comoj.com/images/favicon.ico" />
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+			<script src="js/respond.min.js"></script>
+		<![endif]-->
+		{% block miscript %}
+		{% endblock %}
+		<title>@CM - 
+		{% if nivel == 0 %}
+		Django-Admin
+		{% elif nivel == 1 %}
+		Administrador
+		{% elif nivel == 2 %}
+		Gerencia Contabilidad
+		{% elif nivel == 3 %}
+		Contador Analista
+		{% elif nivel == 4 %}
+		Contador Auditor
+		{% elif nivel == 5 %}
+		Compras Gerencia
+		{% elif nivel == 6 %}
+		Jefe de Distribudion - Compras
+		{% elif nivel == 7 %}
+		Almacenista - Compras
+		{% elif nivel == 10 %}
+		Tecnigo
+		{% elif nivel == 12 %}
+		Vendedor
+		{% endif %}
+		{% block titulo %}
+		{% endblock %}</title>
+	</head>
+	<body>
+		{% block contenido %}{% endblock %}
+	</body>
+</html>

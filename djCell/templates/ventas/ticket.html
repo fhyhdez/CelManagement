@@ -1,0 +1,304 @@
+{% extends 'admingral/base-ticket.html' %}
+{% block miscript %}
+<style type="text/css">
+a{
+	text-decoration: none;
+}
+.button{
+	/* estilos tipograficos */
+	
+	color: #fff;
+	font-family: sans-serif;
+	font-size: 1em;
+	font-weight: bold;
+	text-transform: uppercase;
+	
+	/* padding, margin y borde */
+	
+    padding: 1em 2em;
+	margin-right: 1.5em;
+	cursor: pointer;
+	border: 0;
+    border-radius: 2em;
+
+	/* propiedades para la animacion  */
+	
+	transition: all 0.20s linear;
+	-webkit-transition: all 0.20s linear;
+	-moz-transition: all 0.20s linear;
+	position: relative;
+	bottom: 0;
+}
+.azul{
+	background: #04a8bf;
+	box-shadow: 0px 5px 0 #0491a5;
+}
+.button:active{
+	bottom: -5px;
+}
+.azul:active{
+	box-shadow:0 0 0 #0491a5, inset 0 0 5px rgba(0, 0, 0, 0.4);			
+}
+.rojo{
+	background: #bf1b04;
+	box-shadow: 0px 5px 0 #8F1502;			
+}
+.rojo:active{
+	box-shadow:0 0 0 #9a1604, inset 0 0 5px rgba(0, 0, 0, 0.4);			
+}
+table.simple {
+	font-family: Arial,sans-serif,Tahoma;
+	font-size: 0.580em;
+	border-width: 0px;
+	border-spacing: 1px;
+	border-style: hidden;
+	border-collapse: collapse;
+	background-color: white;
+	width: 250px;
+	vertical-align: center;
+}
+table.simple th {
+	border-width: thin;
+	padding: 3px 12px;
+	border-style: ;
+	border-color: gray;
+	background-color: white;
+}
+table.simple td {
+	border-width: thin;
+	padding: 3px 12px;
+	border-style: ;
+	border-color: gray;
+	background-color: white;
+}
+table.simple2 {
+	font-family: Arial,sans-serif,Tahoma;
+	font-size: 0.580em;
+	border-width: 0px;
+	border-spacing: 1px;
+	border-style: hidden;
+	border-collapse: collapse;
+	background-color: white;
+	width:250px;
+	vertical-align: center;
+}
+table.simple2 th {
+	border-width: thin;
+	padding: 3px 12px;
+	border-style: hidden;
+	background-color: white;
+}
+table.simple2 td {
+	border-width: thin;
+	padding: 3px 12px;
+	border-style: hidden;
+	background-color: white;
+	width: 90%;
+}
+table.simple2 td:first-child{
+	text-align: center;
+	width:4%;
+	border-style: hidden;
+	border-width: thin;
+}
+table.simple2 td:last-child {
+	text-align: center;
+	width: 4%;
+	border-style: hidden;
+	border-width: thin;
+}
+hr.comon{
+	border-style: hidden;
+	border: 1px;
+	width: 200px;
+	vertical-align: left;
+}
+</style>
+<style type="text/css" media="print">
+@media print {
+	.button {display:none;}
+	.azul {display:none;}
+	.rojo {display:none;}
+}
+</style>
+{% endblock %}
+{% block titulo %}@Ticket{% endblock %}
+
+{% block contenido %}
+{%if info %}
+<strong>{{ info }} </strong>
+{%else %}
+<div id="ticket"> 
+	{%for x in aio %}
+	<table class="simple">
+		<tr>
+			<th colspan="2"><h1>GRUPO ACCELL</h1></th>
+		</tr>
+		<tr>
+			<th colspan="2">{{ x.0.sucursal.direccion|upper }}. {{ x.0.sucursal.colonia.colonia|upper }}. {{ x.0.sucursal.cp.cp|upper }}. {{ x.0.sucursal.ciudad.ciudad|upper }}, {{ x.0.sucursal.ciudad.estado|upper }}.</th>
+		</tr>
+		<tr>
+			<th>FOLIO:</th><th>{{ x.0.folioVenta|upper }}</th>
+		</tr>
+		<tr>
+			<th>FECHA:</th><th>{{ x.0.fecha|date }}</th>
+		</tr>
+		{%if x.0.credito %}
+		<tr>
+			<th>VENTA:</th><th>CREDITO</th>
+		</tr>
+		{%elif x.0.mayoreo %}
+		<tr>
+			<th>VENTA:</th><th>MAYOREO</th>
+		</tr>
+		{%else %}
+		<tr>
+			<th>VENTA:</th><th>EFECTIVO</th>
+		</tr>
+		{%endif %}
+	</table>
+	<hr class="comon">
+	<table class="simple2">
+		<tr>
+			<th>CANT.</th>
+			<th>DESCRIPCION</th>
+			<th>IMPORTE</th>
+		</tr>
+		{%for equipoV in x.1 %}
+		<tr>
+			<td>1</td>
+			<td>{{equipoV.equipo.detallesEquipo.marca.marca|upper}} {{equipoV.equipo.detallesEquipo.modelo|upper}} IMEI: {{equipoV.equipo.imei|default:''}} ICC: {{equipoV.equipo.icc|default:''}}</td>										
+			<td>{{equipoV.precVenta|default:'N/A'}} </td>
+		</tr>
+		{%endfor %}
+		{%for expV in x.2 %}
+		<tr>
+			<td>1</td>
+			<td>{{expV.expres.detallesExpres.tipoIcc.tipoIcc|upper}} - {{expV.expres.icc|default:''}}</td>
+			<td>{{expV.precVenta|default:'N/A'}} </td>
+		</tr>
+		{%endfor %}
+		{%for acV in x.3 %}
+		<tr>
+			<td>1</td>
+			<td>{{acV.accesorio.detallesAccesorio.seccion.seccion|upper}} | {{acV.accesorio.codigoBarras}} - {{acV.accesorio.detallesAccesorio.marca|upper}} {{acV.accesorio.detallesAccesorio.descripcion|upper}}</td>
+			<td>{{acV.precVenta|default:'N/A'}} </td>
+		</tr>
+		{%endfor %}
+		{%for ficV in x.4 %}
+		<tr>
+			<td>1 </td>
+			<td>{{ficV.ficha.nominacion.nominacion|upper}} - {{ficV.ficha.folio|upper}}</td>
+			<td>{{ficV.precVenta|default:'N/A'}} </td>
+		</tr>
+		{%endfor %}
+		{%for recV in x.5 %}
+		<tr>
+			<td>1 </td>
+			<td>{{recV.recarga.montos.monto|default:''}} - {{recV.recarga.folio|default:'N/A'}} 
+			<td>{{recV.precVenta|default:'N/A'}} </td>
+		</tr>
+		<tr>
+			<td colspan="3">OBSERVACIONES:<br>{{ recV.observaciones|default:'NINGUNA'|upper}}</td></td>
+		</tr>
+		{%endfor %}
+		{%for planV in x.6 %}
+		<tr>
+			<td>1 </td>
+			<td>{{planV.plan.plan|upper}}</td>
+			<td>{{planV.precVenta|default:'N/A'}} </td>
+		</tr>
+		<tr>
+			<td colspan="3">{{planV.observacion|default:'NINGUNA'|upper}}</td>
+		</tr>
+		{%endfor %}
+		{%for rV in x.7 %}
+		<tr>
+			<td>1</td>
+			<td>RENTA, CUENTA: {{rV.numeroReferencia|upper|default:'N/A'}} </td>
+			<td>{{rV.abono|default:'N/A'}} </td>
+		</tr>
+		<tr>
+			<td>OBSERVACIONES:{{ rV.observacion|default:'NINGUNA'|upper}} </td>
+		</tr>
+		{%endfor %}
+		{%if x.0.credito %}
+		{# no mostrar el #}
+		{%else %}
+		{%for an in x.8 %}
+		<tr>
+			<td>1</td>
+			<td>{{ an.tipoAnticipo|upper }} <br>{{ an.observacion|default:''|upper }} </td>
+			<td>{{an.monto|default:'N/A'}}</td>
+		</tr>
+		{%endfor %}
+		{%endif %}
+		<tr>
+			<td colspan="2" style="text-align:right;font-weight: bold;">TOTAL VENTA:</td>
+			<td>{{ x.0.total|default:'0'}}</td>
+		</tr>
+	</table>
+	{%if x.9 %}
+	<hr class="comon">
+	<table class="simple2">
+		{%for an in x.8 %}
+		<tr>
+			<td>1</td>
+			<td>{{ an.tipoAnticipo|upper }} <br>{{ an.observacion|default:''|upper }} </td>
+			<td>{{an.monto}}</td>
+		</tr>
+		{%endfor %}
+	</table>
+	<hr class="comon">
+	<table class="simple">
+		{%for c in x.9 %}
+		<tr>
+			<th>FOLIO:</th><td>{{ c.folioc|upper }} </td>
+		</tr>
+		<tr>
+			<th>CLIENTE:</th><td>{{ c.subdist.cliente.rfc|upper }} {{ c.subdist.cliente.razonSocial|upper}} {{ c.subdist.cliente.direccion|upper }} </td>
+		</tr>
+		<tr>
+			<th>PLAZO:</th><td>{{ c.plazo|default:'0' }} DIAS.</td>
+		</tr>
+		<tr>
+			<th>OBSERVACIONES:</th><td>{{ c.observacion|default:'NINGUNA'|upper}} </td>
+		</tr>
+		{%endfor %}
+	</table>
+	{%endif %}
+	{%if x.10 %}
+	<hr class="comon">
+	<table class="simple">
+		{%for c in x.10 %}
+		<tr>
+			<th>CLIENTE:</th><td>{{ c.clienteMayoreo.cliente.rfc|upper}} {{ c.clienteMayoreo.cliente.razonSocial|upper}} {{ c.clienteMayoreo.cliente.direccion|upper }}</td>
+		</tr>
+		<tr>
+			<td colspan="2"><strong>DESCUENTOS AUTORIZADOS</strong>FICHAS: {{ c.clienteMayoreo.descuentoFichas|default:'0' }} %, RECARGAS {{  c.clienteMayoreo.descuentoRecargas|default:'0' }} % </td>
+		</tr>
+		{%endfor %}
+	</table>
+	{%endif %}	
+	{%endfor %}
+	<hr class="comon">
+	<table class="simple">
+		<tr>
+			<th colspan="3">***ESTE TICKET NO CUENTA CON VALOR FISCAL***</th>
+		</tr>
+		<tr>
+			<th colspan="3" style="font-size:0.480em;">SUS APARTADOS SOLO APLICAN UN MES *</th>
+		</tr>
+		<tr>
+			<th colspan="3" style="font-size:0.380em;">*PRECIO DE EQUIPO SUJETO A CAMBIOS SIN PREVIO AVISO. NO HAY REEMBOLSOS.</th>
+		</tr>
+		<tr>
+			<th colspan="3">***GRACIAS POR SU COMPRA!***</th>
+		</tr>
+	</table>
+</div>
+<div style="clear:both;height:4em;"></div>
+<a href="javascript:window.print()" class="button azul">Imprimir</a>   
+{%endif %}
+<a href="javascript:close();" class="button rojo">Cerrar ventana</a>
+{% endblock %}

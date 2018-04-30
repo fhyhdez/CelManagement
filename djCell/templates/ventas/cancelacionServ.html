@@ -1,0 +1,189 @@
+{% extends 'ventas/ventas-base.html' %}
+{% block titulo %}@Ventas CANCELADAS del Dia - @Ventas{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<h3><strong>VENTAS CANCELADAS POR AUTORIZAR </strong></h3>
+		<DIV class="info">Las ventas canceladas que no han sido autorizadas, deben ser reportadas para que los productos se liberen y regresen a su respectivo estado de Existencia en sucursal.</DIV>
+		<div id="grid2">
+			<table id="grid2">
+				<tr>
+					<td id="gridhead2">Vendedor</td>
+					<td id="gridhead2">Folio</td>
+					<td id="gridhead2">Producto</td>
+					<td id="gridhead2">Descripcion</td>
+					<td id="gridhead2" title="Tipo de Pago">Estado</td>
+					<td id="gridhead2" title="Tipo de Venta">Venta</td>
+					<td id="gridhead2">Monto</td>
+				</tr>
+		{%if vtaCanceladas %}
+			{%for vc in vtaCanceladas %}
+				{%if eqVendido or expVendido or accVendido or ficVendido or recVendido %}
+					
+					{%for equipoV in eqVendido %}
+					<tr>
+						{%if vc.folioVenta == equipoV.venta.folioVenta %}
+							<td>{{ vc.usuario.username }} </td>
+							<td>{{ vc.folioVenta }} </td>
+							<td>Equipo {{equipoV.equipo.detallesEquipo.marca.marca}} {{equipoV.equipo.detallesEquipo.modelo}} </td>
+							<td>Imei: {{equipoV.equipo.imei}} Icc: {{equipoV.equipo.icc}}</td>		
+							<td style="border-color:#FFAE00;background-color:#FFD373;">{{vc.estado.estado}}</td>
+							{%if vc.credito %}
+							<td style="border-color:#FFAE00;background-color:#FFD373;">Credito</td>
+							{%elif vc.mayoreo %}
+							<td style="border-color:#FFAE00;background-color:#FFD373;">Mayoreo</td>
+							{%else %}
+							<td style="border-color:#FFAE00;background-color:#FFD373;">Contado</td>
+							{%endif %}
+							<td>{{equipoV.precVenta}}</td>
+						{%endif %}
+					</tr>
+					{%endfor %}
+							
+					{%for expV in expVendido %}
+					<tr>
+						{%if vc.folioVenta == expV.venta.folioVenta   %}
+							<td>{{ vc.usuario.username }} </td>
+							<td>{{ vc.folioVenta }} </td>
+							<td>Express {{expV.expres.detallesExpres.tipoIcc.tipo}}</td>
+							<td>{{expV.expres.icc}}</td>
+							<td style="border-color:#FFAE00;background-color:#FFD373;">{{vc.estado.estado}}</td>
+							{%if vc.credito %}
+							<td>Credito</td>
+							{%elif vc.mayoreo %}
+							<td>Mayoreo</td>
+							{%else %}
+							<td>Contado</td>
+							{%endif %}
+							<td>{{expV.precVenta}}</td>
+						{%endif %}
+					</tr>
+					{%endfor %}
+							
+					{%for ficV in ficVendido %}
+					<tr>
+						{%if vc.folioVenta == ficV.venta.folioVenta   %}
+							<td>{{ vc.usuario.username }} </td>
+							<td>{{ vc.folioVenta }} </td>
+							<td>Ficha {{ficV.ficha.nominacion.nominacion}}</td>
+							<td>{{ficV.ficha.folio}}</td>
+							<td style="border-color:#FFAE00;background-color:#FFD373;">{{vc.estado.estado}}</td>
+							{%if vc.credito %}
+							<td>Credito</td>
+							{%elif vc.mayoreo %}
+							<td>Mayoreo</td>
+							{%else %}
+							<td>Contado</td>
+							{%endif %}
+							<td>{{ficV.precVenta}}</td>
+						{%endif %}
+					</tr>
+					{%endfor %}
+
+					{%for recV in recVendido %}
+					<tr>
+						{%if vc.folioVenta == recV.venta.folioVenta   %}
+							<td>{{ vc.usuario.username }} </td>
+							<td>{{ vc.folioVenta }} </td>
+							<td>Recarga {{recV.recarga.montos.monto}}</td>
+							<td>{{recV.recarga.folio}}</td>
+							<td style="border-color:#FFAE00;background-color:#FFD373;">{{vc.estado.estado}}</td>
+							{%if vc.credito %}
+							<td>Credito</td>
+							{%elif vc.mayoreo %}
+							<td>Mayoreo</td>
+							{%else %}
+							<td>Contado</td>
+							{%endif %}
+							<td>{{ recV.precVenta}}</td>
+						{%endif %}
+					</tr>
+					{%endfor %}
+
+					{%for renV in rentaVendido %}
+					<tr>
+						{%if vc.folioVenta == renV.venta.folioVenta   %}
+							<td>{{ vc.usuario.username }} </td>
+							<td>{{ vc.folioVenta }} </td>
+							<td>Deposito de Renta</td>
+							<td> {{renV.numeroReferencia }} / {{renV.observacion}}</td>
+							<td style="border-color:#FFAE00;background-color:#FFD373;">Cancelada</td>
+							{%if vc.credito %}
+							<td>Credito</td>
+							{%elif vc.mayoreo %}
+							<td>Mayoreo</td>
+							{%else %}
+							<td>Contado</td>
+							{%endif %}
+							<td>{{ renV.abono}}</td>
+						{%endif %}
+					</tr>
+					{%endfor %}
+
+					{%for pV in planVendido %}
+					<tr>
+						{%if vc.folioVenta == renV.venta.folioVenta   %}
+							<td>{{ vc.usuario.username }} </td>
+							<td>{{ vc.folioVenta }} </td>
+							<td>Deposito de Plan</td>
+							<td> {{pV.plan.plan }} ${{ pV.plan.costo }} / {{pV.observacion}}</td>
+							<td style="border-color:#FFAE00;background-color:#FFD373;">{{vc.estado.estado}}</td>
+							{%if vc.credito %}
+							<td>Credito</td>
+							{%elif vc.mayoreo %}
+							<td>Mayoreo</td>
+							{%else %}
+							<td>Contado</td>
+							{%endif %}
+							<td>{{ pV.abono}}</td>
+						{%endif %}
+					</tr>
+					{%endfor %}
+
+					{%for acV in accVendido %}
+					<tr>
+						{%if vc.folioVenta == acV.venta.folioVenta   %}
+							<td>{{ vc.usuario.username }} </td>
+							<td>{{ vc.folioVenta }} </td>
+							<td>Acc. {{acV.accesorio.detallesAccesorio.seccion.seccion}} | {{acV.accesorio.codigoBarras}}</td>
+							<td>{{acV.accesorio.detallesAccesorio.marca}} {{acV.accesorio.detallesAccesorio.descripcion}}</td>
+							<td style="border-color:#FFAE00;background-color:#FFD373;">{{vc.estado.estado}}</td>
+							<td>Contado</td>
+							<td>
+								{{acV.precVenta}}
+							</td>
+						{%endif %}
+					</tr>
+					{%endfor %}
+							
+					{%for an in anticipo %}
+					<tr>
+						{%if vc.folioVenta == an.folioVenta.folioVenta  %}
+							<td>{{ vc.usuario.username }} </td>
+							<td>{{ vc.folioVenta }} </td>
+							<td>Anticipo</td>
+							<td>{{ an.tipoAnticipo }}<br>{{an.folioVenta.folioVenta}}</td>
+							<td>Contado</td>
+							<td style="border-color:#FFAE00;background-color:#FFD373;">N/A</td>
+							<td>{{an.monto}}</td>
+						{%endif %}
+					</tr>
+					{%endfor %}
+				{%else %}
+					<tr>
+						<td colspan="3">NO HAY PRODUCTOS/SERVICIOS AGREGADOS</td>
+					</tr>
+				{%endif %}
+			{%endfor %}
+		{%else %}
+					<tr>	
+						<td colspan="3">NO HAY PRODUCTOS/SERVICIOS AGREGADOS</td>
+					</tr>
+		{%endif %}
+			</table>
+		</div>
+	</section>	
+	<br><br>
+</div>
+{% endblock %}

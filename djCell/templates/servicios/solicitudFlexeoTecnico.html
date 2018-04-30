@@ -1,0 +1,167 @@
+{% extends 'servicios/servicios-base2.html' %}
+{% block miscript %} 
+<script type="text/javascript">
+ function SINO(cual) {
+   var elElemento=document.getElementById(cual);
+   if(elElemento.style.display == 'block') {
+      elElemento.style.display = 'none';
+   } else {
+      elElemento.style.display = 'block';
+   }
+}  
+ </script>
+{% endblock %}
+{% block titulo %}@Solicitudes de flexeos - Tecnico @Servicios Tecnicos{% endblock %}
+
+{% block contenido %}
+<div id="content2">
+	<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Clientes de Servicio Tecnico - Flexeos</h2>
+				<div>Equipos para flexear</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar Cliente - Flexeos:</h3>
+				</li>
+				<li>
+					<label class="desc">Cliente: <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query|escape}}" name="q" title="Buscar Cliente, incluya nombre o folio del cliente o sucursal, CLIENTES CON SERVICIO/Equipos PARA FLEXEOS"; placeholder="Ej. Jhon Perez" required />
+					</div>
+					<p class="instruct">Ingrese Nombre del cliente | folio del cliente | sucursal, para realizar el filtrado.Solo se mostraran los clientes que tengan un equipo para flexeo. Gracias.</p>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Buscar"/>  |  
+					<a class="success button" href="/servicios/solicitudes/flexeos/" title="Nueva busqueda">Nueva Busqueda</a>
+				</li>
+				<li><strong>{{ info }}</strong></li>
+			</ul>
+		</form>
+		
+	</section>
+	
+	{% if query %}
+		<section id="row">
+			<h3>Resultados para "{{ query|escape }}":</h3>
+			{% if results %}
+			
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Sucursal</td>
+						<td id="gridhead">Nombre</td>
+						<td id="gridhead">Direccion</td>
+						<td id="gridhead">Equipo</td>
+						<td id="gridhead">Costo</td>
+						<td id="gridhead">Estado</td>
+						<td id="gridhead" colspan="2" title='Accion a Realizar'>Revisar</td>
+					</tr>
+					{% for rep in results %}
+						<tr>
+						{% if rep.estado.estado == 'Entregado a Cliente' or rep.estado.estado == 'Cancelado por el Cliente'  %}
+							<td>{{ rep.cliente.tipoCliente|escape }} </td>
+							<td>{{ rep.sucursal.nombre|escape }} </td>
+							<td>{{ rep.cliente.nombre|escape}} </td>
+							<td>{{ rep.cliente.direccion|escape }}.{{ rep.cliente.colonia.colonia|escape }}, {{ rep.cliente.ciudad.ciudad|escape }}, {{ rep.cliente.ciudad.estado|escape }}.</td>
+							<td>{{ rep.marcaModelo|escape }} {{ rep.imei }} <br> {{ rep.cliente.fxIngreso|date:"Y-m-d h:i a"}} </td>
+							<td>{{ rep.reparacion.monto }} </td>
+							<td>{{ rep.estado.estado|escape }} </td>
+							<td colspan="2">El equipo ya ha sido entregado/cancelado al Cliente</td>
+						{%else %}
+							<td>{{ rep.cliente.tipoCliente|escape }} /{{ rep.reparacion.tipoReparacion.tipo|escape }}</td>
+							<td>{{ rep.sucursal.nombre|escape }} </td>
+							<td>{{ rep.cliente.nombre|escape}} </td>
+							<td>{{ rep.cliente.direccion|escape }}.{{ rep.cliente.colonia.colonia|escape }}, {{ rep.cliente.ciudad.ciudad|escape }}, {{ rep.cliente.ciudad.estado|escape }}.</td>
+							<td>{{ rep.marcaModelo|escape }} {{ rep.imei }} <br> {{ rep.cliente.fxIngreso|date:"Y-m-d h:i a"}} </td>
+							<td>{{ rep.reparacion.monto }} </td>
+							<td>{{ rep.estado.estado|escape }}</td>
+							<td>
+							<form class="wufoo" action="/servicios/clientes_rep/historial/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="histRep" type="image" src="/static/img/icons/zoom_refresh.png" title="Ver Historial" value="{{ rep.id|escape }}" />
+							</form>
+							</td>
+							<td>
+								<form class="wufoo" action="/servicios/seguimiento/flexeos/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+									<input name="upd" type="image" src="/static/img/icons/report_edit.png" title="Actualizar Datos" value="{{ rep.id|escape }}" />
+								</form>
+							</td>
+						{%endif %}	
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+		
+			{% else %}
+				<p>El cliente no se encuentra o no pertenece a esta seccion. <br> verifique sus datos</p>
+			{% endif %}
+		</section>
+		{% endif %}
+	
+	<section id="row">
+		<div class="info"><h3>Equipos en Reparacion por Flexeo</h3></div>
+		{% if flexeos %}
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<td id="gridhead">Sucursal</td>
+					<td id="gridhead">Nombre</td>
+					<td id="gridhead">Direccion</td>
+					<td id="gridhead">Ingreso</td>
+					<td id="gridhead">Estado</td>
+					<td id="gridhead">Detalles</td>
+					<td id="gridhead" colspan="2">Revisar</td>
+				</tr>
+				{% for x in flexeos  %}
+					<tr>
+						<td>{{ x.sucursal.nombre|title }} </td>
+						<td>{{ x.cliente.nombre|title}} </td>
+						<td>{{ x.cliente.direccion|title }}.{{ x.cliente.colonia.colonia }}, {{ x.cliente.ciudad.ciudad }}, {{ x.cliente.ciudad.estado }}.</td>
+						<td>{{ x.cliente.fxIngreso|date:"Y-m-d h:i a"}} </td>
+						<td>{{ x.estado.estado|title }} </td>
+						<td>
+							<div id="div{{ x.id }}" style="display:none;">
+								Equipo : {{ x.marcaModelo|title }} {{ x.imei|title }} <br>
+								Entrega :{{ x.observacion|title }} <br>
+								Anticipo : {{ x.anticipo }}<br>
+							</div>
+							<a href="javascript:void(0);" onclick="SINO('div{{ x.id }}')">Detalles</a>
+						</td>
+						<td>
+							<form class="wufoo" action="/servicios/clientes_rep/historial/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="histRep" type="image" src="/static/img/icons/zoom_refresh.png" title="Ver Historial" value="{{ x.id }}" />
+							</form>
+						</td>
+						<td>
+							<form class="wufoo" action="/servicios/seguimiento/flexeos/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="upd" type="image" src="/static/img/icons/report_edit.png" title="Actualizar Datos" value="{{ x.id }}" />
+							</form>
+						</td>
+					</tr>
+				{%endfor %}
+			</table>
+		</div>
+		<div class="pagination">
+			<span class="step-links">
+				{% if flexeos.has_previous %}
+					<a class="success button" href="?pagina={{ flexeos.previous_page_number }}"><< Anterior</a>
+				{% endif %}
+				<span class="current">
+					Pagina {{ flexeos.number }} de {{ flexeos.paginator.num_pages }}.
+				</span>
+
+				{% if flexeos.has_next %}
+					<a class="success button" href="?pagina={{ flexeos.next_page_number }}"> Siguiente >></a>
+				{% endif %}
+			</span>
+		</div>
+		{%else %}
+		<p>No se Encuentran Solicitudes por el momento.</p>
+		{%endif %}
+	</section>
+	<br>
+	<br><br>
+</div>
+{% endblock %}

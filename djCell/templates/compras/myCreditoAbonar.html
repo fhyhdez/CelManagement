@@ -1,0 +1,172 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Abonos de Subdistriduidores @Compras{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	{%if buscar %}
+	<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Creditos del Cliente</h2>
+				<div>Creditos otorgados al cliente</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar Credito del cliente:</h3>
+				</li>
+				<li>
+					<label class="desc">Folio del Credito: <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query2|escape}}" name="q2" title="Folio de Credito del cliente Seleccionado"; placeholder="Ej. Cred-050" required />
+					</div>
+					<p class="instruct">Ingrese el folio de Credito del Cliente seleccionado. Gracias.</p>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Buscar"/>  |  
+					<a class="success button" href="/compras/compras/credito/abonar/" title="Nueva busqueda">Nueva Busqueda</a>
+					<input type="hidden" name="noSub" value="{{ sub.id }}"/>
+				</li>
+				<li><strong>{{ info }}</strong></li>
+				{%if folioVenta %}
+				<li><a href="./?print={{ folioVenta }}" class="success button" target="_blank" ><img src="{{STATIC_URL}}img/icons/1366452634_print.png">  Imprimir Ticket</a></li>
+				{%endif %}
+			</ul>
+		</form>
+	</section>
+	{%endif %}
+	<br>
+	{%if show %}
+	<section id="row">
+		<div class="info"><h3>Creditos Disponibles del Subdistribuidor</h3></div>
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<td id="gridhead" colspan="2">Datos del Subdistribuidor</td>
+				</tr>
+				<tr>
+					<td>RFC</td>
+					<td>{{ sub.cliente.rfc }} </td>
+				</tr>
+				<tr>
+					<td>Nombre o Razon Social</td>
+					<td>{{ sub.cliente.razonSocial }} </td>
+				</tr>
+				<tr>
+					<td>Direccion:</td>
+					<td>{{ sub.cliente.direccion|escape }}. {{ sub.cliente.colonia.colonia|escape }}, {{ sub.cliente.ciudad.ciudad|escape }}, {{ sub.cliente.ciudad.estado|escape }}.</td>
+				</tr>
+				<tr>
+					<td>Limite de Credito</td>
+					<td>{{ sub.limCredito }}</td>
+				</tr>
+			</table>
+		</div>
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<td id="gridhead">Folio</td>
+					<td id="gridhead">Venta</td>
+					<td id="gridhead">Total</td>
+					<td id="gridhead">Plazo</td>
+					<td id="gridhead">Fecha</td>
+					<td id="gridhead">Estado</td>
+					<td id="gridhead" title="Accion a Realizar" colspan="2">Revisar<br>Historial | Abonar</td>
+				</tr>
+				{%if Creditos %}
+					{% for x in Creditos %}
+					<tr>
+						<td>{{ x.folioc|escape }} </td>
+						<td>{{ x.venta.folioVenta|escape }} </td>
+						<td>{{ x.totalvta|escape }} </td>
+						<td>{{ x.plazo|escape}}</td>
+						<td>{{ x.fxCredito|date:"Y-m-d h:i a" }}</td>
+						<td>{{ x.edo.estado|escape }}</td>
+						{%if x.edo.estado == 'Pagado' %}
+						<td colspan="2">
+							<form class="wufoo" action="/compras/compras/credito/historial/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="hist" type="image" src="/static/img/icons/vcard_edit.png" title="Actualizar Datos" value="{{ x.id }}" />
+							</form>
+						</td>
+						{%else %}
+						<td>
+							<form class="wufoo" action="/compras/compras/credito/historial/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="hist" type="image" src="/static/img/icons/vcard_edit.png" title="Actualizar Datos" value="{{ x.id }}" />
+							</form>
+						</td>
+						<td>
+							<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="abonar" type="image" src="/static/img/icons/report_edit.png" title="Abonar a esta cuenta" value="{{ x.id }}" />
+							</form>
+						</td>
+						{%endif %}
+					</tr>
+					{%endfor %}
+				{%else %}
+				<tr>
+					<td colspan="8">No se Encontraron resultados coincidentes.</td>
+				</tr>
+				{%endif %}
+			</table>
+		</div>
+		<div class="pagination">
+			<span class="step-links">
+				{% if Creditos.has_previous %}
+					<a class="success button" href="?pagCred={{ Creditos.previous_page_number }}&amp;q2={{ query2|escape }}">... Anterior</a>
+				{% endif %}
+				<span class="current">
+					Pagina {{ Creditos.number }} de {{ Creditos.paginator.num_pages }}.
+				</span>
+
+				{% if Creditos.has_next %}
+					<a class="success button" href="?pagCred={{ Creditos.next_page_number }}&amp;q2={{ query2|escape }}"> Siguiente ...</a>
+				{% endif %}
+			</span>
+		</div>
+	</section>
+	{%endif %}
+	{%if mostrarf %}
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div class="info">
+					<h2>Abono a Cuenta de Subdistribuidores</h2>
+					<div>Actualizacion de Pagos</div>
+				</div>
+				<ul>
+					
+					<li class="section first">
+						<h3>Datos Generales</h3>
+					</li>
+					{% if mostrar %}
+						{% for field in formC %}
+							<li>
+								{%if field.label == 'Key' %}
+									{{ field.as_hidden }}
+								{% else %}
+								<label class="desc">{{field.label}}</label> 
+								<div>
+									{{field}}
+								</div>
+								<label> {{field.help_text}} <span class="req"> {{field.errors}} </span></label>
+								{%endif %}
+							</li>
+						{% endfor %}								
+					{% endif %}
+					<li><strong>{{ info }}</strong></li>
+					<li id="buttons">
+						{%if mostrar %}
+						<input class="submit success" type="submit" value="Abonar y Guardar" title="Se genera una nueva venta por recepcion de abono "/> |  
+						{%endif %}
+						<a class="success button" href="/compras/compras/credito/abonar/" title="Buscar Solicitudes sin revisar">Buscar Subdistribuidor</a> <br>
+						<BR /><span class="req">*.Campos Obligatorios. No dejar vacios.</span>
+					</li>
+
+				</ul>
+		</form>			
+	</section>
+	{%endif %}
+	<br><br><br>
+</div>
+{% endblock %}

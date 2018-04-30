@@ -1,0 +1,136 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}@Historial Cliente - Reparacion @Servicios Tecnicos{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	{%if buscar %}
+	<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Clientes de Servicio Tecnico </h2>
+				<div>- Reparaciones, Flexeos y Portabilidades(Flexeo de Equipos sin Costo) -</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar Cliente :</h3>
+				</li>
+				<li>
+					<label class="desc">Cliente: <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query|escape}}" name="q" title="Buscar Cliente, incluya nombre o folio del cliente o sucursal, CLIENTES CON SERVICIO/Equipos Servicio Tecnico"; placeholder="Ej. Jhon Perez" required />
+					</div>
+					<p class="instruct">Ingrese Nombre del cliente | folio del cliente | sucursal, para realizar el filtrado.Solo se mostraran los clientes que tengan un equipo para Reparacion o Flexeo. Gracias.</p>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Buscar"/>  |  
+					<a class="success button" href="." title="Nueva busqueda">Nueva Busqueda</a>
+				</li>
+				<li><strong>{{ info }}</strong></li>
+			</ul>
+		</form>
+	</section>
+	{%endif %}
+	
+	{%if show %}
+	<section id="row">
+			<h3>Equipos en Reparacion Fisica o Carga de Software</h3>
+			{% if reparaciones %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Tipo</td>
+						<td id="gridhead">Sucursal</td>
+						<td id="gridhead">Nombre</td>
+						<td id="gridhead">Direccion</td>
+						<td id="gridhead">Equipo</td>
+						<td id="gridhead">Costo</td>
+						<td id="gridhead">Pagado</td>
+						<td id="gridhead">Estado</td>
+						<td id="gridhead" title='Accion a Realizar'>Revisar<br>Historial</td>
+					</tr>
+					{% for rep in reparaciones %}
+						<tr>
+							<td>{{ rep.cliente.tipoCliente|escape }} / {{ rep.reparacion.tipoReparacion.tipo|escape }} </td>
+							<td>{{ rep.sucursal.nombre|escape }} </td>
+							<td>{{ rep.cliente.nombre|escape}} </td>
+							<td>{{ rep.cliente.direccion|escape }}.{{ rep.cliente.colonia.colonia|escape }}, {{ rep.cliente.ciudad.ciudad|escape }}, {{ rep.cliente.ciudad.estado|escape }}.</td>
+							<td>{{ rep.marcaModelo|escape }} {{ rep.imei }} <br> {{ rep.cliente.fxIngreso|date:"Y-m-d h:i a"}} </td>
+							<td>{{ rep.reparacion.monto|escape }} </td>
+							{%if rep.pagado %}
+							<td title="El equipo en reparacion ya esta pagado. No se puede abonar.">Pagado </td>
+							<td>{{ rep.estado.estado|escape }} / {{ rep.fxRevision|date:"Y-m-d h:i a" }}</td>
+							<td>
+								<form class="wufoo" action="/contabilidad/reportes/servicios/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+									<input name="histRep" type="image" src="/static/img/icons/client_account_template.png" title="Ver Historial" value="{{ rep.id|escape }}" />
+								</form>
+							</td>
+							{%else %}
+							<td title="El equipo no ha sido liquidado del todo, de clic en abonar">Sin Liquidar</td>
+							<td>{{ rep.estado.estado|escape }} / {{ rep.fxRevision|date:"Y-m-d h:i a" }}</td>
+							<td>
+								<form class="wufoo" action="/contabilidad/reportes/servicios/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+									<input name="histRep" type="image" src="/static/img/icons/client_account_template.png" title="Ver Historial" value="{{ rep.id|escape }}" />
+								</form>
+							</td>
+							{%endif %}
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+				<div class="pagination">
+				    <span class="step-links">
+				        {% if reparaciones.has_previous %}
+				            <a class="success button" href="?pagina={{ reparaciones.previous_page_number }}&amp;q={{ query }}">...Anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ reparaciones.number }} de {{ reparaciones.paginator.num_pages }}.
+				        </span>
+
+				        {% if reparaciones.has_next %}
+				            <a class="success button" href="?pagina={{ reparaciones.next_page_number }}&amp;q={{query}}">Siguiente...</a>
+				        {% endif %}
+				    </span>
+				</div>
+		
+			{% else %}
+				<p>El cliente no se encuentra o no pertenece a esta seccion. <br> verifique sus datos</p>
+			{% endif %}
+		</section>
+	{%endif %}
+	{%if mostrarf %}
+	<section id="row">
+		<h3>Historial del Cliente</h3>
+		<ul class="wufoo">
+			<li><strong>Nombre: </strong>{{ clirep.cliente.nombre }} </li>
+			<li><strong>Direccion: </strong>{{ clirep.cliente.direccion|title }}.{{ clirep.cliente.colonia.colonia|title }}, {{ clirep.cliente.ciudad.ciudad|title }}, {{ clirep.cliente.ciudad.estado|title}}.</li>
+			<li><strong>Fecha de ingreso: </strong>{{ clirep.fxIngreso|date:"Y-m-d h:i a" }} </li>
+			<li><strong>Reparacion: </strong> {{ clirep.reparacion.descripcion }} </li>
+			<li><strong>Equipo: </strong>{{ clirep.marcaModelo }} / {{ clirep.imei }} </li>
+			<li><strong>Falla: </strong> {{ clirep.falla }} </li>
+			<li><strong>Pagado: </strong>{% if clirep.pagado %} Si {%else %} No {%endif %}</li>
+			<li><strong>Estado: </strong> {{ clirep.estado.estado}}  </li>
+			
+		</ul>
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Fecha</td>
+						<td id="gridhead">Abono</td>
+					</tr>
+					{% for x in historial %}
+						<tr>
+							<td>{{ x.fxAbono|date:"Y-m-d h:i a" }} </td>
+							<td>{{ x.abono }}</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+		<a class="success button" href="." title="Nueva busqueda">Nueva Busqueda</a>
+	</section>
+	{%endif %}
+	<br><br><br>
+</div>
+{% endblock %}

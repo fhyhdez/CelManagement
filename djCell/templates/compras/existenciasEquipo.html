@@ -1,0 +1,80 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Bienvenido a @Compras{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+				<div class="info">
+					<h2>Equipos Existentes</h2>
+					<div>Total de equipos en todas las sucursales:<span class="req">{{nEquipos}}</span></div>
+				</div>
+
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Equipo</td>
+							<td id="gridhead">Buscar</td>
+						</tr>
+						<tr>
+							<form action='.'  method='GET' enctype="multipart/form-data">{% csrf_token %}
+								<td><input type='text' name='item' value='{{ b_item|escape }}'></td>
+								<td><input class="submit success" type="submit" value='buscar'></td>
+							</form>
+						</tr>
+					</table>
+				</div>
+
+			{% if equipos %}
+				<br>
+				<br>
+				<h2>Descripcion de los Equipos {{nEquipos}}</h2>
+				<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Factura</td>
+						<td id="gridhead">Marca Modelo</td>
+						<td id="gridhead">IMEI</td>
+						<td id="gridhead">ICC</td>
+						<td id="gridhead">No de Cel</td>
+						<td id="gridhead">Accesorios</td>
+						<td id="gridhead">Estatus</td>
+						<td id="gridhead">Sucursal Actual</td>
+					</tr>
+					{% for item in equipos %}
+					<tr>
+						<td>{{ item.equipo.factura|escape}}</td>
+						<td>{{ item.equipo.detallesEquipo|escape}}</td>
+						<td>{{ item.equipo.imei|escape}}</td>
+						<td>{{ item.equipo.icc|escape}}</td>
+						<td>{{ item.equipo.noCell|escape}}</td>
+						<td>{{ item.equipo.accesorioEqu|escape}}</td>
+						<td>{{ item.equipo.estatus|escape}}</td>
+						<td>{{ item.equipo.sucursal|escape}}</td>
+					</tr>
+					{%endfor %}
+				</table>
+				</div>
+				<div class="pagination">
+				    <span class="step-links">
+				        {% if equipos.has_previous %}
+				            <a class="success button" href="?pagina={{ equipos.previous_page_number }}&amp;item={{b_item}}">anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ equipos.number }} de {{ equipos.paginator.num_pages }}.
+				        </span>
+
+				        {% if equipos.has_next %}
+				            <a class="success button" href="?pagina={{ equipos.next_page_number }}&amp;item={{b_item}}">Siguiente</a>
+				        {% endif %}
+				    </span>
+				</div>
+			{%elif b_item %}
+	No hay resultados
+			{% endif %}
+			
+			<strong>{{ informacion }}</strong>
+	</section>
+	<div style="height:70px;"></div>
+</div>
+{% endblock %}

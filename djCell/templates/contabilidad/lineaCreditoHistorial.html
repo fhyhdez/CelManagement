@@ -1,0 +1,54 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}--Contabilidad{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info">
+			<h2>Historial de las Lineas de Credito</h2>s
+		</div>
+			{{ mensaje }}
+			<hr>
+			{{buscador|safe}}
+
+			{%if lineas %}
+				{{lineas|safe}}
+			{%endif %}
+
+			{%if linea %}
+				<h2>Descripcion de la Linea</h2>
+				<div id="twoCol">
+				<table id="twoCol">
+					<tr>
+						<td>Proveedor</td>
+						<td>{{linea.proveedor}}</td>
+					</tr>
+					<tr>
+						<td>Nota de Credito</td>
+						<td>{{linea.notaCredito}}</td>
+					</tr>
+					<tr>
+						<td>Total</td>
+						<td>{{linea.total}}</td>
+					</tr>
+					<tr>
+						<td>Fecha de Creacion</td>
+						<td>{{linea.fxCredito|date:"Y-m-d h:i a"}}</td>
+					</tr>
+					<tr>
+						<td>Deuda</td>
+						{%if linea.pagado %}
+						<td>Liquidada</td>
+						{%else %}
+						<td>{{linea.deuda}}</td>
+						{%endif %}
+					</tr>
+				</table>
+				</div>
+				{{historial|safe}}
+			{%endif %}
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

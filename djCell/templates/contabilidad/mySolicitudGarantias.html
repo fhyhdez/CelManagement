@@ -1,0 +1,83 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}@Solicitudes Garantias de Equipo @Almacen{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Clientes de Equipos en Garantia</h2>
+				<div>Equipos en Garantia enviados a Centro de Atencion a Clientes</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar Cliente:</h3>
+				</li>
+				<li>
+					<label class="desc">Cliente: <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query|escape}}" name="q" title="Buscar Cliente por nombre | imei de equipo | sucursal | folio de papeleta"; placeholder="Ej. J Perez" required />
+					</div>
+					<p class="instruct">Ingrese Nombre del cliente | folio de papeleta | Sucursal | imei de equipo. Gracias.</p>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Buscar"/>  |  
+					<a class="success button" href="." title="Nueva busqueda">Nueva Busqueda</a>
+				</li>
+				<li><strong>{{ info }}</strong></li>
+			</ul>
+		</form>
+		
+	</section>
+	<br>
+	
+		<section id="row">
+			<h3>Equipos en Garantia</h3>
+			{% if garantias %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Sucursal</td>
+						<td id="gridhead">Papeleta</td>
+						<td id="gridhead">Nombre<br>/ Direccion </td>
+						<td id="gridhead">Equipo<br>/ Falla </td>
+						<td id="gridhead" title="Fecha de ingreso en sucursal">Sucursal</td>
+						<td id="gridhead">Estado<br>/ Revision </td>
+					</tr>
+					{% for g in garantias %}
+						<tr>
+							<td>{{ g.sucursal.nombre|title }} </td>
+							<td>{{ g.papeleta.folioPapeleta|title }} </td>
+							<td>{{ g.papeleta.nombre|title}}<br> {{ g.papeleta.calle|title }}.{{ g.papeleta.colonia.colonia|title }}, {{ g.papeleta.ciudad.ciudad|title }}, {{ g.papeleta.estado.estado|title }}. </td>
+							<td>{{ g.equipo.detallesEquipo.marca.marca|title }} {{ g.equipo.detallesEquipo.modelo|title }}<br> {{ g.equipo.imei }}<br>{{ g.falla|escape }} </td>
+							<td title="Fecha de ingreso en sucursal">{% if g.fxSucursal == None %} {%else %} {{ g.fxSucursal|date:"Y-m-d h:i a" }} {%endif %} </td>
+							<td>{{ g.estado.estado|title }} / {% if g.fxRevision == None %} {%else %}{{ g.fxRevision|date:"Y-m-d h:i a" }} {%endif %} </td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+				<div class="pagination">
+				    <span class="step-links">
+				        {% if garantias.has_previous %}
+				            <a class="success button" href="?pagG={{ garantias.previous_page_number }}&amp;q={{ query }}">...Anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ garantias.number }} de {{ garantias.paginator.num_pages }}.
+				        </span>
+
+				        {% if garantias.has_next %}
+				            <a class="success button" href="?pagG={{ garantias.next_page_number }}&amp;q={{query}}">Siguiente...</a>
+				        {% endif %}
+				    </span>
+				</div>
+		
+			{% elif query %}
+				<p>El cliente no se encuentra o no pertenece a esta seccion. <br> verifique sus datos</p>
+			{% endif %}
+		</section>
+	<br><br>
+</div>
+{% endblock %}

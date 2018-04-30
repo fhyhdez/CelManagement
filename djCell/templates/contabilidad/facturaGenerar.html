@@ -1,0 +1,83 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}--Contabilidad{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info">
+			<h2>Factura</h2>
+		</div>
+		{{mensaje}}
+		<hr>
+		{%if fFactura %}
+		<br>
+					<h2>Generar Factura </h2>
+					<h2>Cliente: {{cliente}}</h2>
+					<h2>Folios de Venta: {{listaValida}}</h2>
+			<div id="form2">
+				<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<input type="hidden" name='lV' value="{{listaValida}}"/>
+				<input type="hidden" name='idC' value="{{cliente.id}}"/>
+				<table id="form2">
+					{{fFactura}}
+					<tr>
+						<td></td>
+						<td><input class="submit success" type="submit" name='guardar' value="Guardar Factura"/> </td>
+					</tr>
+				</table>
+				</form>
+			</div>
+		{%else %}
+			<div id="form2">
+				<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<h2>Comprobar Datos a Facturar</h2>
+				<table id="form2">
+					<tr>
+						<td>Folios de las Ventas (separados por comas)</td>
+						<td><input type='text' name='foliosV' value='{{ listaValida|escape }}'></td>
+					</tr>
+					<tr>
+						<td>RFC del Cliente</td>
+						<td><input type='text' name='rfcC' value='{%if cliente %}{{ cliente.rfc|escape }}{%endif %}'> </td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><input class="submit success" type="submit" name='verificar' value="verificar"/> </td>
+					</tr>
+				</table>
+				</form>
+
+				{%if ventas %}
+					<h2>Comprobar Datos a Facturar </h2>
+					<h2>{{cliente}}</h2>
+					<table id="form2">
+					{%for venta in ventas %}
+						<tr>
+							<td>{{venta.1}}</td>
+						</tr>
+					{%endfor %}
+					</table>
+					{%if listaValida %}
+						<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+						{% csrf_token %}
+						<input type="hidden" name='lV' value="{{listaValida}}"/>
+						<input type="hidden" name='idC' value="{{cliente.id}}"/>
+						<ul>
+							<li>
+								<input class="submit success" type="submit" name='generar' value="Generar"/>
+							</li>
+						</ul>
+						</form>
+					{%endif %}
+				{%endif %}
+			</div>
+		{%endif %}
+		{{buscador|safe}}
+		{{clientes|safe}}
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

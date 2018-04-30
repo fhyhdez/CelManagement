@@ -1,0 +1,67 @@
+{% extends 'ventas/ventas-base.html' %}
+
+{% block titulo %}@Servicio Tecnico - Nuevo Cliente - @Ventas{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div class="info">
+					<h2>Agregar Nuevo Cliente - Servicio Tecnico</h2>
+					<div>Registro de Clientes</div>
+				</div>
+				<ul>
+					<li class="section first">
+						<h3>Datos Generales</h3>
+					</li>
+					{% for field in form %}
+						<li>
+							<label class="desc">{{field.label}}</label> 
+							<div>
+								{{field}}
+							</div>
+							<label><small> {{field.help_text}} </small><span class="req"> {{field.errors}} </span></label>
+						</li>
+					{% endfor %}
+					<li id="buttons">
+						<input class="submit success" type="submit" value="Guardar"/> |  
+						<a class="success button" href="/ventas/servicios/clientes/nuevo/" title="Agregar Nuevo">Nuevo Cliente</a> 
+						<BR /><span class="req">*.Campos Obligatorios. No dejar vacios.</span>
+						<center><strong>{{ info }}</strong></center>
+					</li>
+				</ul>
+			</form>
+	</section>
+	<br>
+	<section id="row">
+		<div class="info"><h3>Clientes Registrados</h3></div>
+		{%if clientes %}
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<td id="gridhead">Folio</td>
+					<td id="gridhead">Nombre</td>
+					<td id="gridhead">Direccion</td>
+					<td id="gridhead">Ingreso</td>
+				</tr>
+				{% for cli in clientes %}
+					<tr>
+						{% if cli.tipoCliente == 'Servicio' %}
+						<td>{{ cli.folio }} </td>
+						<td>{{ cli.nombre }} </td>
+						<td>{{ cli.direccion }}. {{ cli.colonia.colonia }}, {{ cli.ciudad.ciudad }}, {{ cli.ciudad.estado }}.  </td>
+						<td>{{ cli.fxIngreso|date:"Y-m-d h:i a" }}</td>
+						{%endif %}
+					</tr>
+				{%endfor %}
+			</table>
+		</div>
+		{%else %}
+		<p>No hay clientes registrados por el momento.</p>
+		{%endif %}
+	</section>
+	<br>
+	<br>
+</div>
+{% endblock %}

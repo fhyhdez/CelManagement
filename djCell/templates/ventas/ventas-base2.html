@@ -1,0 +1,177 @@
+<!DOCTYPE>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name = "viewport" content = "width=device-width, maximum-scale = 1, minimum-scale=1" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/structure.css" media="all" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/theme2.css" media="all" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/buttons.css"  />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/flexslider.css" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/fuentes.css" media="screen" />
+		<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css' />
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+		<link rel="shortcut icon" type="image/x-icon" href="http://dhtml5.comoj.com/images/favicon.ico" />
+		<script src="{{STATIC_URL}}js/wufoo.js"></script>
+ 		<script src="{{STATIC_URL}}js/jquery-1.2.1.pack.js"></script>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="{{STATIC_URL}}js/jquery.flexslider.js"></script>
+		<script src="{{STATIC_URL}}js/default.js"></script>
+		{% block miscript %}
+		{% endblock %}
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+			<script src="js/respond.min.js"></script>
+		<![endif]-->
+		<title>@CM - 
+		{% if nivel == 0 %}
+		Django-Admin
+		{% elif nivel == 1 %}
+		Administrador
+		{% elif nivel == 11 %}
+		Gerente
+		{% elif nivel == 12 %}
+		Vendedores
+		{% endif %}
+		{% block titulo %}
+		{% endblock %}</title>
+	</head>
+	<body>
+		<div id="pagewidth">
+			<header id="header">
+				<img src="{{STATIC_URL}}img/logoAccell2.png" id="imgLogo"/>
+				<div id="Logo"><h1><a href=".">Excess Complet Cellulaire</a></h1></div>
+			</header>
+			<nav id="minav">
+				<div class="center">
+					<ul class="navh">
+						<li><a href="/ventas" class="tooltipbasic" data-tooltip="Pagina de Bienvenida">Inicio</a></li>
+
+						{% if nivel != 11 %}
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Ventas">Ventas</a>
+							<ul>
+								<li><a href="/ventas/ventas/menudeo" class="tooltipbasic" data-tooltip="Ventas de equipos, express, recargas, fichas,">Venta/Menudeo</a></li>
+								<li><a href="/ventas/ventas/mayoreo_tae" class="tooltipbasic" data-tooltip="Venta Mayoreo TAE: Tiempo Aire, recargas">Mayoreo TAE</a></li>
+								<li><a href="/ventas/ventas/mayoreo_fichas" class="tooltipbasic" data-tooltip="Venta Mayoreo de Fichas">Mayoreo Fichas</a></li>
+								<li class="dropdownh">
+									<a href="#"  class="tooltipbasic" data-tooltip="Apartado de equipo">Apartados</a>
+									<ul>
+										<li class="dropdownh">
+											<a href="#" class="tooltipbasic" data-tooltip="Agregar cliente de apartados">Clientes</a>
+											<ul>
+												<li><a href="/ventas/ventas/apartados/clientes/nuevo" class="tooltipbasic" data-tooltip="Nuevo cliente">Nuevo</a></li>
+												<li><a href="/ventas/ventas/apartados/clientes/catalogo" class="tooltipbasic" data-tooltip="Catalogo de clientes ~ Apartados">Catalogo</a></li>
+											</ul>
+										</li>
+										<li><a href="/ventas/ventas/apartados/nuevo_apartado" class="tooltipbasic" data-tooltip="Agregar apartado a un cliente">Nuevo apartado</a></li>
+										<li><a href="/ventas/ventas/apartados/abonos" class="tooltipbasic" data-tooltip="Abonar a un apartado">Abonos</a></li>
+										<li><a href="/ventas/ventas/apartados/liquidacion" class="tooltipbasic" data-tooltip="Liquidar un apartado con equipo">Liquidaciones</a></li>s
+										<li><a href="/ventas/ventas/apartados/historial" class="tooltipbasic" data-tooltip="Historial de apartados, buscar por cliente">Historial</a></li>
+										<li><a href="/ventas/ventas/apartados/cancelacion" class="tooltipbasic" data-tooltip="Cancelacion de apartado y reembolso por Fichas Amigo">Cancelación y Cambio por fichas</a></li>
+									</ul>
+								</li>
+								<li><a href="/ventas/ventas/pedidos" class="tooltipbasic" data-tooltip="Pedidos de nuevos equipos o accesorios">Mensajes a Almacen</a></li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Corte de caja al dia">Corte/Dia</a>
+									<ul>
+										<li><a href="/ventas/ventas/corte_dia/caja" class="tooltipbasic" data-tooltip="Total acumulado de ventas en el dia">Caja</a></li>
+										<li><a href="/ventas/ventas/corte_dia/gastos" class="tooltipbasic" data-tooltip="Agregar Gastos que se realizaron">Gastos</a></li>
+										<li><a href="/ventas/ventas/corte_dia/cerrar_corte" class="tooltipbasic" data-tooltip="Cerrar corte">Cerrar Corte</a></li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Servicios de reparacion">Servicios</a>
+							<ul>
+								<li class="dropdownh">
+								<a href="#"  class="tooltipbasic" data-tooltip="Clientes de servicios">Clientes</a>
+									<ul>
+										<li><a href="/ventas/servicios/clientes/nuevo"  class="tooltipbasic" data-tooltip="Nuevo Cliente de servicio">Nuevo</a></li>
+										<li><a href="/ventas/servicios/clientes/catalogo"  class="tooltipbasic" data-tooltip="Catalogo de clientes de servicio">Catalogo</a></li>
+									</ul>
+								</li>
+								<li><a href="/ventas/servicios/cat_reparaciones" class="tooltipbasic" data-tooltip="catalogo de reparaciones">Cat. Reparaciones</a></li>
+								<li><a href="/ventas/servicios/nva_reparacion" class="tooltipbasic" data-tooltip="Agregar Nueva reparacion">Nva. Reparacion</a></li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Seguimiento de reparacioines">Seguimiento</a>
+									<ul>
+										<li><a href="/ventas/servicios/seguimiento/consultar" class="tooltipbasic" data-tooltip="Consulta de reparaciones ingresadas en sucursal">Consultas, Abonos, Historial</a></li>
+									</ul>
+								</li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Garantias de Equipos">Garantias</a>
+									<ul>
+										<li><a href="/ventas/servicios/garantias/recepcion"  class="tooltipbasic" data-tooltip="ingresar a garantia, buscar papeleta">Recepcion</a></li>
+										<li><a href="/ventas/servicios/garantias/seguimiento"  class="tooltipbasic" data-tooltip="Seguimiento de la garantia">Seguimiento</a></li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Planes Tarifarios">Planes Tarifarios</a>
+							<ul>
+								<li><a href="/ventas/planes_tarifarios/nva_solicitud" class="tooltipbasic" data-tooltip="Agregar Nueva Solicitud">Nva. Solicitud</a></li>
+								<li class="dropdownh">
+									<a href="#" class="tooltipbasic" data-tooltip="Seguimiento de planes tarifarios">Seguimiento</a>
+									<ul>
+										<li><a href="/ventas/planes_tarifarios/seguimiento/todos" class="tooltipbasic" data-tooltip="Mostrar Solicitudes ingresadas">Todos</a></li>
+										<li><a href="/ventas/planes_tarifarios/seguimiento/consultar" class="tooltipbasic" data-tooltip="Consulta y reporte de Solicitudes">Consultar</a></li>
+									</ul>
+								</li>
+								<li><a href="/ventas/planes_tarifarios/actualizacion"  class="tooltipbasic" data-tooltip="Actualizacion de datos de planes activados">Actualizacion</a></li>
+								<li><a href="/ventas/planes_tarifarios/catalogo"  class="tooltipbasic" data-tooltip="Catalogo de planes existentes">Catalogo</a></li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Portabilidades">Portabilidades</a>
+							<ul>
+								<li><a href="/ventas/portabilidades/agregar" class="tooltipbasic" data-tooltip="Nueva Portabilidad">Agregar</a></li>
+								<li><a href="/ventas/portabilidades/seguimiento" class="tooltipbasic" data-tooltip="Seguimiento de Portabilidad">Seguimiento</a></li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Sucursal">Sucursal</a>
+							<ul>
+								<li><a href="/ventas/sucursal/transferencias" class="tooltipbasic" data-tooltip="Reporte de Transferencias Realizadas en el dia">Transferencias</a></li>
+								<li><a href="/ventas/sucursal/devoluciones" class="tooltipbasic" data-tooltip="Reporte de Devoluciones en el dia">Devoluciones</a></li>
+								<li><a href="/ventas/sucursal/existencias" class="tooltipbasic" data-tooltip="Exitencias en el dia">Existencias</a></li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Vendedores">Vendedores</a>
+							<ul>
+								<li><a href="/ventas/vendedores/comisiones" class="tooltipbasic" data-tooltip="Comisiones">Comisiones</a></li>
+								<li><a href="/ventas/vendedores/estado_cuenta" class="tooltipbasic" data-tooltip="Historial de Pagos">Estado de Cuenta</a></li>
+							</ul>
+						</li>
+						{% endif %}
+
+
+
+						{% if nivel == 11 %}
+						<li><a href="/ventas/reportes" class="tooltipbasic" data-tooltip="Reportes de activaciones en sucursales">Reportes</a></li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Eventos">Eventos</a>
+							<ul>
+								<li><a href="/ventas/eventos/consultar" class="tooltipbasic" data-tooltip="Consultar y  Actualizar eventos">Consultar</a></li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Amonestaciones">Amonestaciones</a>
+								<ul>
+									<li><a href="/ventas/amonestaciones/agregar" class="tooltipbasic" data-tooltip="Agregar amonestacioines">Agregar</a></li>
+									<li><a href="/ventas/amonestaciones/consultar" class="tooltipbasic" data-tooltip="Consulta y reporte de amonestaciones">Consultar</a></li>
+								</ul>
+						</li>
+						{% endif %}
+
+						<li><a href="/cerrar">Salir</a></li>
+					</ul>
+			</div>
+			</nav>
+			{% block contenido %}{% endblock %}
+		</div>
+	</body>
+</html>

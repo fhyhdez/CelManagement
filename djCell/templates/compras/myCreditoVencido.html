@@ -1,0 +1,177 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Abonos de Subdistriduidores @Compras{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	{%if buscar %}
+	<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Creditos del Cliente</h2>
+				<div>Creditos otorgados al cliente</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar Credito del cliente:</h3>
+				</li>
+				<li>
+					<label class="desc">Folio del Credito: <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query2|escape}}" name="q2" title="Folio de Credito del cliente Seleccionado"; placeholder="Ej. Cred-050" required />
+					</div>
+					<p class="instruct">Ingrese el folio de Credito del Cliente seleccionado. Gracias.</p>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Buscar"/>  |  
+					<a class="success button" href="/compras/compras/credito/vencidos/" title="Nueva busqueda">Nueva Busqueda</a>
+				</li>
+			</ul>
+		</form>
+		{{ info }}
+	</section>
+	{%endif %}
+
+	{%if show %}
+	<section id="row">
+		<div class="info"><h3>Creditos Vencidos</h3></div>
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<td id="gridhead">Folio</td>
+					<td id="gridhead">Venta</td>
+					<td id="gridhead">Total</td>
+					<td id="gridhead">Plazo</td>
+					<td id="gridhead">Fecha</td>
+					<td id="gridhead">Estado</td>
+					<td id="gridhead" title="Accion a Realizar" colspan="3">Revisar<br>Subdistribuidor | Historial | Abonar</td>
+				</tr>
+				{%if Creditos %}
+					{% for x in Creditos %}
+					<tr>
+						<td>{{ x.folioc|escape }} </td>
+						<td>{{ x.venta.folioVenta|escape }} </td>
+						<td>{{ x.totalvta|escape }} </td>
+						<td>{{ x.plazo|escape}}</td>
+						<td>{{ x.fxCredito|date:"Y-m-d h:i a" }}</td>
+						<td>{{ x.edo.estado|escape }}</td>
+						<td>
+							<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="subdist" type="image" src="/static/img/icons/folder_user.png" title="Datos del Subdistribuidor" value="{{ x.id }}" />
+							</form>
+						</td>
+						<td>
+							<form class="wufoo" action="/compras/compras/credito/historial/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="hist" type="image" src="/static/img/icons/books.png" title="Historial de Pagos" value="{{ x.id }}" />
+							</form>
+						</td>
+						<td>
+							<form class="wufoo" action="/compras/compras/credito/abonar/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="abonar" type="image" src="/static/img/icons/report_edit.png" title="Abonar a esta cuenta" value="{{ x.id }}" />
+							</form>
+						</td>
+					</tr>
+					{%endfor %}
+				{%else %}
+				<tr>
+					<td colspan="8">No se Encontraron resultados coincidentes.</td>
+				</tr>
+				{%endif %}
+			</table>
+		</div>
+		<div class="pagination">
+			<span class="step-links">
+				{% if Creditos.has_previous %}
+					<a class="success button" href="?pagCred={{ Creditos.previous_page_number }}&amp;q2={{ query2|escape }}">... Anterior</a>
+				{% endif %}
+				<span class="current">
+					Pagina {{ Creditos.number }} de {{ Creditos.paginator.num_pages }}.
+				</span>
+
+				{% if Creditos.has_next %}
+					<a class="success button" href="?pagCred={{ Creditos.next_page_number }}&amp;q2={{ query2|escape }}"> Siguiente ...</a>
+				{% endif %}
+			</span>
+		</div>
+	</section>
+	{%endif %}
+	{%if mostrarf %}
+	<section id="row">
+		<div class="info"><h3>Datos del Subdistribuidor</h3></div>
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<td id="gridhead">RFC</td>
+					<td>{{ sub.cliente.rfc }} </td>
+				</tr>
+				<tr>
+					<td id="gridhead">Nombre o Razon Social</td>
+					<td>{{ sub.cliente.razonSocial }} </td>
+				</tr>
+				<tr>
+					<td id="gridhead">Direccion:</td>
+					<td>{{ sub.cliente.direccion|escape }}. {{ sub.cliente.colonia.colonia|escape }}, {{ sub.cliente.ciudad.ciudad|escape }}, {{ sub.cliente.ciudad.estado|escape }}.</td>
+				</tr>
+				<tr>
+					<td id="gridhead">Telefono:</td>
+					<td>{{ sub.cliente.telefono|escape }}.</td>
+				</tr>
+				<tr>
+					<td id="gridhead">Limite de Credito</td>
+					<td>{{ sub.limCredito }} / Utilizado: {{ utilizado }} </td>
+				</tr>
+			</table>
+		</div>
+		<br>
+		<h3>Creditos Vencido</h3>
+		<a class="success button" href="/compras/compras/credito/vencidos/" title="Nueva busqueda">Nueva Busqueda</a>
+		<br>
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<td id="gridhead">Folio</td>
+					<td id="gridhead">Venta</td>
+					<td id="gridhead">Fecha</td>
+					<td id="gridhead">Plazo</td>
+					<td id="gridhead">Dias</td>
+					<td id="gridhead">Total</td>
+					<td id="gridhead">Abonado</td>
+					<td id="gridhead">Resta</td>
+					<td id="gridhead">Estado</td>
+					<td id="gridhead" title="Accion a Realizar" colspan="2">Revisar<br> Historial | Abonar</td>
+				</tr>
+				{%if Cred %}
+					<tr>
+						<td>{{ Cred.folioc|escape }} </td>
+						<td>{{ Cred.venta.folioVenta|escape }} </td>
+						<td>{{ Cred.fxCredito|date:"Y-m-d h:i a" }}</td>
+						<td title="Plazo de dias autorizados">{{ Cred.plazo|escape}}</td>
+						<td title="Dias Atrasados">{{ dias }} </td>
+						<td title="Total de la venta a Credito">${{ Cred.totalvta|escape }} </td>
+						<td>${{ abonado|escape }} </td>
+						<td>${{ resta|escape }} </td>
+						<td>{{ Cred.edo.estado|escape }}</td>
+						<td>
+							<form class="wufoo" action="/compras/compras/credito/historial/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="hist" type="image" src="/static/img/icons/books.png" title="Historial de Pagos" value="{{ Cred.id }}" />
+							</form>
+						</td>
+						<td>
+							<form class="wufoo" action="/compras/compras/credito/abonar/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="abonar" type="image" src="/static/img/icons/report_edit.png" title="Abonar a esta cuenta" value="{{ Cred.id }}" />
+							</form>
+						</td>
+					</tr>
+				{%else %}
+				<tr>
+					<td colspan="8">El Credito asociado no contiene informacion</td>
+				</tr>
+				{%endif %}
+			</table>
+		</div>
+	</section>
+	{%endif %}
+	<br><br><br>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}--Contabilidad{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info">
+			<h2>Cliente</h2>
+		</div>
+			{{ mensaje }}				
+			<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<input  type="hidden" name='idC' value="{{cliente.id}}"/> 
+				<div id='form2'>
+					<h2>Registrar Cliente</h2>
+					<table id='form2'>
+						{% for field in fCliente %}
+						<tr>
+							<td><strong>{{field.label}}</strong></td> 
+							<td>
+								{{field}}<br>
+								<label> {{field.help_text}} <small><span class="req"> {{field.errors}} </span></small></label>
+							</td>
+						</tr>
+						{% endfor %}
+					</table>
+				</div>
+				<div style="text-align:center;padding-top:0.5em;">
+					<input class="submit success" type="submit" name='guardar' value="Registrar Cliente"/> 
+				</div>
+			</form>
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

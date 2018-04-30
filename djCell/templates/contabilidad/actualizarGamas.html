@@ -1,0 +1,44 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}--Contabilidad{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+	<div class="info">
+		<h2>Actualizar Comisiones de las Gamas y los Servicios</h2>
+		{{mensaje}}
+
+<hr>
+				<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div id="form2">
+					<table id="form2">
+						<tr>
+							<td>Gama Alta</td>
+							<td><input type='text' name='alta' value='{{alta.comision|escape}}'></td>
+						</tr>
+						<tr>
+							<td>Gama Media</td>
+							<td><input type='text' name='media' value='{{media.comision|escape}}'></td>
+						</tr>
+						<tr>
+							<td>Gama Baja</td>
+							<td><input type='text' name='baja' value='{{baja.comision|escape}}'></td>
+						</tr>
+						<tr>
+							<td>Servicios</td>
+							<td><input type='text' name='servicio' value='{{servicio.comisionReparacion|escape}}'></td>
+						</tr>
+					</table>
+				</div>
+				<div style="text-align:center;padding-top:0.5em;">
+					<input class="submit success" type="submit" name='actualizar' value="Guardar y Actualizar Las Comisiones"/> 
+				</div>
+				</form>
+
+			<br><br><br><br>
+	</div>
+	</section>
+</div>
+{% endblock %}

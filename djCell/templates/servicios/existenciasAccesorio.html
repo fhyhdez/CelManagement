@@ -1,0 +1,72 @@
+{% extends 'servicios/servicios-base.html' %}
+
+{% block titulo %}@Existencias de Accesorios en Sucursal @Compras{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+				<div class="info">
+					<h3>{{ cosa }} Existentes</h3>
+				</div>
+
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">{{ cosa }} </td>
+							<td id="gridhead">Buscar</td>
+						</tr>
+						<tr>
+							<form action='.'  method='GET' enctype="multipart/form-data">{% csrf_token %}
+								<td><input type='texto' name='item' value='{{ b_item|escape }}'></td>
+								<td><input class="submit success" type="submit" value='buscar'></td>
+							</form>
+						</tr>
+					</table>
+				</div>
+
+
+			{% if items %}
+				<br>
+				<br>
+				<h2>Descripcion de los Productos: {{nItems}}</h2>
+				<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Codigo de Barras</td>
+						<td id="gridhead">Marca Accesorio</td>
+						<td id="gridhead">Precio</td>
+						<td id="gridhead">Estatus</td>
+						<td id="gridhead">Sucursal</td>
+					</tr>
+					{% for item in items %}
+					<tr>
+						<td>{{ item.accesorio.codigoBarras|escape}}</td>
+						<td>{{ item.accesorio.detallesAccesorio|escape}}</td>
+						<td>{{ item.accesorio.detallesAccesorio.precioMenudeo|escape}}</td>
+						<td>{{ item.accesorio.estatusAccesorio|escape}}</td>
+						<td>{{ item.accesorio.sucursal.nombre|escape}}</td>
+					</tr>
+					{%endfor %}
+				</table>
+				</div>
+				<div class="pagination">
+				    <span class="step-links">
+				        {% if items.has_previous %}
+				            <a class="success button" href="?pagina={{ items.previous_page_number }}&amp;item={{b_item}}">anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ items.number }} de {{ items.paginator.num_pages }}.
+				        </span>
+
+				        {% if items.has_next %}
+				            <a class="success button" href="?pagina={{ items.next_page_number }}&amp;item={{b_item}}">Siguiente</a>
+				        {% endif %}
+				    </span>
+				</div>
+			{%elif b_item %}
+					<strong>No hay resultados</strong>
+			{% endif %}
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

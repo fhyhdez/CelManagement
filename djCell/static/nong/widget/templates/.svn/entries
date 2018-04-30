@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="230"
+   name=""
+   committed-date="2006-06-09T06:56:24.860280Z"
+   url="https://svn.optus.net.au/svn/nodelist2/nong/trunk/nong/media/js/nong/widget/templates"
+   last-author="mflanaga"
+   kind="dir"
+   uuid="ab2ab6c3-01dc-0310-9dee-a9ebed7d1430"
+   repos="https://svn.optus.net.au/svn/nodelist2"
+   revision="267"/>
+<entry
+   committed-rev="230"
+   name="NongComboBox.css"
+   text-time="2006-06-09T06:48:29.000000Z"
+   committed-date="2006-06-09T06:56:24.860280Z"
+   checksum="dc2fd0d450c05c2da1e3988dcfc01ce5"
+   last-author="mflanaga"
+   kind="file"/>
+<entry
+   committed-rev="210"
+   name="combo-arrowdown.gif"
+   text-time="2006-04-26T23:44:54.000000Z"
+   committed-date="2006-04-28T05:23:10.410793Z"
+   checksum="8b45da2a5b198acf229f0d2d4e35ec11"
+   last-author="mflanaga"
+   kind="file"
+   prop-time="2006-04-27T07:11:31.000000Z"/>
+<entry
+   committed-rev="217"
+   name="tab_left.gif"
+   text-time="2006-05-01T04:56:13.000000Z"
+   committed-date="2006-05-01T05:19:56.482526Z"
+   checksum="649cf3c3463626f73de8bc72657a8d63"
+   last-author="mflanaga"
+   kind="file"
+   prop-time="2006-05-01T05:11:37.000000Z"/>
+<entry
+   committed-rev="217"
+   name="HtmlTabContainer.css"
+   text-time="2006-05-01T05:11:26.000000Z"
+   committed-date="2006-05-01T05:19:56.482526Z"
+   checksum="42496c9363f212188ef78a7e038a2cfd"
+   last-author="mflanaga"
+   kind="file"/>
+<entry
+   committed-rev="217"
+   name="tab_top_right.gif"
+   text-time="2006-05-01T04:56:13.000000Z"
+   committed-date="2006-05-01T05:19:56.482526Z"
+   checksum="52b273f1dbcaad4772231624bbe8b83c"
+   last-author="mflanaga"
+   kind="file"
+   prop-time="2006-05-01T05:11:38.000000Z"/>
+<entry
+   committed-rev="210"
+   name="combo-arrowdown-over.gif"
+   text-time="2006-04-26T23:54:31.000000Z"
+   committed-date="2006-04-28T05:23:10.410793Z"
+   checksum="c43aefe8f685e826cd4c1cfed171705b"
+   last-author="mflanaga"
+   kind="file"
+   prop-time="2006-04-27T07:11:31.000000Z"/>
+<entry
+   committed-rev="229"
+   name="NongComboBox.html"
+   text-time="2006-05-30T04:31:50.000000Z"
+   committed-date="2006-05-30T06:10:06.952033Z"
+   checksum="b07b545a314b84787de717a7d41904e4"
+   last-author="mflanaga"
+   kind="file"/>
+</wc-entries>

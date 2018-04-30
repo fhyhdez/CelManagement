@@ -1,0 +1,78 @@
+{% extends 'contabilidad/conta-base2.html' %}
+
+{% block titulo %}--Contabilidad{% endblock %}
+
+ctx={'nivel':nivel, 'buscador':buscador, 'mensaje':mensaje, 'fNominas':fNominas, 'fNomina':fNomina, 'nominas':nominas, 'nomina':nomina, 'listaEmNom':listaEmNom}
+
+{% block contenido %}
+<div id="content2">
+	<section id="row">
+	<div class="info">
+		<h2>Nueva Nomina</h2>
+		<hr>
+		{{mensaje}}
+<hr>
+		{% if buscador %}
+				{{buscador|safe}}
+			{%endif %}
+
+<hr>
+			{% if fNominas %}
+			<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<input  type="hidden" name='idC' value="{{cliente.id}}"/> 
+				<div id='grid'>
+					<h2>Registrar Nomina</h2>
+					<table id='grid'>
+						{{fNominas}}
+					</table>
+				</div>
+				<ul>
+					<li id="buttons">
+						<input class="submit success" type="submit" name='gNomina' value="Registrar Nomina"/> 
+					</li>
+					<li id="buttons">
+						<input class="submit success" type="submit" name='gNominaAutomatica' value="Generar Nominas Automaticamente"/> 
+					</li>
+				</ul>
+			</form>
+			{%endif %}
+			{% if nominas %}
+				{{nominas|safe}}
+			{%endif %}
+
+
+			{% if nomina %}
+			<h2>Nomina {{nomina}}</h2>
+
+			<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<input  type="hidden" name='idEN' value="{{eNomina.id}}"/> 
+				<input  type="hidden" name='idN' value="{{nomina.id}}"/> 
+				<div id='form2'>
+					<h2>Registrar Empleado a la Nomina</h2>
+					<table id='form2'>
+						{{fNomina}}
+					</table>
+				</div>
+				<ul>
+					<li id="buttons">
+						<input class="submit success" type="submit" name='guardaEmpleado' value="Registrar Empleado a la Nomina"/> 
+					</li> 
+				</ul>
+			</form>
+			{%if cuentasEmpl %}
+				{{cuentasEmpl|safe}}
+			{%endif %}
+			
+
+			{%if listaEmNom %}
+				{{listaEmNom|safe}}
+			{%endif %}
+
+			{%endif %}
+			<br><br><br><br>
+	</div>
+	</section>
+</div>
+{% endblock %}

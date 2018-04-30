@@ -1,0 +1,42 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Precios @Compras{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+				<div class="info">
+					<h2>Lista de Precios de Express</h2>
+					<div>Actualizacion y registro de los precios por de los tipos de Expres destinados a Venta individual</div>
+				</div>
+				
+			<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div class="info">
+					<h2>Precios Para los Express</h2>
+				</div>
+				<div id='form2'>				
+					<table id='form2'>
+						{{exp}}
+					</table>
+				</div>
+				<br><br>
+
+				<div class="info">
+					<h2>Precios Para los Virgenes</h2>
+				</div>
+				<div id='form2'>
+					<table id='form2'>
+						{{virgen}}
+					</table>
+				</div>
+				<br>
+					<div style="text-align:right;padding-top:0.5em;">
+						<input class="submit success" type="submit" name='actualizar' value="Guardar y Actualizar >>>"/> 
+					</div>
+			</form>
+			<strong>{{ mensaje }}</strong>
+			
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

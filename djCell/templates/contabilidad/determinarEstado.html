@@ -1,0 +1,134 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}--Contabilidad{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info">
+			<h2>{{titulo}}</h2>
+		</div>
+			<strong>{{ mensaje }}</strong>
+
+				{%if desplEq %}
+					<div id="grid">
+						<p>Desglose de Equipos</p>
+						<table id="grid">
+							<tr>
+								<td id="gridhead">Equipo</td>
+								<td id="gridhead">Existente</td>
+								<td id="gridhead">Estado</td>
+								<td id="gridhead">observacion</td>
+								<td id="gridhead">fxRevision</td>
+							</tr>
+							{%for item in desplEq %}
+								<tr>
+									<td>{{item.equipo}}</td>
+									<td>{%if item.existe %}<img src="{{STATIC_URL}}img/icons/tick.png" />{%else %}<img src="{{STATIC_URL}}img/icons/exclamation.png" />{%endif %}</td>
+									<td>{{item.equipo.estatus}}</td>
+									<td>{{item.observacion|default:'Ninguna'}}</td>
+									<td>{%if item.revisado %}{{item.fxRevision|date:"Y-m-d h:i a"}}{%endif %}</td>
+								</tr>
+							{%endfor %}
+						</table>
+					</div>
+				{%endif %}
+				{%if desplAc %}
+					<div id="grid">
+						<p>Desglose de Accesorios</p>
+						<table id="grid">
+							<tr>
+								<td id="gridhead">Accesorio</td>
+								<td id="gridhead">Existente</td>
+								<td id="gridhead">Estado</td>
+								<td id="gridhead">observacion</td>
+								<td id="gridhead">Revision</td>
+							</tr>
+							{%for item in desplAc %}
+								<tr>
+									<td>{{item.accesorio}}</td>
+									<td>{%if item.existe %}<img src="{{STATIC_URL}}img/icons/tick.png" />{%else %}<img src="{{STATIC_URL}}img/icons/exclamation.png" />{%endif %}</td>
+									<td>{{item.accesorio.estatusAccesorio}}</td>
+									<td>{{item.observacion|default:'Ninguna'}}</td>
+									<td>{%if item.revisado %}{{item.fxRevision|date:"Y-m-d h:i a"}}{%endif %}</td>
+								</tr>
+							{%endfor %}
+						</table>
+					</div>
+				{%endif %}
+				{%if desplEx %}
+					<div id="grid">
+						<p>Desglose de Expres</p>
+						<table id="grid">
+							<tr>
+								<td id="gridhead">Expres</td>
+								<td id="gridhead">Existente</td>
+								<td id="gridhead">Estado</td>
+								<td id="gridhead">observacion</td>
+								<td id="gridhead">Revision</td>
+							</tr>
+							{%for item in desplEx %}
+								<tr>
+									<td>{{item.expres}}</td>
+									<td>{%if item.existe %}<img src="{{STATIC_URL}}img/icons/tick.png" />{%else %}<img src="{{STATIC_URL}}img/icons/exclamation.png" />{%endif %}</td>
+									<td>{{item.expres.estatus}}</td>
+									<td>{{item.observacion|default:'Ninguna'}}</td>
+									<td>{%if item.revisado %}{{item.fxRevision|date:"Y-m-d h:i a"}}{%endif %}</td>
+								</tr>
+							{%endfor %}
+						</table>
+					</div>
+				{%endif %}
+				{%if desplFi %}
+					<div id="grid">
+						<p>Desglose de Fichas</p>
+						<table id="grid">
+							<tr>
+								<td id="gridhead">Ficha</td>
+								<td id="gridhead">Existente</td>
+								<td id="gridhead">Estado</td>
+								<td id="gridhead">observacion</td>
+								<td id="gridhead">Revision</td>
+							</tr>
+							{%for item in desplFi %}
+								<tr>
+									<td>{{item.ficha}}</td>
+									<td>{%if item.existe %}<img src="{{STATIC_URL}}img/icons/tick.png" />{%else %}<img src="{{STATIC_URL}}img/icons/exclamation.png" />{%endif %}</td>
+									<td>{{item.ficha.estatusFicha}}</td>
+									<td>{{item.observacion|default:'Ninguna'}}</td>
+									<td>{%if item.revisado %}{{item.fxRevision|date:"Y-m-d h:i a"}}{%endif %}</td>
+								</tr>
+							{%endfor %}
+						</table>
+					</div>
+				{%endif %}
+			
+			{%if inventarios %}
+				<br>
+					<div id='form2'>
+					<table id='form2'>
+					<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+					<tr>
+						<td>Seleccion</td>
+						<td>Auditoria</td>
+					{% for inv in inventarios %}
+					</tr>
+						<td><input type="radio" name="audi_id" value={{inv.inventario.id}}></td>
+						<td>{{inv.inventario}}</td>
+					</tr>
+					{% endfor %}
+					
+					<tr>
+						<td></td>
+						<td><input class="submit success" type="submit" name='seleccion' value="Seleccionar"/> </td>
+					</tr>
+					
+					</form>
+					</table>
+					</div>
+			{%endif %}
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

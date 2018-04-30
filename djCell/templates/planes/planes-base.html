@@ -1,0 +1,187 @@
+<!DOCTYPE>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name = "viewport" content = "width=device-width, maximum-scale = 1, minimum-scale=1" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/structure.css" media="all" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/theme2.css" media="all" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/buttons.css"  />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/flexslider.css" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/fuentes.css" media="screen" />
+		<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css' />
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+		<link rel="shortcut icon" type="image/x-icon" href="http://dhtml5.comoj.com/images/favicon.ico" />
+		<script src="{{STATIC_URL}}js/wufoo.js"></script>
+ 		<script src="{{STATIC_URL}}js/jquery-1.2.1.pack.js"></script>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="{{STATIC_URL}}js/jquery.flexslider.js"></script>
+		<script src="{{STATIC_URL}}js/default.js"></script>
+		{% block miscript %}
+		{% endblock %}
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+			<script src="js/respond.min.js"></script>
+		<![endif]-->
+		<title>@CM - {% block titulo %}{% endblock %}</title>
+	</head>
+	<body>
+		<div id="pagewidth">
+			<header id="header">
+				<img src="{{STATIC_URL}}img/logoAccell2.png" id="imgLogo"/>
+				<div id="Logo"><h1><a href=".">Excess Complet Cellulaire</a></h1></div>
+			</header>
+			<nav id="minav">
+				<div class="center">
+					<ul class="navh">
+						<li><a href="/planes" class="tooltipbasic" data-tooltip="Pagina de Bienvenida">Inicio</a></li>
+						{% if nivel == 0 or nivel == 1 or  nivel == 9 %}
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Planes ingresados por sucursales">Solicitudes</a>
+							<ul>
+								<li><a href="/planes/solicitudes/todos" class="tooltipbasic" data-tooltip="Reporte de Planes Solicitados">Todos</a></li>
+								<li><a href="/planes/solicitudes/consultar" class="tooltipbasic" data-tooltip="Consulta de planes solicitados">Consultar</a></li>
+							</ul>
+						</li>
+						<li><a href="/planes/seguimiento" class="tooltipbasic" data-tooltip="Actualizacion de planes">Seguimiento</a></li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Activacion de planes">Activar</a>
+							<ul>
+								<li><a href="/planes/activar/actualizar" class="tooltipbasic" data-tooltip="consulta y Activacion del plan">Actualizar</a></li>
+								<li><a href="/planes/activar/consultar" class="tooltipbasic" data-tooltip="Consulta y reporte de Planes Activados">Consultar</a></li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Actualizacion de planes">Servicios</a>
+							<ul>
+								<li><a href="/planes/servicios/solicitudes"  class="tooltipbasic" data-tooltip="consulta y actualizacion de datos">Solicitudes</a></li>
+								<li><a href="/planes/servicios/reporte" class="tooltipbasic" data-tooltip="Planes Modificados">Reporte</a></li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Planes ingresados por sucursales">Portabilidades</a>
+							<ul>
+								<li><a href="/planes/portabilidades/solicitudes" class="tooltipbasic" data-tooltip="Recepcion de solicitudes en sucursales">Solicitudes</a></li>
+								<li><a href="/planes/portabilidades/consultar" class="tooltipbasic" data-tooltip="Consulta y actualizacion de solicitud">Consultar</a></li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Planes Existentes">Catalogo Planes</a>
+							<ul>
+								<li><a href="/planes/catalogo_planes/nuevo" class="tooltipbasic" data-tooltip="Nuevo Plan">Nuevo</a></li>
+								<li><a href="/planes/catalogo_planes/consultar" class="tooltipbasic" data-tooltip="Consulta y actualizacion de Plan">Consultar</a></li>
+								<li><a href="/planes/sucursales/papeletas" class="tooltipbasic" data-tooltip="Consulta y reporte de Papeletas ingresadas">Papeletas</a></li>
+							</ul>
+						</li>
+						{%endif %}
+						<li><a href="/cerrar">Salir</a></li>
+					</ul>
+			</div>
+			</nav>
+			<aside id="sidebar">
+				<ul class="nav">
+					<li class="dropdown">
+						<a href="#">Reportes</a>
+						<ul>
+							{% if nivel == 0 or nivel == 1 or  nivel == 9 %}
+							<li><a href="/planes/reportes/portabilidades" class="tooltipbasic2" data-tooltip="Portabilidades recientes">Portabilidades</a></li>
+							<li><a href="/planes/reportes/planes_solicitados" class="tooltipbasic2" data-tooltip="Solicitudes recientes">Planes solicitados</a></li>
+							<li><a href="/planes/reportes/actualizar_solicitud" class="tooltipbasic2" data-tooltip="Actualizar Solicitudes">Servicios Solicitud</a></li>
+							<li><a href="/planes/reportes/por_entregar" class="tooltipbasic2" data-tooltip="Solicitudes activadas por entregar">Por entregar</a></li>
+							{%endif %}
+						</ul>
+					</li>
+				</ul>
+				<p align="center"><SCRIPT language="javascript">
+					function greeting(){   
+					        var today = new Date();   
+					        var hrs = today.getHours();   
+					        document.writeln("<CENTER>");   
+					        document.write("<div id='Calendario'>Buen@s ");   
+					        if (hrs < 6)      document.write("(y tempranos) días");   
+					        else if (hrs < 12)      document.write("días");   
+					        else if (hrs <= 19)      document.write("tardes");   
+					        else      document.write("Noches");   document.writeln("!</div>");   
+					        document.writeln("</CENTER>");  
+					}
+					function getmon(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11)
+					{
+					   this[0] = m0;
+					   this[1] = m1;
+					   this[2] = m2;
+					   this[3] = m3;
+					   this[4] = m4;
+					   this[5] = m5;
+					   this[6] = m6;
+					   this[7] = m7;
+					   this[8] = m8;
+					   this[9] = m9;
+					   this[10] = m10;
+					   this[11] = m11;
+					}
+					function calendar()
+					{
+					   var monthNames = "EneFebMarAbrMayJunJulAgoSepOctNovDic";
+					   var today = new Date();
+					   var thisDay;
+					   var monthDays = new getmon(31, 28, 31, 30, 31, 30, 31, 31, 30,
+					      31, 30, 31);
+					      year = today.getFullYear();
+					   thisDay = today.getDate();
+					      if (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0))
+					      monthDays[1] = 29;
+					   nDays = monthDays[today.getMonth()];
+					   firstDay = today;
+					   firstDay.setDate(1);
+					   startDay = firstDay.getDay();
+					   document.writeln("<center><small>");
+					   document.write("<table border=3 cellpadding=1>");
+					   document.write("<tr><th colspan=7><font size=2>");
+					   document.write(monthNames.substring(today.getMonth() * 3,
+					      (today.getMonth() + 1) * 3));
+					   document.write(". ");
+					   document.write(year);
+					   document.write("<tr><th>");
+					  document.write("D<th>L<th>M<th>Mi<th>J<th>V<th>S");
+					   document.write("<tr>");
+					   column = 0;
+					   for (i=0; i<startDay; i++)
+					   {
+					   document.write("<td align=center>");
+					      column++;
+					      document.write("");
+					   }
+					   for (i=1; i<=nDays; i++)
+					   {
+					   document.write("<td align=center>");
+					      if (i == thisDay)
+					         document.write("<font color=\"red\"  size=2><b>")
+					      document.write(i);
+					      if (i == thisDay)
+					        document.write("</font></b>")
+					      column++;
+					      if (column == 7)
+					      {
+					     document.write("<tr>");
+					         column = 0;
+					      }
+					   }
+					   document.write("</table></small>");
+					}
+					greeting();
+					calendar();
+					document.write();
+					function shutdown(){
+						window.close()
+					}
+					</SCRIPT>
+				</p>
+			</aside>
+			{% block contenido %}{% endblock %}
+			<footer id="footer">
+				<div class="center">
+				<a href="#">Soporte T&eacute;cnico</a>
+			</div></footer>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name = "viewport" content = "width=device-width, maximum-scale = 1, minimum-scale=1" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/structure.css" media="all" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/theme2.css" media="all" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/buttons.css"  />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/flexslider.css" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/fuentes.css" media="screen" />
+		<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css' />
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+		<link rel="shortcut icon" type="image/x-icon" href="http://dhtml5.comoj.com/images/favicon.ico" />
+		<script src="{{STATIC_URL}}js/wufoo.js"></script>
+ 		<script src="{{STATIC_URL}}js/jquery-1.2.1.pack.js"></script>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="{{STATIC_URL}}js/jquery.flexslider.js"></script>
+		<script src="{{STATIC_URL}}js/default.js"></script>
+
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+			<script src="js/respond.min.js"></script>
+		<![endif]-->
+		{% block miscript %}
+		{% endblock %}
+		<title>@CM - 
+		{% if nivel == 0 %}
+		Django-Admin
+		{% elif nivel == 1 %}
+		Administrador
+		{% elif nivel == 8 %}
+		Activador Kit
+		{% endif %}
+		{% block titulo %}
+		{% endblock %}</title>
+	</head>
+	<body>
+		<div id="pagewidth">
+			<header id="header">
+				<img src="{{STATIC_URL}}img/logoAccell2.png" id="imgLogo"/>
+				<div id="Logo"><h1><a href=".">Excess Complet Cellulaire</a></h1></div>
+			</header>
+			<nav id="minav">
+				<div class="center">
+					<ul class="navh">
+						<li><a href="/activaciones/" class="tooltipbasic" data-tooltip="Pagina de Bienvenida">Inicio</a></li>
+						{% if nivel == 0 or nivel == 1 or nivel == 8 %}
+						<li class="dropdownh">
+							<a href="" class="tooltipbasic" data-tooltip="Activacion de equipos">Equipo</a>
+							<ul>
+								<li><a href="/activaciones/equipo/buscar" class="tooltipbasic" data-tooltip="Buscar y actualizar equipo para activacion">Buscar y Actualizar</a></li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="" class="tooltipbasic" data-tooltip="Activacion de express">Express</a>
+							<ul>
+								<li><a href="/activaciones/express/buscar" class="tooltipbasic" data-tooltip="Buscar y actualizar express para activacion">Buscar y Actualizar</a></li>
+							</ul>
+						</li>
+						<li><a href="/activaciones/reporte" class="tooltipbasic" data-tooltip="Reporte de activaciones">Reporte</a></li>
+						{%endif %}
+
+						<li><a href="/cerrar">Salir</a></li>
+					</ul>
+			</div>
+			</nav>
+			{% block contenido %}{% endblock %}
+			<footer id="footer">
+				<div class="center">
+				<a href="#">Soporte T&eacute;cnico</a>
+			</div></footer>
+		</div>
+	</body>
+</html>

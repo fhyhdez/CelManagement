@@ -1,0 +1,76 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Bienvenido a @Compras{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+				<div class="info">
+					<h2>Fichas Existentes</h2>
+				</div>
+
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Fichas</td>
+							<td id="gridhead">Buscar</td>
+						</tr>
+						<tr>
+							<form action='.'  method='GET' enctype="multipart/form-data">{% csrf_token %}
+								<td><input type='text' name='item' value='{{ b_item|escape }}'></td>
+								<td><input class="submit success" type="submit" value='buscar'></td>
+							</form>
+						</tr>
+					</table>
+				</div>
+
+
+			{% if items %}
+				<br>
+				<br>
+				<h2>Numero de Fichas Amigo de $100.00 : {{n100}}</h2>
+				<h2>Numero de Fichas Amigo de $200.00 : {{n200}}</h2>
+				<h2>Numero de Fichas Amigo de $300.00 : {{n300}}</h2>
+				<h2>Numero de Fichas Amigo de $500.00 : {{n500}}</h2>
+				<h2>Descripcion de los Fichas {{nItems}}</h2>
+				<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Factura</td>
+						<td id="gridhead">Folio</td>
+						<td id="gridhead">Nominacion</td>
+						<td id="gridhead">Sucursal Actual</td>
+					</tr>
+					{% for item in items %}
+					<tr>
+						<td>{{ item.ficha.factura|escape}}</td>
+						<td>{{ item.ficha.folio|escape}}</td>
+						<td>{{ item.ficha.nominacion|escape}}</td>
+						<td>{{ item.ficha.sucursal|escape}}</td>
+					</tr>
+					{%endfor %}
+				</table>
+				</div>
+				<div class="pagination">
+				    <span class="step-links">
+				        {% if items.has_previous %}
+				            <a class="success button" href="?pagina={{ items.previous_page_number }}&amp;item={{b_item}}">anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ items.number }} de {{ items.paginator.num_pages }}.
+				        </span>
+
+				        {% if items.has_next %}
+				            <a class="success button" href="?pagina={{ items.next_page_number }}&amp;item={{b_item}}">Siguiente</a>
+				        {% endif %}
+				    </span>
+				</div>
+			{%elif b_item %}
+	No hay resultados
+			{% endif %}
+			
+			<strong>{{ informacion }}</strong>
+	</section>
+	<div style="height:70px;"></div>
+</div>
+{% endblock %}

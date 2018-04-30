@@ -1,0 +1,78 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Bienvenido a @Compras{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+				<div class="info">
+					<h2>actualizar Stock de Saldo a la Sucursal</h2>
+					<div></div>
+				</div>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Sucursal</td>
+							<td id="gridhead">Buscar</td>
+						</tr>
+						<tr>
+							<form action='.'  method='GET' enctype="multipart/form-data">{% csrf_token %}
+								<td><input type='texto' name='sucursal' value='{{ b_sucursal|escape }}'></td>
+								<td><input class="submit success" type="submit" value='buscar'></td>
+							</form>
+						</tr>
+					</table>
+				</div>
+
+
+
+
+
+				{% if r_sucus %}
+				<h2>Sucursales</h2>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Tipo</td>
+							<td id="gridhead">Nombre</td>
+							<td id="gridhead">Encargado</td>
+							<td id="gridhead">No. Oficina</td>
+							<td id="gridhead">Direccion</td>
+							<td id="gridhead">Seleccionar</td>
+						</tr>
+						{% for item in r_sucus %}
+						<tr>
+							<td>{{ item.tipoSucursal|upper}}</td>
+							<td>{{ item.nombre|upper}}</td>
+							<td>{{ item.encargado|upper}}</td>
+							<td>{{ item.noCelOfi|default:'Sin Asignar'}}</td>
+							<td>{{ item.direccion|title}}</td>
+							<td><a href="/compras/compras/stocks/actualizar/recargas/?sucursal={{ item.nombre|escape}}">Seleccionar
+							</a></td>
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+			{%elif b_sucursal %}
+	No hay resultados
+				{% endif %}
+			<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div id='form2'>
+					<table id='form2'>
+						{{stockItem}}
+					</table>
+				</div>
+				<div style="text-align:center;padding-top:0.5em;">
+					<strong>{{info}} </strong>
+					<input class="submit success" type="submit" name='actualizar' value="Actualizar Stock"/> 
+				</div>
+					
+						<BR /><span class="req">*.Campos Obligatorios. No dejar vacios.</span>
+			</form>
+				
+			
+			<strong>{{ informacion }}</strong>
+	</section>
+	<div style="height:70px;"></div>
+</div>
+{% endblock %}

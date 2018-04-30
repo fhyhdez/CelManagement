@@ -1,0 +1,30 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}--Contabilidad{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info">
+			<h2>Cuentas</h2>
+			<div>{{descr}}</div>
+		</div>
+			{{ mensaje }}				
+			<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div id='form2'>
+					<table id='form2'>
+						{{fCuenta}}
+					</table>
+				</div>
+				<div style="text-align:center;padding-top:0.5em;">
+					<input class="submit success" type="submit" name='guardar' value="Guardar la Cuenta"/> 
+				</div>
+			</form>
+			{{buscador|safe}}
+			<hr>
+			{{cuentas|safe}}
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

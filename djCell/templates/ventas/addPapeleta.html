@@ -1,0 +1,32 @@
+{% extends 'ventas/base-pop.html' %}
+
+{% block titulo %}Captura de Papeleta @Ventas{% endblock %}
+
+{% block contenido %}
+	<div id="stylized" class="myform">
+		<form id="form" name="form" method="POST" action="." enctype="multipart/form-data">{% csrf_token %}
+			<h1>AGREGAR PAPELETA</h1>
+			<p>Registrar los datos.</p>
+			<table>
+				{% for field in form %}
+				<tr>
+					<td id="col1"><label>{{field.label}}</label></td>
+					<td id="col2">{{field}}</td>
+					<td id="col3">{{field.errors}}</td>
+				</tr>
+				{% endfor %}
+				<tr> 
+					<td colspan="3"><strong>{{info}}</strong></td>
+				</tr>
+			</table>
+			{%if cerrar %}
+			<br>
+			<a href="javascript:close();" class="submit"><img src="/static/img/icons/cross.png" /><br>Cerrar ventana</a>
+			{%else %}
+			<input type="hidden" name="tipo" value="{{tipo}}"/>
+			<center><button type="submit" class="submit">Guardar Datos</button></center>
+			{%endif %}
+			<div class="spacer"></div>
+		</form>
+	</div>
+{% endblock %}

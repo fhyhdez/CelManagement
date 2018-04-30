@@ -1,0 +1,67 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Cerrar Corte @Almacen{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	{%if show %}
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div class="info">
+					<h2>Cerrar Corte de Venta:</h2>
+					<div>El corte de venta contiene el total de las ventas realizadas,<strong>Si hay ventas canceladas, por favor, pida la liberacion de los productos, para que pueda realizar la venta de &eacute;stos nuevamente.</strong></div>
+				</div>
+				<ul>
+					<li class="section first">
+						<h3>Verifique las Ventas antes de realizar el Cierre de Corte</h3>
+					</li>
+					{% for field in cerrarForm %}
+						<li>
+							<label class="desc">{{field.label}}</label> 
+							<div>
+								{{field}}
+							</div>
+							<label> {{field.help_text}} <span class="req"> {{field.errors}} </span></label>
+						</li>
+					{% endfor %}
+					<li><strong>{{ info }}</strong></li>
+					<li id="buttons">
+						{% if cerrarForm %}
+						<input class="submit success" name="cerrar" type="submit" value="Cerrar Corte"/>
+						{% else %}
+						<img src="/static/img/1353395830_gnome-system-monitor.png" alt="advertencia"/>
+						{% endif %}
+						<BR /><span class="req">*.Campos Obligatorios. No dejar vacios.</span>
+					</li>
+				</ul>
+		</form>
+	</section>
+	{%else %}
+	<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Crear Nuevo Corte</h2>
+			</div>
+			<ul>
+				{%if cerrar %}
+				<li class="section first">
+					<h3>El corte se dejara activo, una vez sea creado y no se cierre. Especialmente para ventas que se realizaron despues del cierre.</h3>
+				</li>
+				<li>
+					<label class="desc">¿Desea crear un corte con la fecha de hoy o la de mañana? <span class="req">*</span></label>
+					<div>
+						<center><input name="tomorrow" type="image" src="/static/img/icons/date_go.png" title="Generar con fecha de mañana" value="manana" /> | <input name="hoy" type="image" src="/static/img/icons/date_add.png" title="Generar con fecha de hoy" value="hoy" /> </center>
+					</div>
+					<p class="instruct">Elija una de las opciones o se generara el consecutivo de la fecha de hoy. </p>
+				</li>
+				{%endif %}
+				<li><strong>{{ info }} </strong></li>
+			</ul>
+		</form>
+	</section>
+	{%endif %}
+	<br><br><br>
+</div>
+{% endblock %}

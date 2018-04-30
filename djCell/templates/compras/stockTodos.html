@@ -1,0 +1,180 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Bienvenido a @Compras{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+				<div class="info">
+					<h2>Reporte de Stocks por Sucursal</h2>
+					<div>Busque y seleccione una sucursal para ver sus Stocks</div>
+				</div>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Sucursal</td>
+							<td id="gridhead">Buscar</td>
+						</tr>
+						<tr>
+							<form action='.'  method='GET' enctype="multipart/form-data">{% csrf_token %}
+								<td><input type='texto' name='sucursal' value='{{ b_sucursal|escape }}'></td>
+								<td><input class="submit success" type="submit" value='buscar'></td>
+							</form>
+						</tr>
+					</table>
+				</div>
+
+
+
+
+
+				{% if r_sucus %}
+				<h2>Sucursales</h2>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Tipo</td>
+							<td id="gridhead">Nombre</td>
+							<td id="gridhead">Encargado</td>
+							<td id="gridhead">No. Oficina</td>
+							<td id="gridhead">Direccion</td>
+							<td id="gridhead">Seleccionar</td>
+						</tr>
+						{% for item in r_sucus %}
+						<tr>
+							<td>{{ item.tipoSucursal|escape}}</td>
+							<td>{{ item.nombre|escape}}</td>
+							<td>{{ item.encargado|escape}}</td>
+							<td>{{ item.noCelOfi|default:'Sin Asignar'}}</td>
+							<td>{{ item.direccion|escape}}</td>
+							<td><a href="/compras/compras/stocks/todos/?sucursal={{ item.nombre|escape}}">Seleccionar
+							</a></td>
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+				<br>
+			{%elif b_sucursal %}
+	No hay resultados<br>
+				{% endif %}
+
+				{% if r_equipos %}
+				<h2>Detalles de Equipo</h2>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Gama</td>
+							<td id="gridhead">Marca</td>
+							<td id="gridhead">Modelo</td>
+							<td id="gridhead">Color</td>
+							<td id="gridhead">Tiempo Garantia</td>
+							<td id="gridhead">Stock Minimo</td>
+							<td id="gridhead">Stock Maximo</td>
+						</tr>
+						{% for item in r_equipos %}
+						<tr>
+							<td>{{ item.detalle.gama|escape}}</td>
+							<td>{{ item.detalle.marca|escape}}</td>
+							<td>{{ item.detalle.modelo|escape}}</td>
+							<td>{{ item.detalle.color|escape}}</td>
+							<td>{{ item.detalle.tiempoGarantia|escape}}</td>
+							<td>{{ item.stockMin|default:'Sin Asignar'}}</td>
+							<td>{{ item.stockMax|default:'Sin Asignar'}}</td>
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+				<br><br>
+				{% endif %}
+
+				{%if r_expres %}
+				<h2>Stocks de Express</h2>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Stock Minimo</td>
+							<td id="gridhead">Stock Maximo</td>
+						</tr>
+						{% for item in r_expres %}
+						<tr>
+							<td>{{ item.stockMin|default:'Sin Asignar'}}</td>
+							<td>{{ item.stockMax|default:'Sin Asignar'}}</td>
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+				<br><br>
+				{%endif %}
+
+
+				{% if r_accesorios %}
+				<h2>Detalles de Accesorio</h2>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Marca</td>
+							<td id="gridhead">Descripcion</td>
+							<td id="gridhead">Seccion</td>
+							<td id="gridhead">Stock Minimo</td>
+							<td id="gridhead">Stock Maximo</td>
+						</tr>
+						{% for item in r_accesorios %}
+						<tr>
+							<td>{{ item.detalle.marca|escape}}</td>
+							<td>{{ item.detalle.descripcion|escape}}</td>
+							<td>{{ item.detalle.seccion|escape}}</td>
+							<td>{{ item.stockMin|default:'Sin Asignar'}}</td>
+							<td>{{ item.stockMax|default:'Sin Asignar'}}</td>
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+				<br><br>
+				{% endif %}
+
+
+				{% if r_fichas %}
+				<h2>Detalles de Fichas</h2>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Nominacion</td>
+							<td id="gridhead">Stock Minimo</td>
+							<td id="gridhead">Stock Maximo</td>
+						</tr>
+						{% for item in r_fichas %}
+						<tr>
+							<td>{{ item.nominacion|escape}}</td>
+							<td>{{ item.stockMin|default:'Sin Asignar'}}</td>
+							<td>{{ item.stockMax|default:'Sin Asignar'}}</td>
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+				<br><br>
+				{% endif %}
+
+
+				{%if r_saldo %}
+				<h2>Stock en Saldo</h2>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Stock Minimo</td>
+							<td id="gridhead">Stock Maximo</td>
+						</tr>
+						{% for item in r_saldo %}
+						<tr>
+							<td>${{ item.minimo|default:'Sin Asignar'}}</td>
+							<td>${{ item.maximo|default:'Sin Asignar'}}</td>
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+				<br><br>
+				{%endif %}
+
+
+	</section>
+	<div style="height:70px;"></div>
+</div>
+{% endblock %}

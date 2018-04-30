@@ -1,0 +1,57 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Agregar Clientes Distribuidores @Compras{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div class="info">
+					<h2>Actualizar Nuevo Cliente - {{ mycli }}</h2>
+					<div>Registro de Clientes</div>
+
+				</div>
+				<ul>
+					{%if mostrar %}
+					<li class="section first">
+						<h3>Datos Generales</h3>
+					</li>
+					{% for field in form %}
+						<li>
+							{%if field.label == 'Key' %}
+							{{ field.as_hidden }}
+							{%else %}
+							<label class="desc">{{field.label}}</label> 
+							<div>
+								{{field}}
+							</div>
+							<label><small> {{field.help_text}} </small><span class="req"> {{field.errors}} </span></label>
+							{%endif %}
+						</li>
+					{% endfor %}
+					<li><hr></li>
+					{% for field in form2 %}
+						<li>
+							<label class="desc">{{field.label}}</label> 
+							<div>
+								{{field}}
+							</div>
+							<label><small> {{field.help_text}} </small><span class="req"> {{field.errors}} </span></label>
+						</li>
+					{% endfor %}
+					{%endif %}
+					<li><center><strong>{{ info }}</strong></center></li>
+					<li id="buttons">
+						{% if mostrar %}
+						<input name="actualizar" class="submit success" type="submit" value="Guardar"/> 
+						|  {%endif %}
+						<a class="success button" href="{{ myurl }}" title="Agregar Nuevo">Nuevo Cliente</a> 
+						<BR /><span class="req">*.Campos Obligatorios. No dejar vacios.</span>
+						
+					</li>
+				</ul>
+			</form>
+	</section>
+</div>
+{% endblock %}

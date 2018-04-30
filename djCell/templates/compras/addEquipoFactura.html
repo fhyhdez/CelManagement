@@ -1,0 +1,204 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Equipos @Compras{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+				<div class="info">
+					<h2>Agregar Equipos a Factura</h2>
+					<div>Registro de Productos a la Factura de Compras a Almacen</div>
+				</div>
+			<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<h3>Datos Globales</h3>
+				{% if glovales %}
+				<span class="req">{{ glovales }}</span>
+				{% endif %}
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Factura</td>
+							<td id="gridhead">Detalles de Equipo</td>
+							<td id="gridhead">Accesorios</td>
+							<td id="gridhead" title="Importe individual por producto">Importe Factura c/p</td>
+						</tr>
+						<tr>
+							<td>{{ f_equipo.factura }}</td>
+							<td>{{ f_equipo.detallesEquipo }}</td>
+							<td>{{ f_equipo.accesorioEqu }}</td>
+							<td>{{ f_equipo.importeFactura }}</td>
+						</tr>
+						<tr>
+							<td>{{ f_equipo.factura.errors }}</td>
+							<td>{{ f_equipo.detallesEquipo.errors }}</td>
+							<td>{{ f_equipo.accesorioEqu.errors }}</td>
+							<td>{{ f_equipo.importeFactura.errors }}</td>
+						</tr>
+					</table>
+				</div>
+					
+				<div style="clear:both;padding:1em;"></div>
+				<br>
+				{%if mensaje %}
+					{{mensaje|safe}}
+				{%endif %}
+				<br>
+				<h3>Datos del Equipo</h3>		
+		{%if guardados %}
+			Equipos Almacenados con exito:{{guardados}}
+		{%endif %}
+		{%if errores %}
+			Error en el almacenamiento del Equipo:{{errores}}
+		{%endif %}
+	
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">IMEI</td>
+							<td id="gridhead">ICC</td>
+						</tr>
+						<tr>
+							<td><input id="id_imei" name="0-imei" step="1" type="number" /></td>
+							<td><input id="id_icc" name="0-icc" step="1" type="number" /></td>
+						</tr>
+						
+						<tr>
+							<td><input id="id_1-imei" name="1-imei" step="1" type="number" /></td>
+							<td><input id="id_1-icc" name="1-icc" step="1" type="number" /></td>
+						</tr>
+						
+						<tr>
+							<td><input id="id_2-imei" name="2-imei" step="1" type="number" /></td>
+							<td><input id="id_2-icc" name="2-icc" step="1" type="number" /></td>
+						</tr>
+						
+						<tr>
+							<td><input id="id_3-imei" name="3-imei" step="1" type="number" /></td>
+							<td><input id="id_3-icc" name="3-icc" step="1" type="number" /></td>
+						</tr>
+						
+						<tr>
+							<td><input id="id_4-imei" name="4-imei" step="1" type="number" /></td>
+							<td><input id="id_4-icc" name="4-icc" step="1" type="number" /></td>
+						</tr>
+						
+						<tr>
+							<td><input id="id_5-imei" name="5-imei" step="1" type="number" /></td>
+							<td><input id="id_5-icc" name="5-icc" step="1" type="number" /></td>
+						</tr>
+						
+						<tr>
+							<td><input id="id_6-imei" name="6-imei" step="1" type="number" /></td>
+							<td><input id="id_6-icc" name="6-icc" step="1" type="number" /></td>
+						</tr>
+						
+						<tr>
+							<td><input id="id_7-imei" name="7-imei" step="1" type="number" /></td>
+							<td><input id="id_7-icc" name="7-icc" step="1" type="number" /></td>
+						</tr>
+						
+						<tr>
+							<td><input id="id_8-imei" name="8-imei" step="1" type="number" /></td>
+							<td><input id="id_8-icc" name="8-icc" step="1" type="number" /></td>
+						</tr>
+						
+						<tr>
+							<td><input id="id_9-imei" name="9-imei" step="1" type="number" /></td>
+							<td><input id="id_9-icc" name="9-icc" step="1" type="number" /></td>
+						</tr>
+						
+						<tr>
+							<td><input id="id_10-imei" name="10-imei" step="1" type="number" /></td>
+							<td><input id="id_10-icc" name="10-icc" step="1" type="number" /></td>
+						</tr>
+						
+						<tr>
+							<td><input id="id_11-imei" name="11-imei" step="1" type="number" /></td>
+							<td><input id="id_11-icc" name="11-icc" step="1" type="number" /></td>
+						</tr>
+						
+						<tr>
+							<td><input id="id_12-imei" name="12-imei" step="1" type="number" /></td>
+							<td><input id="id_12-icc" name="12-icc" step="1" type="number" /></td>
+						</tr>
+						
+						<tr>
+							<td><input id="id_13-imei" name="13-imei" step="1" type="number" /></td>
+							<td><input id="id_13-icc" name="13-icc" step="1" type="number" /></td>
+						</tr>
+						
+						<tr>
+							<td><input id="id_14-imei" name="14-imei" step="1" type="number" /></td>
+							<td><input id="id_14-icc" name="14-icc" step="1" type="number" /></td>
+						</tr>
+						
+						<tr>
+							<td><input id="id_15-imei" name="15-imei" step="1" type="number" /></td>
+							<td><input id="id_15-icc" name="15-icc" step="1" type="number" /></td>
+						</tr>
+						
+						<tr>
+							<td><input id="id_16-imei" name="16-imei" step="1" type="number" /></td>
+							<td><input id="id_16-icc" name="16-icc" step="1" type="number" /></td>
+						</tr>
+						
+						<tr>
+							<td><input id="id_17-imei" name="17-imei" step="1" type="number" /></td>
+							<td><input id="id_17-icc" name="17-icc" step="1" type="number" /></td>
+						</tr>
+						
+						<tr>
+							<td><input id="id_18-imei" name="18-imei" step="1" type="number" /></td>
+							<td><input id="id_18-icc" name="18-icc" step="1" type="number" /></td>
+						</tr>
+						
+						<tr>
+							<td><input id="id_19-imei" name="19-imei" step="1" type="number" /></td>
+							<td><input id="id_19-icc" name="19-icc" step="1" type="number" /></td>
+						</tr>
+					</table>
+				</div>
+				<ul>
+					<li id="buttons">
+						<input class="submit success" type="submit" name='equipos' value="Guardar y Agregar Productos >>>"/>
+						{%if b_factura %}
+							<br>
+							<a class="success button" href="/compras/almacen/equipos/?factura={{ b_factura|escape }}" title="Agregar Nuevo">Agregar Equipos</a>
+							<a class="success button" href="/compras/almacen/express/?factura={{ b_factura|escape }}" title="Agregar Express a la misma factura">Agregar Express</a>  |
+							<a class="success button" href="/compras/almacen/accesorios/?factura={{ b_factura|escape }}" title="Agregar Accesorios a la misma factura">Agregar Accesorios</a>  |
+							<a class="success button" href="/compras/almacen/fichas/?factura={{ b_factura|escape }}" title="Agregar Fichas a la misma factura">Agregar Fichas</a>  |
+							<a class="success button" href="/compras/almacen/recargas/?factura={{ b_factura|escape }}" title="Agregar Recargas a la misma factura">Agregar Recargas</a> |
+							<a class="success button" href="/compras/almacen/reporte/?q={{ b_factura|escape }}" title="Revisar Reposte de la misma factura">Revisar Reposte</a>
+						{%endif %}
+						<BR /><span class="req">*.Campos Obligatorios. No dejar vacios.</span>
+					</li>
+				</ul>
+			</form>
+			{% if agregados %}
+				<br>
+				<div class='info'>
+					<h2>Equipos Agregados</h2>
+				</div>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">IMEI</td>
+							<td id="gridhead">ICC</td>
+							<td id="gridhead">Detalles del Equipo</td>
+						</tr>
+						{% for item in agregados %}
+						<tr>
+							<td>{{ item.imei }}</td>
+							<td>{{ item.icc }}</td>
+							<td>{{ item.detallesEquipo }}</td>
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+			{%endif %}
+			
+			<strong>{{ informacion }}</strong>
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

@@ -1,0 +1,84 @@
+<!DOCTYPE>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name = "viewport" content = "width=device-width, maximum-scale = 1, minimum-scale=1" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/structure.css" media="all" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/theme2.css" media="all" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/buttons.css"  />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/flexslider.css" />
+		<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/fuentes.css" media="screen" />
+		<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css' />
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+		<link rel="shortcut icon" type="image/x-icon" href="http://dhtml5.comoj.com/images/favicon.ico" />
+		<script src="{{STATIC_URL}}js/wufoo.js"></script>
+ 		<script src="{{STATIC_URL}}js/jquery-1.2.1.pack.js"></script>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="{{STATIC_URL}}js/jquery.flexslider.js"></script>
+		<script src="{{STATIC_URL}}js/default.js"></script>
+		{% block miscript %}
+		{% endblock %}
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+			<script src="js/respond.min.js"></script>
+		<![endif]-->
+		<title>@CM - {% block titulo %}{% endblock %}</title>
+	</head>
+	<body>
+		<div id="pagewidth">
+			<header id="header">
+				<img src="{{STATIC_URL}}img/logoAccell2.png" id="imgLogo"/>
+				<div id="Logo"><h1><a href=".">Excess Complet Cellulaire</a></h1></div>
+			</header>
+			<nav id="minav">
+				<div class="center">
+					<ul class="navh">
+						<li><a href="/planes" class="tooltipbasic" data-tooltip="Pagina de Bienvenida">Inicio</a></li>
+						{% if nivel == 0 or nivel == 1 or  nivel == 9 %}
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Planes ingresados por sucursales">Solicitudes</a>
+							<ul>
+								<li><a href="/planes/solicitudes/todos" class="tooltipbasic" data-tooltip="Reporte de Planes Solicitados">Todos</a></li>
+								<li><a href="/planes/solicitudes/consultar" class="tooltipbasic" data-tooltip="Consulta de planes solicitados">Consultar</a></li>
+							</ul>
+						</li>
+						<li><a href="/planes/seguimiento" class="tooltipbasic" data-tooltip="Actualizacion de planes">Seguimiento</a></li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Activacion de planes">Activar</a>
+							<ul>
+								<li><a href="/planes/activar/actualizar" class="tooltipbasic" data-tooltip="consulta y Activacion del plan">Actualizar</a></li>
+								<li><a href="/planes/activar/consultar" class="tooltipbasic" data-tooltip="Consulta y reporte de Planes Activados">Consultar</a></li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Actualizacion de planes">Servicios</a>
+							<ul>
+								<li><a href="/planes/servicios/solicitudes"  class="tooltipbasic" data-tooltip="consulta y actualizacion de datos">Solicitudes</a></li>
+								<li><a href="/planes/servicios/reporte" class="tooltipbasic" data-tooltip="Planes Modificados">Reporte</a></li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Planes ingresados por sucursales">Portabilidades</a>
+							<ul>
+								<li><a href="/planes/portabilidades/solicitudes" class="tooltipbasic" data-tooltip="Recepcion de solicitudes en sucursales">Solicitudes</a></li>
+								<li><a href="/planes/portabilidades/consultar" class="tooltipbasic" data-tooltip="Consulta y actualizacion de solicitud">Consultar</a></li>
+							</ul>
+						</li>
+						<li class="dropdownh">
+							<a href="#" class="tooltipbasic" data-tooltip="Planes Existentes">Catalogo Planes</a>
+							<ul>
+								<li><a href="/planes/catalogo_planes/nuevo" class="tooltipbasic" data-tooltip="Nuevo Plan">Nuevo</a></li>
+								<li><a href="/planes/catalogo_planes/consultar" class="tooltipbasic" data-tooltip="Consulta y actualizacion de Plan">Consultar</a></li>
+								<li><a href="/planes/sucursales/papeletas" class="tooltipbasic" data-tooltip="Consulta y reporte de Papeletas ingresadas">Papeletas</a></li>
+							</ul>
+						</li>
+						{%endif %}
+						<li><a href="/cerrar">Salir</a></li>
+					</ul>
+			</div>
+			</nav>
+			{% block contenido %}{% endblock %}
+		</div>
+	</body>
+</html>

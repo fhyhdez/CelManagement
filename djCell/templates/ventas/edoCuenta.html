@@ -1,0 +1,100 @@
+{% extends 'ventas/ventas-base.html' %}
+{% block titulo %}@Comisiones de Empleado{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info">
+			<h3>Datos del Empleado</h3>
+		</div>
+		<div id="twoCol">
+			<table id="twoCol">
+				<tr>
+					<td>CURP</td>
+					<td>{{empleado.curp|upper}}</td>
+				</tr>
+				<tr>
+					<td>Nombre</td>
+					<td>{{empleado.nombre|title}} {{empleado.aPaterno|title}} {{empleado.aMaterno|title}}</td>
+				</tr>
+				<tr>
+					<td>Direccion</td>
+					<td>{{ empleado.direccion|title}}, {{ empleado.colonia|title}}, {{ empleado.ciudad|title}}, {{ empleado.estado|title}}</td>
+				</tr>
+				<tr>
+					<td>Telefono</td>
+					<td>{{empleado.telefono|title}}</td>
+				</tr>
+				<tr>
+					<td>Fecha de Nacimiento</td>
+					<td>{{empleado.fxNacimiento|date}}</td>
+				</tr>
+				<tr>
+					<td>Fecha de Ingreso</td>
+					<td>{{empleado.fxIngreso|date:"Y-m-d h:i a"}}</td>
+				</tr>
+				<tr>
+					<td>Puesto</td>
+					<td>{{empleado.puesto}}</td>
+				</tr>
+				<tr>
+					<td>Area</td>
+					<td>{{empleado.area}}</td>
+				</tr>
+			</table>
+		</div>
+	</section>
+	
+	<section id="row">
+	{%if cuentas %}
+		<div class="info">
+			<h3>Estado de Cuenta {{cuen.0}}</h3>
+		</div>
+		{%for cuen in cuentas %}
+			<div id="grid">
+				<table id="twoCol">
+					<tr>
+						<td>Tipo de Cuenta</td>
+						<td>{{cuen.0.tipoCuenta}}</td>
+					</tr>
+					<tr>
+						<td>Monto Original</td>
+						<td>{{cuen.0.monto}}</td>
+					</tr>
+					<tr>
+						<td>Fecha de Creacion</td>
+						<td>{{cuen.0.fxCreacion|date}}</td>
+					</tr>
+					<tr>
+						<td>Observaciones</td>
+						<td>{{ cuen.0.observacion|title}}</td>
+					</tr>
+				</table>
+			{%if cuen.1 %}
+				<h3>Historial de la Cuenta</h3>
+				<table id="grid">
+					<tr>
+						<th>Descuento</th>
+						<th>Fecha</th>
+						<th>Observacion</th>
+					</tr>
+					{%for item in cuen.1 %}
+					<tr>
+						<td>{{item.descuento}}</td>
+						<td>{{item.fxPago|date}}</td>
+						<td>{{item.observacion}}</td>
+					</tr>
+					{%endfor %}
+				</table>
+			{%else %}
+				<h3>Sin Abonos Realizados</h3>
+			{%endif %}
+			</div>
+		{%endfor %}
+	{%else %}
+	<h3>No hay Cuentas agregadas en este momento.</h3>
+	{%endif %}
+	</section>
+	<div style="height:100px;"></div>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'servicios/servicios-base.html' %}
+
+{% block titulo %}@Agregar nueva Reparacion al Catalogo @Servicios Tecnicos{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div class="info">
+					<h2>Agregar Reparaciones al Catalogo</h2>
+					<div>Registro de reparaciones</div>
+				</div>
+				<ul>
+					<li class="section first">
+						<h3>Datos Generales</h3>
+					</li>
+					{% for field in form %}
+						<li>
+							<label class="desc">{{field.label}}</label> 
+							<div>
+								{{field}}
+							</div>
+							<label> {{field.help_text}} <span class="req"> {{field.errors}} </span></label>
+						</li>
+					{% endfor %}
+					<li id="buttons">
+						<input class="submit success" type="submit" value="Guardar"/> |  
+						<a class="success button" href="/servicios/catalogo_reparaciones/agregar/" title="Agregar Nuevo">Nueva Reparacion</a>
+						<BR /><span class="req">*.Campos Obligatorios. No dejar vacios.</span>
+					</li>
+					<li>
+						<strong>{{ info }}</strong>
+					</li>
+				</ul>
+			</form>
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

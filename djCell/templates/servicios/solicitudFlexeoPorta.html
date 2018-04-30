@@ -1,0 +1,239 @@
+{% extends 'servicios/servicios-base2.html' %}
+{% block miscript %} 
+<script type="text/javascript">
+ function SINO(cual) {
+   var elElemento=document.getElementById(cual);
+   if(elElemento.style.display == 'block') {
+      elElemento.style.display = 'none';
+   } else {
+      elElemento.style.display = 'block';
+   }
+}  
+ </script>
+{% endblock %}
+{% block titulo %}@Solicitudes de flexeo - portabilidad @Servicios Tecnicos{% endblock %}
+
+{% block contenido %}
+<div id="content2">
+	<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Clientes de Portabilidades</h2>
+				<div>Portabilidades con equipo a flexear con o sin costo</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar Cliente:</h3>
+				</li>
+				<li>
+					<label class="desc">Cliente: <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query|escape}}" name="q" title="Buscar Cliente, incluya nombre o folio del cliente o sucursal"; placeholder="Ej. Jhon Perez" required />
+					</div>
+					<p class="instruct">Ingrese Nombre del cliente | folio del cliente | sucursal, para realizar el filtrado, Gracias.</p>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Buscar"/>  |  
+					<a class="success button" href="/servicios/solicitudes/flexeo_porta/" title="Nueva busqueda">Nueva Busqueda</a>
+				</li>
+				<li><strong>{{ info }}</strong></li>
+			</ul>
+		</form>
+		
+	</section>
+	
+	{% if query %}
+		<section id="row">
+			<h3>Resultados para "{{ query|escape }}":</h3>
+			{% if results %}
+
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Sucursal</td>
+						<td id="gridhead">Nombre</td>
+						<td id="gridhead">Direccion</td>
+						<td id="gridhead">Equipo</td>
+						<td id="gridhead">Costo</td>
+						<td id="gridhead" title="Ultima Fecha de Revision">Fecha</td>
+						<td id="gridhead">Estado</td>
+						<td id="gridhead" colspan="2" title="Seleccione una accion a realizar">Revisar</td>
+					</tr>
+					{% for porta in results %}
+						{% if porta.cliente.tipoCliente == 'Portabilidad con costo' %}
+							{%for x in ccosto %}
+							<tr>
+								{% if porta.cliente.id == x.cliente.id %}
+								<td>{{ x.sucursal.nombre|escape }} </td>
+								<td>{{ x.cliente.nombre|escape}} </td>
+								<td>{{ x.cliente.direccion|escape }}.{{ x.cliente.colonia.colonia|escape }}, {{ x.cliente.ciudad.ciudad|escape }}, {{ x.cliente.ciudad.estado|escape }}.</td>
+								<td>{{ x.marcaModelo|escape }} {{ x.imei|escape }} <br> {{ x.cliente.fxIngreso|date:"Y-m-d h:i a"}} </td>
+								<td>Si</td>
+								<td>{{ x.fxRevision|date:"Y-m-d h:i a" }} </td>
+								<td>{{ x.estado.estado|escape }} </td>
+								<td>
+									<form class="wufoo" action="/servicios/clientes_rep/historial/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+											<input name="histRep" type="image" src="/static/img/icons/zoom_refresh.png" title="Ver Historial" value="{{ x.id|escape }}" />
+										</form>
+									</td>
+									<td>
+										<form class="wufoo" action="/servicios/seguimiento/flexeo_porta/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+											<input name="updCPorta" type="image" src="/static/img/icons/report_edit.png" title="Actualizar Datos" value="{{ x.id|escape }}" />
+										</form>
+									</td>
+								{%endif %}
+							</tr>
+							{% endfor %}
+						{% elif porta.cliente.tipoCliente == 'Portabilidad sin costo' %}
+							{% for x in scosto  %}
+								<tr>
+									{% if porta.cliente.id == x.portabilidad.cliente.id %}
+									<td>{{ x.portabilidad.sucursal.nombre|escape }} </td>
+									<td>{{ x.portabilidad.cliente.nombre|escape}} </td>
+									<td>{{ x.portabilidad.cliente.direccion|escape }}.{{ x.portabilidad.cliente.colonia.colonia|escape }}, {{ x.portabilidad.cliente.ciudad.ciudad|escape }}, {{ x.portabilidad.cliente.ciudad.estado|escape }}.</td>
+									<td>{{ x.marcaModelo|escape }} </td>
+									<td>No</td>
+									<td>{{ x.fxRevision|date:"Y-m-d h:i a" }} </td>
+									<td>{{ x.estado.estado|escape }} </td>
+									<td title="No disponible ya que el equipo no tiene costo" colspan="2">
+										<form class="wufoo" action="/servicios/seguimiento/flexeo_porta/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+											<input name="updSPorta" type="image" src="/static/img/icons/report_edit.png" title="Actualizar Datos" value="{{ x.id|escape }}" />
+										</form>
+									</td>
+									{%endif %}
+								</tr>
+							{%endfor %}
+						
+						{% endif %}
+
+					{%endfor %}
+				</table>
+			</div>
+			{% else %}
+				<p>El cliente no se encuentra o no pertenece a esta seccion. <br> verifique sus datos</p>
+			{% endif %}
+		</section>
+	{% endif %}
+		
+	<section id="row">
+		<div class="info"><h3>Portabilidad: Equipo Sin Costo</h3></div>
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<td id="gridhead">Sucursal</td>
+					<td id="gridhead">Nombre</td>
+					<td id="gridhead">Direccion</td>
+					<td id="gridhead">Ingreso</td>
+					<td id="gridhead" title="Ultima Fecha de Revision">Fecha</td>
+					<td id="gridhead">Estado</td>
+					<td id="gridhead">Detalles</td>
+					<td id="gridhead" title="Accion a Realizar" colspan="2">Revisar</td>
+				</tr>
+				{% for x in pSCosto  %}
+					<tr>
+						<td>{{ x.portabilidad.sucursal.nombre }} </td>
+						<td>{{ x.portabilidad.cliente.nombre}} </td>
+						<td>{{ x.portabilidad.cliente.direccion }}.{{ x.portabilidad.cliente.colonia.colonia }}, {{ x.portabilidad.cliente.ciudad.ciudad }}, {{ x.portabilidad.cliente.ciudad.estado }}.</td>
+						<td>{{ x.portabilidad.fxIngreso|date:"Y-m-d h:i a"}} </td>
+						<td>{{ x.fxRevision|date:"Y-m-d h:i a" }} </td>
+						<td>{{ x.estado.estado }} </td>
+						<td>
+							<div id="div{{ x.id }}" style="display:none;">
+								Equipo : {{ x.marcaModelo }} <br>
+								Entrega :{{ x.observaciones }} <br>
+								Fecha / Tecnico : {{ x.portabilidad.fxTecnico|date:"Y-m-d h:i a" }}<br>
+								Fecha / Cliente : {{ x.portabilidad.fxCliente|date:"Y-m-d h:i a" }}<br>
+							</div>
+							<a href="javascript:void(0);" onclick="SINO('div{{ x.id }}')">Detalles</a>
+						</td>
+						<td title="El equipo no cuenta con historial, ya que no tiene costo">
+							<form class="wufoo" action="/servicios/seguimiento/flexeo_porta/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="updSPorta" type="image" src="/static/img/icons/report_edit.png" title="Actualizar Datos" value="{{ x.id }}" />
+							</form>
+						</td>
+					</tr>
+				{%endfor %}
+			</table>
+		</div>
+		<div class="pagination">
+			<span class="step-links">
+				{% if pSCosto.has_previous %}
+					<a class="success button" href="?pagSCosto={{ pSCosto.previous_page_number }}">... Anterior</a>
+				{% endif %}
+				<span class="current">
+					Pagina {{ pSCosto.number }} de {{ pSCosto.paginator.num_pages }}.
+				</span>
+
+				{% if pSCosto.has_next %}
+					<a class="success button" href="?pagSCosto={{ pSCosto.next_page_number }}"> Siguiente ...</a>
+				{% endif %}
+			</span>
+		</div>
+	</section>
+	
+	<section id="row">
+		<div class="info"><h3>Portabilidad: Equipo con Costo</h3></div>
+		<div id="grid">
+			<table id="grid">
+				<tr>
+					<td id="gridhead">Sucursal</td>
+					<td id="gridhead">Nombre</td>
+					<td id="gridhead">Direccion</td>
+					<td id="gridhead">Ingreso</td>
+					<td id="gridhead" title="Ultima Fecha de Revision">Fecha</td>
+					<td id="gridhead">Estado</td>
+					<td id="gridhead">Detalles</td>
+					<td id="gridhead" colspan="2" title="Accion a Realizar">Revisar</td>
+				</tr>
+				{% for x in pCosto  %}
+					<tr>
+						<td>{{ x.sucursal.nombre }} </td>
+						<td>{{ x.cliente.nombre}} </td>
+						<td>{{ x.cliente.direccion }}.{{ x.cliente.colonia.colonia }}, {{ x.cliente.ciudad.ciudad }}, {{ x.cliente.ciudad.estado }}.</td>
+						<td>{{ x.fxIngreso|date:"Y-m-d h:i a"}} </td>
+						<td>{{ x.fxRevision|date:"Y-m-d h:i a" }} </td>
+						<td>{{ x.estado.estado }} </td>
+						<td>
+							<div id="div{{ x.id }}" style="display:none;">
+								Equipo : {{ x.marcaModelo }} {{ x.imei }} <br>
+								Entrega :{{ x.observacion }} <br>
+								Anticipo : {{ x.anticipo }}<br>
+								Estado del equipo con el Tecnico :<br>
+								{{ x.estado.estado }}
+							</div>
+							<a href="javascript:void(0);" onclick="SINO('div{{ x.id }}')">Detalles</a>
+						</td>
+						<td>
+							<form class="wufoo" action="/servicios/clientes_rep/historial/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="histRep" type="image" src="/static/img/icons/zoom_refresh.png" title="Ver Historial" value="{{ x.id }}" />
+							</form>
+						</td>
+						<td>
+							<form class="wufoo" action="/servicios/seguimiento/flexeo_porta/" method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="updCPorta" type="image" src="/static/img/icons/report_edit.png" title="Actualizar Datos" value="{{ x.id }}" />
+							</form>
+						</td>
+					</tr>
+				{%endfor %}
+			</table>
+		</div>
+		<div class="pagination">
+			<span class="step-links">
+				{% if pCosto.has_previous %}
+					<a class="success button" href="?pagCosto={{ pCosto.previous_page_number }}">... Anterior</a>
+				{% endif %}
+				<span class="current">
+					Pagina {{ pCosto.number }} de {{ pCosto.paginator.num_pages }}.
+				</span>
+
+				{% if pCosto.has_next %}
+					<a class="success button" href="?pagCosto={{ pCosto.next_page_number }}"> Siguiente ...</a>
+				{% endif %}
+			</span>
+		</div>
+	</section>
+	<br>
+	<br><br><br>
+</div>
+{% endblock %}

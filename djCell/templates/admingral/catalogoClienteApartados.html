@@ -1,0 +1,76 @@
+{% extends 'admingral/admin-base.html' %}
+
+{% block titulo %}@Catalogo de Clientes - Apartados - @Ventas{% endblock %}
+
+{% block contenido %}
+<div id="content">
+		<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Catalogo de Clientes - Apartados</h2>
+				<div>Clientes registrados en sucursales</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar Cliente</h3>
+				</li>
+				<li>
+					<label class="desc">Filtrar por : (Nombre / direccion / colonia /ciudad /folio) <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query|escape}}" name="q" title="Ingrese parcial o totalmente el nombre, direccion del cliente"; placeholder="Ej. carlos" required />
+					</div>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Consultar"/>  |  
+					<a class="success button" href="." title="Nueva busqueda">Nueva Busqueda</a>
+				</li>
+				<li><strong>{{ info }}</strong></li>
+			</ul>
+		</form>
+		
+	</section>
+		<section id="row">
+			<h3>{{ query|escape }}</h3>
+			{% if results %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Folio</td>
+						<td id="gridhead">Nombre</td>
+						<td id="gridhead">Direccion</td>
+						<td id="gridhead">Ingreso</td>
+					</tr>
+					{% for cli in results %}
+					<tr>
+						<td>{{ cli.folio|title }} </td>
+						<td>{{ cli.nombre|title }} </td>
+						<td>{{ cli.direccion|title }}. {{ cli.colonia.colonia|title }}, {{ cli.ciudad.ciudad|title }}, {{ cli.ciudad.estado }}.  </td>
+						<td>{{ cli.fxIngreso|date }}</td>						
+					</tr>
+					{%endfor %}
+				</table>
+			</div>
+			<div class="pagination">
+				    <span class="step-links">
+				        {% if results.has_previous %}
+				            <a class="success button" href="?pagina={{ results.previous_page_number }}&amp;q={{ query }}">...Anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ results.number }} de {{ results.paginator.num_pages }}.
+				        </span>
+
+				        {% if results.has_next %}
+				            <a class="success button" href="?pagina={{ results.next_page_number }}&amp;q={{query}}">Siguiente...</a>
+				        {% endif %}
+				    </span>
+				</div>
+
+			{% else %}
+				<p>No hay resultados por el momento</p>
+			{% endif %}
+		</section>
+	<br><br>
+</div>
+{% endblock %}

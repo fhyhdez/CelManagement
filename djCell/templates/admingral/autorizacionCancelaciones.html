@@ -1,0 +1,99 @@
+{% extends 'admingral/admin-base.html' %}
+
+{% block titulo %}@Autorizacion de Cancelaciones @Administracion{% endblock %}
+
+{% block contenido %}
+<div id="content">
+		<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Autorizacion de Cancelacion de Ventas</h2>
+				<div>Ventas Canceladas</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Venta Cancelada</h3>
+				</li>
+				<li>
+					<label class="desc">Filtrar por: (Folio / Sucursal / usuario)  <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query|escape}}" name="q" title="Ingrese elemento a buscar"; required />
+					</div>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Consultar"/>  |  
+					<a class="success button" href="." title="Nueva busqueda">Nueva Busqueda</a>
+				</li>
+				<li><strong>{{ info }}</strong></li>
+			</ul>
+		</form>
+		
+	</section>
+	<section id="row">
+			<h3>{{ query|escape }}</h3>
+			{% if cancelaciones %}
+			<div id="grid">
+				<table id="grid2">
+					<tr>
+						<td id="gridhead2">Venta</td>
+						<td id="gridhead2">Tipo</td>
+						<td id="gridhead2">Sucursal</td>
+						<td id="gridhead2">Usuario<br>Vendedor</td>
+						<td id="gridhead2">Productos</td>
+						<td id="gridhead2">Total</td>
+						<td id="gridhead2">Estado</td>
+						<td id="gridhead2" colspan="2">Autorizar</td>
+					</tr>
+					{% for x in cancelaciones %}
+				
+					<tr>
+						<td>{{ x.venta.folioVenta|upper }} </td>
+						<td>
+							{%if x.venta.mayoreo %}Mayoreo
+							{%elif x.venta.credito %}Credito
+							{%else %}Contado{%endif %}
+						</td>
+						<td>{{ x.venta.sucursal.nombre|upper }} </td>
+						<td>{{ x.venta.usuario.username|upper }} </td>
+						<td title="Ver Productos Asociados"><a href="./?pop={{ x.id }}" class="success button" onClick="window.open(this.href, this.target, 'width=900,height=250,toolbar=0,menubar=1,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0'); return false;" >Mostrar</a> </td>
+						<td>{{ x.venta.total|default:'0' }} </td>
+						<td>{{ x.venta.estado.estado|upper }} </td>
+						<td title="Eliminar Venta">
+							<form class="wufoo" action="." method="GET" enctype="multipart/form-data">{% csrf_token %}
+								<input name="del" type="image" src="/static/img/icons/bin.png" onClick="alert('¿La Venta seleccionada, se mandara a papelera, se esta seguro de continuar?')" value="{{ x.id }}" />
+							</form>
+						</td>
+						<td title="Autorizar Venta">
+							<form class="wufoo" action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+								<input name="upd" type="image" src="/static/img/icons/active_sessions.png" onClick="alert('¿La Venta seleccionada, se liberarán los productos asociados, se esta seguro de continuar?')" value="{{ x.id }}" />
+							</form>
+						</td>
+					</tr>
+					{%endfor %}
+				</table>
+			</div>
+		
+			<div class="pagination">
+				    <span class="step-links">
+				        {% if cancelaciones.has_previous %}
+				            <a class="success button" href="?pagina={{ cancelaciones.previous_page_number }}&amp;q={{ query }}">...Anterior</a>
+				        {% endif %}
+
+				        <span class="current">
+				            Pagina {{ cancelaciones.number }} de {{ cancelaciones.paginator.num_pages }}.
+				        </span>
+
+				        {% if cancelaciones.has_next %}
+				            <a class="success button" href="?pagina={{ cancelaciones.next_page_number }}&amp;q={{query}}">Siguiente...</a>
+				        {% endif %}
+				    </span>
+				</div>
+
+			{% else %}
+				<p>No hay resultados por el momento</p>
+			{% endif %}
+		</section>
+	<br><br>
+</div>
+{% endblock %}

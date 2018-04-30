@@ -1,0 +1,206 @@
+{% extends 'ventas/ventas-base.html' %}
+
+{% block titulo %}@Apartados - Nuevo - @Ventas{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Clientes de Apartados</h2>
+				<div>Activacion de Equipos</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar Cliente</h3>
+				</li>
+				<li>
+					<label class="desc">Nombre del Cliente: <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ query|escape}}" name="q" title="Ingrese parcial o totalmente el nombre del cliente"; placeholder="Ej. Juan Perez" required />
+					</div>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Buscar Cliente"/>  |  
+					<a class="success button" href="/ventas/ventas/apartados/abonos/" title="Nueva busqueda">Nueva Busqueda</a>
+				</li>
+			</ul>
+		</form>
+		{{ info }}
+	</section>
+	
+		{% if query %}
+		<section id="row">
+			<h3>Resultados para "{{ query|escape }}":</h3>
+			{% if results %}
+			<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+				{% csrf_token %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Nombre</td>
+						<td id="gridhead">Direccion</td>
+						<td id="gridhead">Colonia</td>
+						<td id="gridhead">Ciudad</td>
+						<td id="gridhead">Ingreso</td>
+						<td id="gridhead">Seleccionar</td>
+						<td id="gridhead">Abonar</td>
+					</tr>
+					{% for cliente in results %}
+					<tr>
+						<td>{{ cliente.nombre }}</td>
+						<td>{{ cliente.direccion }}</td>
+						<td>{{ cliente.colonia.colonia }}</td>
+						<td>{{ cliente.ciudad.ciudad }}</td>
+						<td>{{ cliente.fxIngreso|date:"Y-m-d h:i a" }}</td>
+						<td>
+							Apartado<input type="radio" name="apartaCliente" value="{{ cliente.id|escape }}"/> |  
+							Abono<input type="radio" name="abonarCliente" value="{{ cliente.id|escape }}"/></td>
+						<td><input name="operacion" class="submit success" type="submit" value="Realizar"/></td>
+					</tr>
+					{%endfor %}
+				</table>
+			</div>
+		</form>
+			{% else %}
+				<p>El cliente que busca no se encuentra o esta mal escrito, verifique sus datos</p>
+			{% endif %}
+		</section>
+		{% endif %}
+	
+	{%if mostrarElegirApartado %}
+	<section id="row">
+		<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Apartar Equipos</h2>
+				<div>Agregar equipos/apartado </div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Buscar equipo</h3>
+				</li>
+				<li>
+					<label class="desc">IMEI: <span class="req">*</span></label>
+					<div>
+						<input class="field text medium" type="text" value="{{ queryEq|escape}}" name="qEq" title="Ingrese los 15 digitos del equipo"; placeholder="359121076754241" required />
+					</div>
+					<p class="instruct">Ingrese los 15 dig. del equipo</p>
+				</li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Buscar Equipo"/>
+				</li>
+			</ul>
+		</form>
+		{{ info }}
+		{% if queryEq %}
+		<section id="row">
+			<h3>Resultados para "{{ queryEq|escape }}":</h3>
+			{% if results %}
+			<form class="wufoo" action="." method="GET" enctype="multipart/form-data">
+				{% csrf_token %}
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Marca/Modelo</td>
+						<td id="gridhead">Imei</td>
+						<td id="gridhead">Icc</td>
+						<td id="gridhead">Seleccionar</td>
+						<td id="gridhead">Apartar</td>
+					</tr>
+					{% for equipo in results %}
+					<tr>
+						{% if equipo.estatus.estatus == 'Vendido' %}
+						<td>{{ equipo.detallesEquipo.marca.marca|escape}} {{ equipo.detallesEquipo.modelo|escape}}</td>
+						<td>{{ equipo.imei|escape}}</td>
+						<td>{{ equipo.icc|escape}}</td>
+						<td>Vendido</td>
+						<td>
+							<div id="div{{ equipo.id }}" style="display:none;">
+								{% for vtas in vtaEq %}
+									{% if vtas.equipo.imei == equipo.equipo.imei %}
+										<td>Fecha : {{ vtas.venta.fecha|date:"Y-m-d h:i a"}}</td>
+										<td>Usuario : {{ vtas.venta.usuario|escape}}</td>
+									{%endif %}
+								{%endfor %}
+							</div>
+							<a href="javascript:void(0);" onclick="SINO('div{{ equipo.id }}')">Detalles</a>
+						</td>
+						{% elif equipo.estatus.estatus == 'Activado' %}
+						<td>{{ equipo.detallesEquipo.marca.marca|escape}} {{ equipo.detallesEquipo.modelo|escape}}</td>
+						<td>{{ equipo.imei|escape}}</td>
+						<td>{{ equipo.icc|escape}}</td>
+						<td>Activado<br><input type="radio" name="activarImei" value="{{ equipo.imei|escape }}"/></td>
+						<td>
+							<div id="div{{ equipo.id }}" style="display:none;">
+								{% for detalles in eqActivado %}
+									{% if detalles.equipo.imei == equipo.imei %}
+									Fecha :{{ detalles.fxActivacion|date:"Y-m-d h:i a" }}<br>
+									Vendedor : {{ detalles.empleado.curp }}<br>
+									Activo : {{ detalles.usuario }}
+									{% endif %}
+								{% endfor %}
+							</div>
+							<a href="javascript:void(0);" onclick="SINO('div{{ equipo.id }}')">Detalles</a><br>
+							<input name="ActivarEquipo" class="submit success" type="submit" value="Apartar"/>
+						</td>
+						{% else %}
+						<td>{{ equipo.detallesEquipo.marca.marca|escape}} {{ equipo.detallesEquipo.modelo|escape}}</td>
+						<td>{{ equipo.imei|escape}}</td>
+						<td>{{ equipo.icc|escape}}</td>
+						<td><input type="radio" name="activarImei" value="{{ equipo.imei|escape }}"/></td>
+						<td><input name="ActivarEquipo" class="submit success" type="submit" value="Apartar"/></td>
+						{%endif %}
+					</tr>
+					{%endfor %}
+				</table>
+			</div>
+		</form>
+			{% else %}
+				<p>Imei de Equipo no se encuentra, verifique sus datos</p>
+			{% endif %}
+		</section>
+		{% endif %}
+	</section>
+	{%endif %}
+	
+	{%if mostrarNuevoApartado %}
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Nuevo Apartado</h2>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Asignar Nuevo Apartado a Cliente</h3>
+				</li>
+				{% for field in form %}
+				<li>
+					<label class="desc">{{field.label}}</label> 
+					<div>
+						{{field}}
+					</div>
+					<label> {{field.help_text}} <small><span class="req"> {{field.errors}} </span></small></label>
+				</li>
+				{% endfor %}
+				{% for field in form2 %}
+				<li>
+					<label class="desc">{{field.label}}</label> 
+					<div>
+						{{field}}
+					</div>
+					<label> {{field.help_text}} <small><span class="req"> {{field.errors}} </span></small></label>
+				</li>
+				{% endfor %}
+				
+				<li id="buttons">
+					<input class="submit success" type="submit" value="Realizar Venta"/>
+				</li>
+			</ul>
+		</form>
+	</section>
+	{%endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'ventas/ventas-base2.html' %}
+
+{% block titulo %}@Solicitud de Plan @Ventas{% endblock %}
+
+{% block contenido %}
+<div id="content2">
+	<section id="row">
+		<div class="info"><h3>{{ cosa }} Solicitud de Plan Tarifario</h3></div>
+	<form class="wufoo" action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+		
+		<div id="grid">
+			<table id="twoCol">
+			{% for field in form %}
+				{%if field.label == 'A' %}
+				<tr>
+					<th  colspan="3">A) CONTROL DE DATOS</th>
+				</tr>
+				{%elif field.label == 'B' %}
+				<tr>
+					<th colspan="3">B) USO EXCLUSIVO TELCEL(MESA DE CONTROL)</th>
+				</tr>
+				{%elif field.label == 'Cep' %}
+				<tr>
+					<th colspan="3">C) DATOS PERSONALES</th>
+				</tr>
+				{%elif field.label == 'D' %}
+				<tr>
+					<th colspan="3">D) DOMICILIO</th>
+				</tr>
+				{%elif field.label == 'E' %}
+				<tr>
+					<th colspan="3">E) OCUPACION</th>
+				</tr>
+				{%elif field.label == 'F' %}
+				<tr>
+					<th colspan="3">F) DOMICILIO DEL EMPLEO</th>
+				</tr>
+				{%elif field.label == 'G' %}
+				<tr>
+					<th colspan="3">G) EVALUACION SOCIOECONOMICA (SOLO PARA KITS A CREDITO) </th>
+				</tr>
+				{%elif field.label == 'H' %}
+				<tr>
+					<th colspan="3">H) REFERENCIAS</th>
+				</tr>
+				{%elif field.label == 'J' %}
+				<tr>
+					<th colspan="3">EQUIPO Y PLAN SOLICITADO</th>
+				</tr>
+				{%else %}
+				<tr>
+					<td>{{field.label}}</td>
+					<td>{{field}}</td>
+					<td>{{field.errors}}</td>
+				</tr>
+				{%endif %}
+			{%endfor %}
+				<tr>
+					<th colspan="3">{{ info }} </th>
+				</tr>
+				<tr>
+					<th colspan="3">
+					{% if form %}
+						<input name="Ingresar" class="submit success" type="submit" value="Guardar Solicitud"/>  |  
+					{% endif %}
+					<a class="success button" href="." title="Nueva busqueda para activacion">Nueva Solicitud</a>
+					</th>
+				</tr>
+			</table>
+		</div>
+		
+	</form>
+	
+	</section>
+	<div style="height:100px;"></div>
+</div>
+{% endblock %}

@@ -1,0 +1,257 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Bienvenido a @Compras{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+				<div class="info">
+					<h2>Faltantes de Totales en la Sucursal</h2>
+					<div>Seleccione una sucursal para ver los faltantes</div>
+				</div>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Sucursal</td>
+							<td id="gridhead">Buscar</td>
+						</tr>
+						<tr>
+							<form action='.'  method='GET' enctype="multipart/form-data">{% csrf_token %}
+								<td><input type='text' name='sucursal' value='{{ b_sucursal|escape }}'></td>
+								<td><input class="submit success" type="submit" value='buscar'></td>
+							</form>
+						</tr>
+					</table>
+				</div>
+
+
+
+
+
+				{% if r_sucus %}
+				<h2>Sucursales</h2>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Tipo Sucursal</td>
+							<td id="gridhead">Nombre</td>
+							<td id="gridhead">Encargado</td>
+							<td id="gridhead">No Cel Oficina</td>
+							<td id="gridhead">Direccion</td>
+							<td id="gridhead">Seleccionar</td>
+						</tr>
+						{% for item in r_sucus %}
+						<tr>
+							<td>{{ item.tipoSucursal|escape}}</td>
+							<td>{{ item.nombre|escape}}</td>
+							<td>{{ item.encargado|escape}}</td>
+							<td>{{ item.noCelOfi|escape}}</td>
+							<td>{{ item.direccion|escape}}</td>
+							<td><a href="?sucursal={{ item.nombre|escape}}">Seleccionar
+							</a></td>
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+				<br>
+			{%elif b_sucursal %}
+	No hay resultados
+				<br>
+				{% endif %}
+
+				{%if sucu %}
+					{% if faltantes1 %}
+					<h2>Detalles de los Equipos Faltantes</h2>
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Equipo</td>
+						<td id="gridhead">Existencias</td>
+						<td id="gridhead">Requiere</td>
+						<td id="gridhead">Faltantes</td>
+					</tr>
+					{% for x in faltantes1 %}
+						<tr>
+							<td>{{ x.0|title }}</td>
+							<td>{{ x.1|default:'0' }}</td>
+							<td>{{ x.2|default:'0' }}</td>
+							<td>
+								{{ x.3|default:'0' }}
+								{% if x.3 >= x.2 %}
+								<img src="{{STATIC_URL}}img/icons/stockRed.png" title="Urgente Transferir {{ x.2 }} "/>
+								{% elif x.3 < x.2 %}
+								<img src="{{STATIC_URL}}img/icons/stockYellow.png" title="Advertencia: Se sugiere surtir {{ x.2 }}"/>
+								{% else %}
+								<img src="{{STATIC_URL}}img/icons/stockGreen.png" title="Sin Problemas" />
+								{% endif %}
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+						<br>
+						<br>
+					{%else %}
+						<div class="info">
+							<h2>No hay Equipos Faltantes, todo esta por encima del minimo</h2>
+						</div>
+						<br>
+						<br>
+					{% endif %}
+
+					{% if faltantes2 %}
+					<h2>Detalles de los Accesorios Faltantes</h2>
+					<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Accesorio</td>
+						<td id="gridhead">Existencias</td>
+						<td id="gridhead">Requiere</td>
+						<td id="gridhead">Faltantes</td>
+					</tr>
+					{% for x in faltantes2 %}
+						<tr>
+							<td>{{ x.0|title }}</td>
+							<td>{{ x.1|default:'0' }}</td>
+							<td>{{ x.2|default:'0' }}</td>
+							<td>
+								{{ x.3|default:'0' }}
+								{% if x.3 >= x.2 %}
+								<img src="{{STATIC_URL}}img/icons/stockRed.png" title="Urgente Transferir {{ x.2 }} "/>
+								{% elif x.3 < x.2 %}
+								<img src="{{STATIC_URL}}img/icons/stockYellow.png" title="Advertencia: Se sugiere surtir {{ x.2 }}"/>
+								{% else %}
+								<img src="{{STATIC_URL}}img/icons/stockGreen.png" title="Sin Problemas" />
+								{% endif %}
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+						<br>
+						<br>
+					{%else %}
+						<div class="info">
+							<h2>No hay Accesorios Faltantes, todo esta por encima del minimo</h2>
+						</div>
+						<br>
+						<br>
+					{% endif %}
+
+					{% if faltantes3 %}
+					<h2>Detalles de los Express Faltantes</h2>
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Existencias</td>
+						<td id="gridhead">Requiere</td>
+						<td id="gridhead">Faltantes</td>
+					</tr>
+					{% for x in faltantes3 %}
+						<tr>
+							<td>{{ x.0|default:'0' }}</td>
+							<td>{{ x.1|default:'0' }}</td>
+							<td>
+								{{ x.2|default:'0' }}
+								{% if x.2 >= x.1 %}
+								<img src="{{STATIC_URL}}img/icons/stockRed.png" title="Urgente Transferir {{ x.1 }} "/>
+								{% elif x.2 < x.1 %}
+								<img src="{{STATIC_URL}}img/icons/stockYellow.png" title="Advertencia: Se sugiere surtir {{ x.1 }}"/>
+								{% else %}
+								<img src="{{STATIC_URL}}img/icons/stockGreen.png" title="Sin Problemas" />
+								{% endif %}
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+						<br>
+						<br>
+					{%else %}
+						<div class="info">
+							<h2>No hay Express Faltantes, todo esta por encima del minimo</h2>
+						</div>
+						<br>
+						<br>
+					{% endif %}
+
+					{% if faltantes4 %}
+					<h2>Detalles de los Fichas Faltantes</h2>
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Nominacion</td>
+						<td id="gridhead">Existencias</td>
+						<td id="gridhead">Requiere</td>
+						<td id="gridhead">Faltantes</td>
+					</tr>
+					{% for x in faltantes4 %}
+						<tr>
+							<td>{{ x.0|title }}</td>
+							<td>{{ x.1|default:'0' }}</td>
+							<td>{{ x.2|default:'0' }}</td>
+							<td>
+								{{ x.3|default:'0' }}
+								{% if x.3 >= x.2 %}
+								<img src="{{STATIC_URL}}img/icons/stockRed.png" title="Urgente Transferir {{ x.2 }} "/>
+								{% elif x.3 < x.2 %}
+								<img src="{{STATIC_URL}}img/icons/stockYellow.png" title="Advertencia: Se sugiere surtir {{ x.2 }}"/>
+								{% else %}
+								<img src="{{STATIC_URL}}img/icons/stockGreen.png" title="Sin Problemas" />
+								{% endif %}
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+						<br>
+						<br>
+					{%else %}
+						<div class="info">
+							<h2>No hay Fichas Faltantes, todo esta por encima del minimo</h2>
+						</div>
+						<br>
+						<br>
+					{% endif %}
+
+					{% if faltantes5 %}
+					<h2>Saldo Faltante</h2>
+			<div id="grid">
+				<table id="grid">
+					<tr>
+						<td id="gridhead">Existencias</td>
+						<td id="gridhead">Requiere</td>
+					</tr>
+					{% for x in faltantes %}
+						<tr>
+							<td>{{ x.0|default:'0' }}</td>
+							<td>
+								{{ x.1|default:'0' }}
+								{% if x.1 >= x.0 %}
+								<img src="{{STATIC_URL}}img/icons/stockRed.png" title="Urgente Transferir {{ x.1 }} "/>
+								{% elif x.1 < x.0 %}
+								<img src="{{STATIC_URL}}img/icons/stockYellow.png" title="Advertencia: Se sugiere surtir {{ x.1 }}"/>
+								{% else %}
+								<img src="{{STATIC_URL}}img/icons/stockGreen.png" title="Sin Problemas" />
+								{% endif %}
+							</td>
+						</tr>
+					{%endfor %}
+				</table>
+			</div>
+						<br>
+						<br>
+					{%else %}
+						<div class="info">
+							<h2>Saldo Suficiente, por encima del minimo</h2>
+						</div>
+						<br>
+						<br>
+					{% endif %}
+				{% endif %}
+
+				
+
+			<strong></strong>
+	</section>
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}--Contabilidad{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+		<div class="info">
+			<h2>Equipos Vendidos sin Factura obligatoria</h2>
+		</div>
+		{{buscador|safe}}
+		{{equipos|safe}}
+		{{expres|safe}}
+		{{accesorios|safe}}
+		{{fichas|safe}}
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

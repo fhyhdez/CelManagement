@@ -1,0 +1,111 @@
+{% extends 'activaciones/activaciones-base2.html' %}
+
+{% block titulo %}@Reporte de Activaciones @Activaciones{% endblock %}
+{% block contenido %}
+<div id="content2">
+	<section id="row">
+		<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="info">
+				<h2>Reporte de Activaciones</h2>
+				<div>Equipos y Express: Otros tipo de activacion</div>
+			</div>
+			<ul>
+				<li class="section first">
+					<h3>Filtrar por:</h3>
+				</li>
+				<li>
+					<label class="desc">Fecha de Inicio</label>
+					<div>
+						<input type="date" name="fxInicio" required>
+					</div>
+				</li>
+				<li>
+					<label class="desc">Fecha de Final</label>
+					<div>
+						<input type="date" name="fxFinal">
+					</div>
+				</li>
+				<li><strong>*** La fecha final es opcional ***</strong></li>
+				<li id="buttons">
+					<input name="buscar" class="submit success" type="submit" value="Consultar"/>  |  
+					<a class="success button" href="/activaciones/reportes/otros/" title="Nueva Consulta">Nueva Consulta</a>  |  
+					<a href="" class="tooltipbasic" data-tooltip="Seleccione para Generar el Archivo"><input type="checkbox" name="excel" value="Exportar">Descargar Reporte</a>
+				</li>
+				<li><strong>{{ info }}</strong></li>
+			</ul>
+		</form>
+	</section>
+	{% if query %} 
+	<section id="row">
+		<h3>Resultados para "{{ query|escape }}":</h3>
+		<hr style="clear:both;">
+		<div id="grid">
+			Equipos:
+			{% if resultsEq %}
+			<table id="grid">
+				<tr>
+					<td id="gridhead">Sucursal</td>
+					<td id="gridhead">Tipo Activacion</td>
+					<td id="gridhead">Equipo</td>
+					<td id="gridhead">IMEI</td>
+					<td id="gridhead">ICC</td>
+					<td id="gridhead">NO.ASIGNADO</td>
+					<td id="gridhead">Vendedor</td>
+					<td id="gridhead">Fecha</td>
+				</tr>
+				{% for equipoA in resultsEq %}
+					<tr>
+						<td>{{ equipoA.sucursal|escape }} </td>
+						<td>{{ equipoA.tipoActivacion.tipo|upper}}</td>
+						<td>{{ equipoA.equipo.detallesEquipo.marca.marca|escape}} {{ equipoA.equipo.detallesEquipo.modelo|escape}}</td>
+						<td>{{ equipoA.equipo.imei|escape}}</td>
+						<td>{{ equipoA.equipo.icc|escape}}</td>
+						<td>{{ equipoA.equipo.noCell|default:'Sin Asignar'}}</td>
+						<td>{{ equipoA.empleado.curp|upper}}</td>
+						<td>{{ equipoA.fxActivacion|date:"Y-m-d h:i a"}}</td>
+					</tr>
+				{%endfor %}
+			</table>
+			{% else %}
+			<strong>No Hay resultados</strong>
+			{% endif %}
+		</div>
+		<hr>
+		<div style="height:10px;"></div>
+		<div id="grid">
+			Express:
+			{% if resultsExp %}
+			<table id="grid">
+				<tr>
+					<td id="gridhead">Sucursal</td>
+					<td id="gridhead">Tipo Activacion</td>
+					<td id="gridhead">ICC</td>
+					<td id="gridhead">NO.ASIGNADO</td>
+					<td id="gridhead">Vendedor</td>
+					<td id="gridhead">Fecha</td>
+				</tr>
+				{% for expressA in resultsExp %}
+					<tr>
+						<td>{{ expressA.sucursal|escape }} </td>
+						<td>{{ expressA.tipoActivacion.tipo|upper}}</td>
+						<td>{{ expressA.express.icc|escape}}</td>
+						<td>{{ expressA.express.noCell|default:'Sin Asignar'}}</td>
+						<td>{{ expressA.empleado.curp|upper}}</td>
+						<td>{{ expressA.fxActivacion|date:"Y-m-d h:i a"}}</td>
+					</tr>
+				{%endfor %}
+			</table>
+			{% else %}
+			<strong>No Hay resultados</strong>
+			{% endif %}
+		<div style="height:140px;"></div>
+		</div>
+		
+		</div>
+		<div style="height:90px;"></div>
+	</section>
+	{% endif %}
+
+</div>
+{% endblock %}

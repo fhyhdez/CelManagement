@@ -1,0 +1,23 @@
+{% extends 'home/base.html' %}
+
+{% block titulo %}Bienvenidos a Excess Complet{% endblock %}
+
+{% block contenido %}
+	<div id="stylized" class="myform">
+		<form id="formulario" method='post' name="form" method="post" action="">{% csrf_token %}
+			<img src="{{STATIC_URL}}img/logoAccell2.png" id="imgLogo"/>
+			<h1>Bienvenido!</h1>
+			<p>Para poder ingresar al sistema, Ud. debe contar con previlegios. </p>
+
+			<label for="User">Usuario</label>
+			{{ formulario.username }}
+			<label for="Password">Contraseña</label>
+			{{ formulario.password }}
+
+
+			<P><button type="submit" class="submit">Ingresar</button></P>
+			
+			<div class="spacer"></div>
+		</form>
+	</div>
+{% endblock %}

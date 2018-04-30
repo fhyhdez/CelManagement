@@ -1,0 +1,70 @@
+{% extends 'contabilidad/conta-base.html' %}
+
+{% block titulo %}--Contabilidad{% endblock %}
+
+{% block contenido %}
+<div id="content">
+	<section id="row">
+				<div class="info">
+					<h2>{{titulo}}</h2>
+					<div>{{descr}}</div>
+				</div>
+			<strong>{{ mensaje }}</strong>
+			<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				{% if ide %}
+					<input type='hidden' name='ide' value='{{ ide|escape }}'>
+				{% endif %}
+				<div class="info">
+					<h2>Datos del Empleado</h2>
+				</div>
+				<div id='form2'>				
+					<table id='form2'>
+						
+						{% for field in emplForm %}
+						<tr>
+							{% if field.label = 'Direccion' %}
+							<td><strong> {{field.label}}</strong></td> 
+							<td>
+								{{field}}<br>
+								<label> {{field.help_text}} <small><span class="req"> {{field.errors}} </span></small></label>
+							</td>
+							{% for f in colForm %}
+						<tr>
+							<td><strong>{{f.label}}</strong></td> 
+							<td>
+								{{f}}<br>
+								<label> {{f.help_text}} <small><span class="req"> {{f.errors}} </span></small></label>
+							</td>
+						</tr>
+							{% endfor%}
+							{% else %}
+							<td><strong>{{field.label}}</strong></td> 
+							<td>
+								{{field}}<br>
+								<label> {{field.help_text}} <small><span class="req"> {{field.errors}} </span></small></label>
+							</td>
+							{% endif %}
+						</tr>
+						{% endfor %}
+					</table>
+				</div>
+				<div class="info">
+					<h3>Sucursal</h3>
+				</div>
+				<div id='form2'>				
+					<table id='form2'>
+						{{sucForm}}
+					</table>
+				</div>
+				<br>
+				<div style="text-align:center;padding-top:0.5em;">
+					<input class="submit success" type="submit" name='actualizar' value="Guardar y Actualizar >>>"/> 
+				</div>
+					
+			</form>
+			
+	</section>
+	<br><br><br>
+</div>
+{% endblock %}

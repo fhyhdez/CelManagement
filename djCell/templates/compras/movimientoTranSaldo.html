@@ -1,0 +1,127 @@
+{% extends 'compras/compras-base.html' %}
+
+{% block titulo %}@Bienvenido a @Compras{% endblock %}
+{% block contenido %}
+<div id="content">
+	<section id="row">
+				<div class="info">
+					<h2>Agregar Transferencia de Saldo</h2>
+					<div>Sucursal a Sucursal</div>
+				</div>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Movimiento</td>
+							<td id="gridhead">Buscar</td>
+						</tr>
+						<tr>
+							<form action='.'  method='GET' enctype="multipart/form-data">{% csrf_token %}
+								<td><input type='text' name='movimiento' value='{{ b_movimiento|escape }}'></td>
+								<td><input class="submit success" type="submit" value='buscar'></td>
+							</form>
+						</tr>
+					</table>
+				</div>
+
+
+			{% if r_movis %}
+				<h2>Movimientos Disponibles</h2>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Folio</td>
+							<td id="gridhead">Fecha</td>
+							<td id="gridhead">Destino</td>
+							<td id="gridhead">Seleccionar</td>
+						</tr>
+						{% for item in r_movis %}
+						<tr>
+							<td>{{ item.folio|escape}}</td>
+							<td>{{ item.fx_movimiento|date:"Y-m-d h:i a"}}</td>
+							<td>{{ item.sucursalDestino|escape}}</td>
+							<td><a href="/compras/movimientos/transferencias/equipos/?movimiento={{ item.folio|escape}}&amp;qitem={{ b_item|escape }}">Seleccionar
+							</a></td>
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+			{%elif b_movimiento %}
+	No hay resultados
+			{% endif %}
+
+			<h2>Saldo Actual: ${{saldoActual}}</h2>
+
+				
+			<form class="wufoo" action="." method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+
+				{%if formMov %}
+				<h3>Nueva Transferencia</h3>
+			<div id="form2">
+				<table id='form2'>
+					{{formMov}}
+					<tr>
+						<td></td>
+						<td><input class="submit success" type="submit" name='gmovimiento' value="Guardar Movimiento"></td>
+					</tr>
+				</table>
+			</div>
+				{%else %}
+			<ul>
+				<li id="buttons">
+					<input class="submit success" type="submit" name='addmovimiento' value="Crear Nueva Transferencia">
+				</li>
+			</ul>
+				{%endif %}
+
+
+				<h3>Datos Globales</h3>
+			<div id="form2">
+				<table id='form2'>
+					{{formMovItem}}
+					<tr>
+						<td></td>
+						<td><input class="submit success" type="submit" name='gmovitem' value="Guardar y Agregar Otro >>>"></td>
+					</tr>
+					<tr>
+						<td>
+							{{ info }}
+						</td>
+					</tr>
+				</table>
+			</div>
+				
+			</form>
+			{%if b_movimiento %}
+				<br>
+				<a class="success button" href="/compras/movimientos/transferencias/equipos/?movimiento={{ b_movimiento|escape }}" title="Agregar Equipos a la misma Transferencia">Agregar Equipos</a>
+				<a class="success button" href="/compras/movimientos/transferencias/express/?movimiento={{ b_movimiento|escape }}" title="Agregar Express a la misma Transferencia">Agregar Express</a>  |
+				<a class="success button" href="/compras/movimientos/transferencias/accesorios/?movimiento={{ b_movimiento|escape }}" title="Agregar Accesorios a la misma Transferencia">Agregar Accesorios</a>  |
+				<a class="success button" href="/compras/movimientos/transferencias/fichas/?movimiento={{ b_movimiento|escape }}" title="Agregar Fichas a la misma Transferencia">Agregar Fichas</a>  |
+				<a class="success button" href="/compras/movimientos/transferencias/recargas/?movimiento={{ b_movimiento|escape }}" title="Agregar Recargas a la misma Transferencia">Agregar Recargas</a> |
+				<a class="success button" href="/compras/movimientos/transferencias/consultar/?movimiento={{ b_movimiento|escape }}" title="Revisar Reposte de la misma Transferencia">Revisar Reposte</a>
+			{%endif %}
+			{%if items %}
+
+				<h2>Transferencias de Saldo Añadidos</h2>
+				<div id="grid">
+					<table id="grid">
+						<tr>
+							<td id="gridhead">Monto</td>
+							<td id="gridhead">Observaciones</td>
+						</tr>
+						{% for item in items %}
+						<tr>
+							<td>{{ item.monto|escape}}</td>
+							<td>{{ item.observaciones|default:'Ninguna'}}</td>
+						</tr>
+						{%endfor %}
+					</table>
+				</div>
+			{%endif %}
+
+
+	</section>
+	<div style="height:70px;"></div>
+</div>
+{% endblock %}
